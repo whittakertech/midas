@@ -1,0 +1,67 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.4
+  Exclude:
+    - 'bin/**/*'
+    - 'spec/dummy/**/*'
+    - 'vendor/**/*'
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+
+# Disable cops for engine scaffolding
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/routes.rb'
+    - 'app/models/concerns/**/*'
+
+Metrics/MethodLength:
+  Max: 15
+  Exclude:
+    - 'app/models/concerns/**/*'
+
+Metrics/AbcSize:
+  Max: 20
+  Exclude:
+    - 'app/models/concerns/**/*'
+
+Naming/PredicateName:
+  Enabled: false  # Allow has_coin, has_coins
+
+Rails/InverseOf:
+  Enabled: false  # Polymorphic associations don't need inverse_of
+
+RSpec/MultipleExpectations:
+  Max: 3
+
+RSpec/ImplicitExpect:
+  EnforcedStyle: should  # Keep shoulda-matchers style
+
+Layout/TrailingEmptyLines:
+  Enabled: true
+
+Lint/EmptyBlock:
+  Exclude:
+    - 'spec/**/*'
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false  # Engine, not gem
+
+Gemspec/RequireMFA:
+  Enabled: false  # Internal engine
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false  # We want them in gemspec

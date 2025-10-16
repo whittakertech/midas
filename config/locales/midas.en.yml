@@ -1,0 +1,58 @@
+# WhittakerTech::Midas I18n Configuration
+#
+# This file defines currency-specific settings used by the Bankable concern
+# for decimal precision when converting numeric values to minor units.
+#
+# Add more currencies as needed following the ISO 4217 standard.
+
+en:
+  midas:
+    ui:
+      defaults:
+        decimal_count: 2
+      currencies:
+        # Major currencies
+        USD:
+          decimal_count: 2
+          symbol: "$"
+          symbol_position: left
+        EUR:
+          decimal_count: 2
+          symbol: "€"
+          symbol_position: left
+        GBP:
+          decimal_count: 2
+          symbol: "£"
+          symbol_position: left
+        JPY:
+          decimal_count: 0
+          symbol: "¥"
+          symbol_position: left
+        CNY:
+          decimal_count: 2
+          symbol: "¥"
+          symbol_position: left
+        
+        # Additional currencies
+        CAD:
+          decimal_count: 2
+          symbol: "$"
+          symbol_position: left
+        AUD:
+          decimal_count: 2
+          symbol: "$"
+          symbol_position: left
+        CHF:
+          decimal_count: 2
+          symbol: "Fr"
+          symbol_position: left
+        INR:
+          decimal_count: 2
+          symbol: "₹"
+          symbol_position: left
+        
+        # Cryptocurrency (if needed)
+        BTC:
+          decimal_count: 8
+          symbol: "₿"
+          symbol_position: left
