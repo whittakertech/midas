@@ -67,9 +67,9 @@ RSpec.describe WhittakerTech::Midas::Bankable do
 
     context 'with invalid amount' do
       it 'raises ArgumentError' do
-        expect {
+        expect do
           order.set_subtotal(amount: 'invalid', currency_code: 'USD')
-        }.to raise_error(ArgumentError, /Invalid value for subtotal/)
+        end.to raise_error(ArgumentError, /Invalid value for subtotal/)
       end
     end
 
@@ -79,9 +79,9 @@ RSpec.describe WhittakerTech::Midas::Bankable do
       end
 
       it 'updates existing coin' do
-        expect {
+        expect do
           order.set_subtotal(amount: 2000, currency_code: 'USD')
-        }.not_to change(WhittakerTech::Midas::Coin, :count)
+        end.not_to change(WhittakerTech::Midas::Coin, :count)
 
         expect(order.subtotal.currency_minor).to eq(2000)
       end
@@ -162,13 +162,16 @@ RSpec.describe WhittakerTech::Midas::Bankable do
   end
 
   describe 'dependent destroy' do
-    it 'destroys coins when resource is destroyed' do
+    before do
       order.set_subtotal(amount: 100, currency_code: 'USD')
+    end
+
+    it 'destroys coins when resource is destroyed' do
       coin_id = order.subtotal.id
 
-      expect {
+      expect do
         order.destroy!
-      }.to change(WhittakerTech::Midas::Coin, :count).by(-1)
+      end.to change(WhittakerTech::Midas::Coin, :count).by(-1)
 
       expect(WhittakerTech::Midas::Coin.find_by(id: coin_id)).to be_nil
     end

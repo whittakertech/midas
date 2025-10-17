@@ -11,9 +11,20 @@ RSpec.describe WhittakerTech::Midas::Coin do
     subject { create(:wt_midas_coin) }
 
     it { should validate_presence_of(:resource_label) }
+
+    %w[price cost value money subtotal tax total shipping].each do |label|
+      it { should allow_value(label).for(:resource_label) }
+    end
+
+    it do
+      expect(subject).to validate_uniqueness_of(:resource_label).scoped_to(%i[resource_type
+                                                                              resource_id]).case_insensitive
+    end
+
     it { should validate_presence_of(:currency_code) }
-    it { should validate_presence_of(:currency_minor) }
     it { should validate_length_of(:currency_code).is_equal_to(3) }
+
+    it { should validate_presence_of(:currency_minor) }
     it { should validate_numericality_of(:currency_minor).only_integer }
   end
 
@@ -39,6 +50,45 @@ RSpec.describe WhittakerTech::Midas::Coin do
 
     it 'returns a Money object with correct currency' do
       expect(amount.currency.iso_code).to eq(currency_code)
+    end
+  end
+
+  # spec/models/whittaker_tech/midas/coin_spec.rb
+
+  describe 'normalization' do
+    it 'normalizes currency_code to uppercase' do
+      coin = build(:wt_midas_coin, currency_code: 'usd')
+      coin.valid?
+      expect(coin.currency_code).to eq('USD')
+    end
+
+    it 'normalizes resource_label to lowercase' do
+      coin = build(:wt_midas_coin, resource_label: 'Price')
+      coin.valid?
+      expect(coin.resource_label).to eq('price')
+    end
+
+    it 'strips whitespace from currency_code' do
+      coin = build(:wt_midas_coin, currency_code: ' EUR ')
+      coin.valid?
+      expect(coin.currency_code).to eq('EUR')
+    end
+  end
+
+  describe 'memoization' do
+    let(:coin) { create(:wt_midas_coin) }
+
+    it 'memoizes amount' do
+      first = coin.amount
+      second = coin.amount
+      expect(first.object_id).to eq(second.object_id)
+    end
+
+    it 'clears memoization when currency_minor changes' do
+      first = coin.amount
+      coin.currency_minor = 5000
+      second = coin.amount
+      expect(first.object_id).not_to eq(second.object_id)
     end
   end
 
@@ -77,6 +127,12 @@ RSpec.describe WhittakerTech::Midas::Coin do
         expect { coin.amount = [100] }
           .to raise_error(ArgumentError, /Invalid value for Coin#amount: \[100\]/)
       end
+    end
+
+    it 'raises error when setting numeric without currency' do
+      coin = build(:wt_midas_coin, currency_code: nil)
+      expect { coin.amount = 100 }
+        .to raise_error(ArgumentError, /currency_code required/)
     end
   end
 
@@ -200,6 +256,22 @@ RSpec.describe WhittakerTech::Midas::Coin do
         expect(coin.amount.cents).to eq(999_999_999)
         expect(coin.format).to include('$9,999,999.99')
       end
+    end
+  end
+
+  describe 'convenience methods' do
+    let(:coin) { create(:wt_midas_coin, currency_minor: 1234, currency_code: 'USD') }
+
+    it 'provides minor alias for currency_minor' do
+      expect(coin.minor).to eq(1234)
+    end
+
+    it 'provides currency alias for currency_code' do
+      expect(coin.currency).to eq('USD')
+    end
+
+    it 'provides fractional alias for currency_minor' do
+      expect(coin.fractional).to eq(1234)
     end
   end
 end

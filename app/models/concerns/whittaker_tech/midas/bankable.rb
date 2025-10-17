@@ -125,6 +125,10 @@ module WhittakerTech
                   class_name: 'WhittakerTech::Midas::Coin',
                   dependent: dependent
 
+          define_methods(name, label, assoc_name)
+        end
+
+        def define_methods(name, label, assoc_name)
           define_method(name) { public_send(assoc_name) }
 
           define_method("#{name}_amount")   { public_send(name)&.amount }

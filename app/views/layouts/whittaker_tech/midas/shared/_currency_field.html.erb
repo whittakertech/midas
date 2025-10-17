@@ -1,31 +1,39 @@
-<%#
-  Headless currency input field with bank-style typing behavior.
-  
-  This partial provides only the structural HTML and Stimulus bindings.
-  All styling is applied via the input_html and wrapper_html options.
-  
-  Local variables:
-    - form: FormBuilder instance
-    - attribute: Symbol, the coin attribute name
-    - currency_code: String, ISO currency code
-    - current_minor: Integer, current value in minor units
-    - decimals: Integer, number of decimal places
-    - input_html: Hash, HTML attributes for the display input
-    - wrapper_html: Hash, HTML attributes for the wrapper
-    - label_text: String or nil, optional label text
--%>
+<%
+  # Headless currency input field for Money-like objects.
+  #
+  # Locals:
+  #   form: FormBuilder
+  #   attribute: Symbol, e.g. :price
+  #   value: Money object (responds to #fractional and #currency.iso_code)
+  #   decimals: Integer (default: 2)
+  #   input_html: Hash (optional)
+  #   wrapper_html: Hash (optional)
+  #   label_text: String (optional, defaults to humanized attribute)
+  #   show_label: Boolean (default: false)
+  #
+  input_id      = "#{form.object_name}_#{attribute}_display"
+  money_value   = value || Money.new(0, "USD")
+  current_minor = money_value.fractional
+  currency_code = money_value.currency.iso_code
+  decimals      ||= 2
+  input_html    ||= {}
+  wrapper_html  ||= {}
+  show_label    ||= false
+  label_text    = label_text.presence || attribute.to_s.humanize
+%>
+
 <div <%= tag.attributes(wrapper_html) %>
      data-controller="midas-currency"
      data-midas-currency-currency-value="<%= currency_code %>"
      data-midas-currency-decimals-value="<%= decimals %>">
 
-  <% if label_text.present? %>
-    <%= form.label "#{attribute}_display", label_text %>
-  <% end %>
+  <%= form.label "#{attribute}_display",
+                 label_text,
+                 for: input_id,
+                 class: (show_label ? nil : "sr-only") %>
 
-  <%# Visible formatted input - displays dollars/euros %>
   <input type="text"
-         id="<%= form.object_name %>_<%= attribute %>_display"
+         id="<%= input_id %>"
          name="<%= form.object_name %>[<%= attribute %>_display]"
          data-midas-currency-target="display"
          data-action="beforeinput->midas-currency#input keydown->midas-currency#backspace keydown->midas-currency#preventDefault"
@@ -33,11 +41,9 @@
          autocomplete="off"
          <%= tag.attributes(input_html) %>>
 
-  <%# Hidden field with minor units (cents) - this is what gets submitted %>
   <%= form.hidden_field "#{attribute}_minor",
                         value: current_minor,
                         data: { midas_currency_target: "hidden" } %>
 
-  <%# Hidden field for currency code %>
   <%= form.hidden_field "#{attribute}_currency", value: currency_code %>
 </div>

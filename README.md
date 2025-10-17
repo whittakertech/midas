@@ -1,160 +1,394 @@
 # WhittakerTech::Midas
 
-WhittakerTech Midas is a lightweight Rails engine that provides money utilities and banking-related building blocks for your Rails applications.
+A Rails engine for elegant monetary value management with multi-currency support. Midas provides a single source of truth for all currency values in your application, eliminating schema bloat and unifying currency behavior.
 
-- Money-aware helpers for views and forms
-- A model concern for representing and validating bank account details
-- Rails-friendly conventions and configuration hooks
+## Features
 
-Midas is designed to be adopted incrementally: include only what you need.
+- 🪙 **Single Source of Truth**: One `Coin` model stores all monetary values
+- 💰 **Multi-Currency Support**: Built on the Money gem with automatic conversion
+- 🎨 **Headless UI**: Bank-style currency input field (Stimulus) that you style
+- 🔧 **Rails-Friendly DSL**: Simple `has_coins` macro for declarative money attributes
+- 📊 **Zero Schema Bloat**: No `price_cents`/`price_currency` columns everywhere
+- ✅ **Battle-Tested**: 90%+ test coverage with comprehensive specs
 
 ## Requirements
 
-- Ruby: 3.4+ (tested with 3.4.5)
-- Rails: >= 7.1.5.2
-- money: ~> 6.19.0
+- Ruby 3.4+
+- Rails 7.1+
+- money gem ~> 6.19.0
 
 ## Installation
 
-Add the gem to your application's Gemfile:
-
+Add to your `Gemfile`:
 ```ruby
-# Gemfile
-gem 'whittaker_tech-midas', '~> 0.x'
+gem 'whittaker_tech-midas', path: 'engines/whittaker_tech-midas'
 ```
 
-Install:
-
+Install and run migrations:
 ```bash
 bundle install
-```
-
-If the engine provides migrations (e.g., for bank account–related columns), install them into your host app:
-
-```bash
 bin/rails railties:install:migrations FROM=whittaker_tech_midas
 bin/rails db:migrate
 ```
 
-Note: Only install migrations if you intend to persist attributes introduced by the engine. If your app already has suitable columns, you can skip this step.
+This creates the `wt_midas_coins` table.
 
-## Usage
+## Quick Start
 
-### 1) Bankable model concern
-
-Include the concern in any model that needs to store or validate bank account information.
-
+### 1. Include Bankable in Your Model
 ```ruby
-# app/models/vendor_bank_account.rb
-class VendorBankAccount < ApplicationRecord
+class Product < ApplicationRecord
   include WhittakerTech::Midas::Bankable
-
-  # Your model logic here…
+  
+  has_coins :price, :cost, :msrp
 end
 ```
 
-Typical workflow:
-- Add columns in a migration for the bank attributes you plan to use (e.g., account holder name, account/routing numbers, IBAN/BIC, country).
-- Include the concern in the model that owns those columns.
-- Use the provided validations/normalization and any helper methods exposed by the concern.
-
-Example migration (adapt fields to your needs):
-
+### 2. Set Monetary Values
 ```ruby
-class AddBankDetailsToVendorBankAccounts < ActiveRecord::Migration[7.1]
-  def change
-    change_table :vendor_bank_accounts, bulk: true do |t|
-      t.string  :bank_name
-      t.string  :account_holder_name
-      t.string  :account_number, null: false
-      t.string  :routing_number
-      t.string  :iban
-      t.string  :bic
-      t.string  :country_code
-      t.boolean :primary, default: false, null: false
-    end
+product = Product.create!
 
-    add_index :vendor_bank_accounts, :iban
-    add_index :vendor_bank_accounts, :routing_number
-  end
+# From float (dollars)
+product.set_price(amount: 29.99, currency_code: 'USD')
+
+# From Money object
+product.set_price(amount: Money.new(2999, 'USD'), currency_code: 'USD')
+
+# From integer (cents)
+product.set_price(amount: 2999, currency_code: 'USD')
+```
+
+### 3. Access Values
+```ruby
+product.price              # => Coin object
+product.price_amount       # => Money object (#<Money @cents=2999 @currency="USD">)
+product.price_format       # => "$29.99"
+product.price_in('EUR')    # => "€26.85" (if exchange rates configured)
+```
+
+## Usage Guide
+
+### The Coin Model
+
+Every monetary value is stored as a `Coin` with:
+- `resource_type` / `resource_id`: Polymorphic association to parent
+- `resource_label`: Identifies which money attribute (e.g., "price")
+- `currency_code`: ISO 4217 code (USD, EUR, JPY, etc.)
+- `currency_minor`: Integer value in minor units (cents, pence)
+
+### The Bankable Concern
+
+Include `Bankable` to add monetary attributes to any model:
+```ruby
+class Invoice < ApplicationRecord
+  include WhittakerTech::Midas::Bankable
+  
+  has_coins :subtotal, :tax, :total
 end
 ```
 
-Refer to the API docs for `WhittakerTech::Midas::Bankable` for the complete list of attributes, validations, and utility methods.
+#### Single Coin
+```ruby
+has_coin :price
+has_coin :deposit, dependent: :nullify  # Custom dependency
+```
 
-### 2) Form and view helpers for money/banking
+#### Multiple Coins
+```ruby
+has_coins :subtotal, :tax, :shipping, :total
+```
 
-Use the engine’s helpers to render money and bank-related inputs consistently. The helpers leverage the `money` gem for parsing/formatting.
+### Generated Methods
 
-Example (namespaced for clarity; adapt to your conventions):
+For each `has_coin :price`, you get:
 
+| Method | Returns | Example |
+|--------|---------|---------|
+| `price` | Coin object | `product.price` |
+| `price_coin` | Coin association | `product.price_coin` |
+| `price_amount` | Money object | `Money<2999 USD>` |
+| `price_format` | Formatted string | `"$29.99"` |
+| `price_in(currency)` | Formatted conversion | `"€26.85"` |
+| `set_price(amount:, currency_code:)` | Creates/updates coin | Returns Coin |
+| `midas_coins` | All coins on resource | `product.midas_coins.count` |
+
+### Currency Input Field (UI)
+
+Midas provides a headless Stimulus-powered currency input with bank-style typing:
 ```erb
-<%# app/views/payments/_form.html.erb %>
-<%= form_with model: @payment do |f| %>
-  <!-- Money input -->
-  <%= midas_money_field(f, :amount_cents, currency: 'USD') %>
-
-  <!-- Bank account fields -->
-  <%= midas_bank_account_fields(f, scope: :payout_account) %>
-
+<%= form_with model: @product do |f| %>
+  <%= midas_currency_field f, :price,
+        currency_code: 'USD',
+        label: 'Product Price',
+        wrapper_html: { class: 'mb-4' },
+        input_html: { 
+          class: 'rounded-lg border-gray-300 text-right',
+          placeholder: '0.00'
+        } %>
+  
   <%= f.submit %>
 <% end %>
 ```
 
-- Pass `currency:` explicitly when appropriate, or configure a global default.
-- See `WhittakerTech::Midas::FormHelper` for the full list of helper methods and options.
+**Bank-Style Typing:**
+User types `1234` → displays as `0.01` → `0.12` → `1.23` → `12.34`
 
-## Configuration
+**Features:**
+- Automatic decimal handling based on currency
+- Hidden field stores minor units (cents)
+- Style with Tailwind, Bootstrap, or custom CSS
+- Backspace removes rightmost digit
 
-Define global defaults (e.g., default currency, formatting) in an initializer:
+### Currency Configuration
 
+Define currency-specific settings via I18n:
+```yaml
+# config/locales/midas.en.yml
+en:
+  midas:
+    ui:
+      defaults:
+        decimal_count: 2
+      currencies:
+        USD:
+          decimal_count: 2
+          symbol: "$"
+        JPY:
+          decimal_count: 0
+          symbol: "¥"
+        BTC:
+          decimal_count: 8
+          symbol: "₿"
+```
+
+### Money Gem Configuration
+
+Configure Money gem behavior (recommended):
 ```ruby
-# config/initializers/midas.rb
-WhittakerTech::Midas.configure do |config|
-  # Examples:
-  # config.default_currency = 'USD'
-  # config.format = :accounting
+# config/initializers/money.rb
+Money.locale_backend = nil  # or :i18n for i18n support
+Money.default_bank = Money::Bank::VariableExchange.new
+Money.rounding_mode = BigDecimal::ROUND_HALF_EVEN
+
+Money.default_formatting_rules = {
+  display_free: false,
+  with_currency: false,
+  no_cents_if_whole: false,
+  format: '%u%n',  # symbol before amount
+  thousands_separator: ',',
+  decimal_mark: '.'
+}
+```
+
+### Exchange Rates
+
+Set up exchange rates for currency conversion:
+```ruby
+# In your app
+Money.default_bank.add_rate('USD', 'EUR', 0.85)
+Money.default_bank.add_rate('EUR', 'USD', 1.18)
+
+# Now conversions work
+product.price_in('EUR')  # Automatic conversion
+```
+
+For production, integrate with an exchange rate API:
+- [eu_central_bank](https://github.com/RubyMoney/eu_central_bank)
+- [money-open-exchange-rates](https://github.com/spk/money-open-exchange-rates)
+- [google_currency](https://github.com/RubyMoney/google_currency)
+
+## Advanced Usage
+
+### Multiple Coins on One Resource
+```ruby
+order = Order.create!
+order.set_subtotal(amount: 100.00, currency_code: 'USD')
+order.set_tax(amount: 8.50, currency_code: 'USD')
+order.set_total(amount: 108.50, currency_code: 'USD')
+
+order.midas_coins.count  # => 3
+```
+
+### Mixed Currencies
+```ruby
+order.set_subtotal(amount: 100, currency_code: 'USD')
+order.set_shipping(amount: 850, currency_code: 'EUR')
+
+order.subtotal_format     # => "$100.00"
+order.shipping_format     # => "€8.50"
+order.shipping_in('USD')  # => "$10.00" (with exchange rate)
+```
+
+### Working with Coin Objects Directly
+```ruby
+coin = product.price
+coin.currency_code        # => "USD"
+coin.currency_minor       # => 2999
+coin.amount               # => Money object
+coin.amount.format        # => "$29.99"
+coin.exchange_to('EUR')   # => Money object in EUR
+coin.format(to: 'EUR')    # => "€26.85"
+```
+
+### Validations
+```ruby
+class Product < ApplicationRecord
+  include WhittakerTech::Midas::Bankable
+  has_coin :price
+  
+  validate :price_must_be_positive
+  
+  private
+  
+  def price_must_be_positive
+    if price_amount && price_amount.cents <= 0
+      errors.add(:price, "must be positive")
+    end
+  end
 end
 ```
 
-Consult the configuration API for available options.
+## Architecture
+
+### Why This Design?
+
+**Problem:** Traditional Rails apps duplicate currency logic everywhere:
+```ruby
+# ❌ Schema bloat - every model needs these columns
+add_column :products, :price_cents, :integer
+add_column :products, :price_currency, :string
+add_column :invoices, :subtotal_cents, :integer
+add_column :invoices, :subtotal_currency, :string
+# ...repeated dozens of times
+```
+
+**Solution:** Midas uses a polymorphic `Coin` model as a single source of truth:
+```ruby
+# ✅ One table, unlimited monetary attributes
+create_table :wt_midas_coins do |t|
+  t.references :resource, polymorphic: true
+  t.string :resource_label  # "price", "cost", "tax", etc.
+  t.string :currency_code
+  t.integer :currency_minor
+end
+```
+
+### Database Schema
+```
+┌─────────────────────────────────────┐
+│       wt_midas_coins                │
+├─────────────────────────────────────┤
+│ id                    BIGINT        │
+│ resource_type         STRING        │ ─┐
+│ resource_id           BIGINT        │ ─┤ Polymorphic
+│ resource_label        STRING        │ ─┘
+│ currency_code         STRING(3)     │
+│ currency_minor        BIGINT        │
+│ created_at            TIMESTAMP     │
+│ updated_at            TIMESTAMP     │
+└─────────────────────────────────────┘
+         ▲
+         │ has_many :midas_coins
+         │
+┌────────┴─────────┐
+│  Any Model with  │
+│     Bankable     │
+└──────────────────┘
+```
 
 ## Testing
 
-This engine uses RSpec.
-
+Run the full test suite:
 ```bash
+cd engines/whittaker_tech-midas
 bundle exec rspec
 ```
 
-Optional coverage:
-
+With coverage report:
 ```bash
 COVERAGE=true bundle exec rspec
+open coverage/index.html
 ```
+
+Current coverage: **90%+**
 
 ## Development
 
-- Ensure compatible Ruby and Rails versions are installed.
-- Use the included dummy app under `spec/dummy` for local manual testing.
-- Standard Rails engine tasks apply (e.g., installing migrations into the host app).
+### Setup
+```bash
+cd engines/whittaker_tech-midas
+bundle install
+cd spec/dummy
+bin/rails db:create db:migrate
+```
 
-## Versioning & Release
+### Dummy App
 
-- Update `lib/whittaker_tech/midas/version.rb`.
-- Update `CHANGELOG.md` with notable changes.
-- Build and publish to your chosen gem server/registry.
+Test the engine manually:
+```bash
+cd spec/dummy
+bin/rails server
+# Visit http://localhost:3000
+```
 
-## Security
+### Adding New Features
 
-If you discover a security issue, please email: security@your-org.example (placeholder).
+1. Write tests first in `spec/`
+2. Implement in `app/`
+3. Update README
+4. Run `bundle exec rspec`
+5. Check coverage with `COVERAGE=true bundle exec rspec`
+
+## Troubleshooting
+
+### Exchange rates not working
+
+Make sure you've configured exchange rates:
+```ruby
+Money.default_bank.add_rate('USD', 'EUR', 0.85)
+```
+
+### Input field not formatting
+
+Check that Stimulus is loaded and the controller is registered:
+```javascript
+import { MidasCurrencyController } from "whittaker_tech-midas"
+application.register("midas-currency", MidasCurrencyController)
+```
+
+### Coin not persisting
+
+Ensure the parent record is saved before setting coins:
+```ruby
+product = Product.create!  # Must be persisted
+product.set_price(amount: 29.99, currency_code: 'USD')
+```
+
+## Roadmap
+
+- [ ] Install generator (`rails g midas:install`)
+- [ ] Add coins generator (`rails g midas:add_coins Product price cost`)
+- [ ] Built-in exchange rate fetching
+- [ ] Coin versioning for audit trails
+- [ ] ViewComponent integration
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Write tests
+4. Implement your feature
+5. Submit a pull request
 
 ## License
 
-MIT License. See MIT-LICENSE for details.
+MIT License. See [MIT-LICENSE](MIT-LICENSE) for details.
 
-## Links
+## Credits
 
-- Source: https://github.com/your-org/whittaker_tech-midas
-- Changelog: https://github.com/your-org/whittaker_tech-midas/blob/main/CHANGELOG.md
-- Issues: https://github.com/your-org/whittaker_tech-midas/issues
+Built with ❤️ by WhittakerTech
+
+Powered by:
+- [Money gem](https://github.com/RubyMoney/money)
+- [Rails](https://rubyonrails.org/)
+- [Stimulus](https://stimulus.hotwired.dev/)

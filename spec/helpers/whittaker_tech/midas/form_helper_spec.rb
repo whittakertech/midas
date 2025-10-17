@@ -17,12 +17,7 @@ RSpec.describe WhittakerTech::Midas::FormHelper do
 
       expect(helper).to have_received(:render).with(
         partial: 'whittaker_tech/midas/shared/currency_field',
-        locals: hash_including(
-          form: form_builder,
-          attribute: :subtotal,
-          currency_code: 'USD',
-          decimals: 2
-        )
+        locals: hash_including(form: form_builder, attribute: :subtotal, currency_code: 'USD', decimals: 2)
       )
     end
 
@@ -48,17 +43,12 @@ RSpec.describe WhittakerTech::Midas::FormHelper do
 
     it 'passes through input_html options' do
       helper.midas_currency_field(
-        form_builder,
-        :subtotal,
-        currency_code: 'USD',
-        input_html: { class: 'custom-input' }
+        form_builder, :subtotal, currency_code: 'USD', input_html: { class: 'custom-input' }
       )
 
       expect(helper).to have_received(:render).with(
         partial: 'whittaker_tech/midas/shared/currency_field',
-        locals: hash_including(
-          input_html: { class: 'custom-input' }
-        )
+        locals: hash_including(input_html: { class: 'custom-input' })
       )
     end
 
