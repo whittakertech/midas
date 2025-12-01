@@ -1,4 +1,4 @@
 .idea/
 *.gem
 pkg/
-**/log/
+spec/dummy/log/

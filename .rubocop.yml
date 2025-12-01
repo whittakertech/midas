@@ -51,7 +51,7 @@ Naming/PredicatePrefix:
 Rails/InverseOf:
   Enabled: false  # Polymorphic associations don't need inverse_of
 
-Rspec/ExampleLength:
+RSpec/ExampleLength:
   Max: 10
   CountAsOne:
     - array

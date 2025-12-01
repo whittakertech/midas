@@ -150,7 +150,7 @@ module WhittakerTech
             iso = currency_code.to_s.upcase
             coin = public_send(name) || public_send("build_#{assoc_name}", resource_label: label)
             coin.currency_code  = iso
-            coin.currency_minor = to_cents(amount, iso)
+            coin.currency_minor = to_cents(name, amount, iso)
             coin.resource       = self
             coin.save!
 
@@ -161,7 +161,7 @@ module WhittakerTech
 
       private
 
-      def to_cents(amount, iso)
+      def to_cents(name, amount, iso)
         raise ArgumentError, "Invalid value for #{name}: #{amount.inspect}" unless is_valid_type?(amount)
 
         return amount.cents if amount.is_a? Money
