@@ -17096,3 +17096,898 @@ Shoulda::Matchers.configure
   [1m[36mWhittakerTech::Midas::Coin Create (0.1ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 264], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1234], ["created_at", "2025-10-17 02:14:37.116485"], ["updated_at", "2025-10-17 02:14:37.116485"]]
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:26:48.439005', '2025-12-01 19:26:48.439005') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '004c309d61b8bba4cbea128734397de82d612f73', '2025-12-01 19:26:48.439274', '2025-12-01 19:26:48.439274') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:27:06.492225', '2025-12-01 19:27:06.492225') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '5b525a3e8a790e1798f268d0f2e2ce2e1abf93e6', '2025-12-01 19:27:06.492489', '2025-12-01 19:27:06.492489') RETURNING "key"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:27:07.013958', '2025-12-01 19:27:07.013958') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '5b525a3e8a790e1798f268d0f2e2ce2e1abf93e6', '2025-12-01 19:27:07.014217', '2025-12-01 19:27:07.014217') RETURNING "key"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:27:07.524465', '2025-12-01 19:27:07.524466') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '5b525a3e8a790e1798f268d0f2e2ce2e1abf93e6', '2025-12-01 19:27:07.524709', '2025-12-01 19:27:07.524709') RETURNING "key"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:28:22.451463', '2025-12-01 19:28:22.451463') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '5b525a3e8a790e1798f268d0f2e2ce2e1abf93e6', '2025-12-01 19:28:22.451728', '2025-12-01 19:28:22.451729') RETURNING "key"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:29:11.953733', '2025-12-01 19:29:11.953734') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '5b525a3e8a790e1798f268d0f2e2ce2e1abf93e6', '2025-12-01 19:29:11.953993', '2025-12-01 19:29:11.953994') RETURNING "key"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:29:12.465658', '2025-12-01 19:29:12.465659') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '5b525a3e8a790e1798f268d0f2e2ce2e1abf93e6', '2025-12-01 19:29:12.465908', '2025-12-01 19:29:12.465909') RETURNING "key"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:29:12.979724', '2025-12-01 19:29:12.979725') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '5b525a3e8a790e1798f268d0f2e2ce2e1abf93e6', '2025-12-01 19:29:12.979965', '2025-12-01 19:29:12.979966') RETURNING "key"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "test_orders"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "test_orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "wt_midas_coins"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "wt_midas_coins" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_type" varchar NOT NULL, "resource_id" bigint NOT NULL, "resource_label" varchar NOT NULL, "currency_code" varchar(3) NOT NULL, "currency_minor" bigint NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource_and_label" ON "wt_midas_coins" ("resource_id", "resource_type", "resource_label")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_wt_midas_coins_on_resource" ON "wt_midas_coins" ("resource_type", "resource_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251015173602)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-01 19:57:48.103253', '2025-12-01 19:57:48.103253') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '5b525a3e8a790e1798f268d0f2e2ce2e1abf93e6', '2025-12-01 19:57:48.103552', '2025-12-01 19:57:48.103552') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.861214"], ["updated_at", "2025-12-01 19:57:55.861214"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.903666"], ["updated_at", "2025-12-01 19:57:55.903666"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1999], ["created_at", "2025-12-01 19:57:55.906623"], ["updated_at", "2025-12-01 19:57:55.906623"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.907464"], ["updated_at", "2025-12-01 19:57:55.907464"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.908342"], ["updated_at", "2025-12-01 19:57:55.908342"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.909230"], ["updated_at", "2025-12-01 19:57:55.909230"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.910028"], ["updated_at", "2025-12-01 19:57:55.910028"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.910952"], ["updated_at", "2025-12-01 19:57:55.910952"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.911693"], ["updated_at", "2025-12-01 19:57:55.911693"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.912727"], ["updated_at", "2025-12-01 19:57:55.912727"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.913143"], ["updated_at", "2025-12-01 19:57:55.913143"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.913533"], ["updated_at", "2025-12-01 19:57:55.913533"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.913943"], ["updated_at", "2025-12-01 19:57:55.913943"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.914366"], ["updated_at", "2025-12-01 19:57:55.914366"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.915019"], ["updated_at", "2025-12-01 19:57:55.915019"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1999], ["created_at", "2025-12-01 19:57:55.915956"], ["updated_at", "2025-12-01 19:57:55.915956"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.917207"], ["updated_at", "2025-12-01 19:57:55.917207"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "EUR"], ["currency_minor", 2500], ["created_at", "2025-12-01 19:57:55.917891"], ["updated_at", "2025-12-01 19:57:55.917891"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.2ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.918324"], ["updated_at", "2025-12-01 19:57:55.918324"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1999], ["created_at", "2025-12-01 19:57:55.930110"], ["updated_at", "2025-12-01 19:57:55.930110"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.931718"], ["updated_at", "2025-12-01 19:57:55.931718"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.932188"], ["updated_at", "2025-12-01 19:57:55.932188"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1000], ["created_at", "2025-12-01 19:57:55.932822"], ["updated_at", "2025-12-01 19:57:55.932822"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "wt_midas_coins"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Update (0.0ms)[0m  [1m[33mUPDATE "wt_midas_coins" SET "currency_minor" = ?, "updated_at" = ? WHERE "wt_midas_coins"."id" = ?[0m  [["currency_minor", 2000], ["updated_at", "2025-12-01 19:57:55.934684"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "wt_midas_coins"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.935259"], ["updated_at", "2025-12-01 19:57:55.935259"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.935870"], ["updated_at", "2025-12-01 19:57:55.935870"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1500], ["created_at", "2025-12-01 19:57:55.937090"], ["updated_at", "2025-12-01 19:57:55.937090"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.937895"], ["updated_at", "2025-12-01 19:57:55.937895"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.938495"], ["updated_at", "2025-12-01 19:57:55.938495"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1999], ["created_at", "2025-12-01 19:57:55.939160"], ["updated_at", "2025-12-01 19:57:55.939160"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.940967"], ["updated_at", "2025-12-01 19:57:55.940967"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1000], ["created_at", "2025-12-01 19:57:55.941574"], ["updated_at", "2025-12-01 19:57:55.941574"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.941785"], ["updated_at", "2025-12-01 19:57:55.941785"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 2], ["resource_type", "TestOrder"], ["resource_label", "tax"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.942501"], ["updated_at", "2025-12-01 19:57:55.942501"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1000], ["created_at", "2025-12-01 19:57:55.943117"], ["updated_at", "2025-12-01 19:57:55.943117"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.943588"], ["updated_at", "2025-12-01 19:57:55.943588"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 100], ["created_at", "2025-12-01 19:57:55.944186"], ["updated_at", "2025-12-01 19:57:55.944186"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.944715"], ["updated_at", "2025-12-01 19:57:55.944715"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "tax"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "tax"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "tax"], ["currency_code", "USD"], ["currency_minor", 200], ["created_at", "2025-12-01 19:57:55.945338"], ["updated_at", "2025-12-01 19:57:55.945338"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.945729"], ["updated_at", "2025-12-01 19:57:55.945729"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1000], ["created_at", "2025-12-01 19:57:55.946341"], ["updated_at", "2025-12-01 19:57:55.946341"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "tax"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "tax"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "tax"], ["currency_code", "USD"], ["currency_minor", 100], ["created_at", "2025-12-01 19:57:55.947116"], ["updated_at", "2025-12-01 19:57:55.947116"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "total"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "total"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "total"], ["currency_code", "USD"], ["currency_minor", 1100], ["created_at", "2025-12-01 19:57:55.947681"], ["updated_at", "2025-12-01 19:57:55.947681"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Load (0.0ms)[0m  [1m[34mSELECT "test_orders".* FROM "test_orders" WHERE "test_orders"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.950327"], ["updated_at", "2025-12-01 19:57:55.950327"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "subtotal"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 100], ["created_at", "2025-12-01 19:57:55.951159"], ["updated_at", "2025-12-01 19:57:55.951159"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "wt_midas_coins"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"]]
+  [1m[36mWhittakerTech::Midas::Coin Destroy (0.0ms)[0m  [1m[31mDELETE FROM "wt_midas_coins" WHERE "wt_midas_coins"."id" = ?[0m  [["id", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Destroy (0.0ms)[0m  [1m[31mDELETE FROM "wt_midas_coins" WHERE "wt_midas_coins"."id" = ?[0m  [["id", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "tax"], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_id" = ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_label" = ? LIMIT ?[0m  [["resource_id", 1], ["resource_type", "TestOrder"], ["resource_label", "total"], ["LIMIT", 1]]
+  [1m[36mTestOrder Destroy (0.0ms)[0m  [1m[31mDELETE FROM "test_orders" WHERE "test_orders"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "wt_midas_coins"[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_label" IS NULL AND "wt_midas_coins"."resource_type" IS NULL AND "wt_midas_coins"."resource_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.954139"], ["updated_at", "2025-12-01 19:57:55.954139"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.954572"], ["updated_at", "2025-12-01 19:57:55.954572"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_label" IS NULL AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE "wt_midas_coins"."resource_label" IS NULL AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.956154"], ["updated_at", "2025-12-01 19:57:55.956154"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.956568"], ["updated_at", "2025-12-01 19:57:55.956568"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "price"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.957256"], ["updated_at", "2025-12-01 19:57:55.957256"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.957681"], ["updated_at", "2025-12-01 19:57:55.957681"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "cost"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.958281"], ["updated_at", "2025-12-01 19:57:55.958281"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.958838"], ["updated_at", "2025-12-01 19:57:55.958838"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "value"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.959472"], ["updated_at", "2025-12-01 19:57:55.959472"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.959931"], ["updated_at", "2025-12-01 19:57:55.959931"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "money"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.960536"], ["updated_at", "2025-12-01 19:57:55.960536"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.960992"], ["updated_at", "2025-12-01 19:57:55.960992"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.962087"], ["updated_at", "2025-12-01 19:57:55.962087"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.962763"], ["updated_at", "2025-12-01 19:57:55.962763"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "tax"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.964020"], ["updated_at", "2025-12-01 19:57:55.964020"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.964698"], ["updated_at", "2025-12-01 19:57:55.964698"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "total"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.965720"], ["updated_at", "2025-12-01 19:57:55.965720"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.3ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.966358"], ["updated_at", "2025-12-01 19:57:55.966358"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "shipping"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.968145"], ["updated_at", "2025-12-01 19:57:55.968145"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.968746"], ["updated_at", "2025-12-01 19:57:55.968746"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" ORDER BY "wt_midas_coins"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTestOrder Load (0.0ms)[0m  [1m[34mSELECT "test_orders".* FROM "test_orders" WHERE "test_orders"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins"[0m
+  [1m[36mShoulda::Matchers::ActiveRecord::Uniqueness::TestModels::TestOrdes Load (0.0ms)[0m  [1m[34mSELECT "test_orders".* FROM "test_orders" WHERE "test_orders"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "Shoulda::Matchers::ActiveRecord::Uniqueness::TestModels::TestOrdes"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTestOrder Load (0.0ms)[0m  [1m[34mSELECT "test_orders".* FROM "test_orders" WHERE "test_orders"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 2], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.3ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.976106"], ["updated_at", "2025-12-01 19:57:55.976106"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.977266"], ["updated_at", "2025-12-01 19:57:55.977266"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.6ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.981861"], ["updated_at", "2025-12-01 19:57:55.981861"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.983476"], ["updated_at", "2025-12-01 19:57:55.983476"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.987252"], ["updated_at", "2025-12-01 19:57:55.987252"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.987829"], ["updated_at", "2025-12-01 19:57:55.987829"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.989419"], ["updated_at", "2025-12-01 19:57:55.989419"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.989896"], ["updated_at", "2025-12-01 19:57:55.989896"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.991424"], ["updated_at", "2025-12-01 19:57:55.991424"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1299], ["created_at", "2025-12-01 19:57:55.991797"], ["updated_at", "2025-12-01 19:57:55.991797"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.2ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.992224"], ["updated_at", "2025-12-01 19:57:55.992224"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1299], ["created_at", "2025-12-01 19:57:55.992765"], ["updated_at", "2025-12-01 19:57:55.992765"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.993217"], ["updated_at", "2025-12-01 19:57:55.993217"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1299], ["created_at", "2025-12-01 19:57:55.993581"], ["updated_at", "2025-12-01 19:57:55.993581"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" IS NULL LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" IS NULL LIMIT ?[0m  [["resource_label", "price"], ["resource_type", "TestOrder"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" IS NULL LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.995286"], ["updated_at", "2025-12-01 19:57:55.995286"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.995742"], ["updated_at", "2025-12-01 19:57:55.995742"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.996146"], ["updated_at", "2025-12-01 19:57:55.996146"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:55.996515"], ["updated_at", "2025-12-01 19:57:55.996515"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.998535"], ["updated_at", "2025-12-01 19:57:55.998535"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1000], ["created_at", "2025-12-01 19:57:55.999006"], ["updated_at", "2025-12-01 19:57:55.999006"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:55.999485"], ["updated_at", "2025-12-01 19:57:55.999485"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1000], ["created_at", "2025-12-01 19:57:55.999855"], ["updated_at", "2025-12-01 19:57:55.999855"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.000600"], ["updated_at", "2025-12-01 19:57:56.000600"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1299], ["created_at", "2025-12-01 19:57:56.000972"], ["updated_at", "2025-12-01 19:57:56.000972"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.001457"], ["updated_at", "2025-12-01 19:57:56.001457"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1299], ["created_at", "2025-12-01 19:57:56.001815"], ["updated_at", "2025-12-01 19:57:56.001815"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.002355"], ["updated_at", "2025-12-01 19:57:56.002355"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1299], ["created_at", "2025-12-01 19:57:56.002725"], ["updated_at", "2025-12-01 19:57:56.002725"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.003321"], ["updated_at", "2025-12-01 19:57:56.003321"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:56.003693"], ["updated_at", "2025-12-01 19:57:56.003693"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.004564"], ["updated_at", "2025-12-01 19:57:56.004564"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1295], ["created_at", "2025-12-01 19:57:56.005185"], ["updated_at", "2025-12-01 19:57:56.005185"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."id" != ? AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["id", 1], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Update (0.0ms)[0m  [1m[33mUPDATE "wt_midas_coins" SET "currency_code" = ?, "currency_minor" = ?, "updated_at" = ? WHERE "wt_midas_coins"."id" = ?[0m  [["currency_code", "GBP"], ["currency_minor", 5000], ["updated_at", "2025-12-01 19:57:56.005619"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Load (0.0ms)[0m  [1m[34mSELECT "wt_midas_coins".* FROM "wt_midas_coins" WHERE "wt_midas_coins"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.006349"], ["updated_at", "2025-12-01 19:57:56.006349"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 0], ["created_at", "2025-12-01 19:57:56.006804"], ["updated_at", "2025-12-01 19:57:56.006804"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.007332"], ["updated_at", "2025-12-01 19:57:56.007332"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", -500], ["created_at", "2025-12-01 19:57:56.007786"], ["updated_at", "2025-12-01 19:57:56.007786"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.008246"], ["updated_at", "2025-12-01 19:57:56.008246"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 999999999], ["created_at", "2025-12-01 19:57:56.008635"], ["updated_at", "2025-12-01 19:57:56.008635"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.009105"], ["updated_at", "2025-12-01 19:57:56.009105"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1234], ["created_at", "2025-12-01 19:57:56.009476"], ["updated_at", "2025-12-01 19:57:56.009476"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.009984"], ["updated_at", "2025-12-01 19:57:56.009984"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1234], ["created_at", "2025-12-01 19:57:56.010355"], ["updated_at", "2025-12-01 19:57:56.010355"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTestOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "test_orders" ("created_at", "updated_at") VALUES (?, ?) RETURNING "id"[0m  [["created_at", "2025-12-01 19:57:56.010771"], ["updated_at", "2025-12-01 19:57:56.010771"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWhittakerTech::Midas::Coin Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "wt_midas_coins" WHERE LOWER("wt_midas_coins"."resource_label") = LOWER(?) AND "wt_midas_coins"."resource_type" = ? AND "wt_midas_coins"."resource_id" = ? LIMIT ?[0m  [["resource_label", "subtotal"], ["resource_type", "TestOrder"], ["resource_id", 1], ["LIMIT", 1]]
+  [1m[36mWhittakerTech::Midas::Coin Create (0.0ms)[0m  [1m[32mINSERT INTO "wt_midas_coins" ("resource_type", "resource_id", "resource_label", "currency_code", "currency_minor", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["resource_type", "TestOrder"], ["resource_id", 1], ["resource_label", "subtotal"], ["currency_code", "USD"], ["currency_minor", 1234], ["created_at", "2025-12-01 19:57:56.011138"], ["updated_at", "2025-12-01 19:57:56.011138"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m

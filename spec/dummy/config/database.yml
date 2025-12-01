@@ -1,15 +1,12 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV.fetch("DB_HOST", "db") %>
-  username: <%= ENV.fetch("DB_USER", "postgres") %>
-  password: <%= ENV.fetch("DB_PASSWORD", "postgres") %>
+  adapter: sqlite3
+  pool: 5
+  timeout: 5000
 
 development:
   <<: *default
-  database: whittaker_tech_midas_development
+  database: db/development.sqlite3
 
 test:
   <<: *default
-  database: whittaker_tech_midas_test
+  database: db/test.sqlite3
