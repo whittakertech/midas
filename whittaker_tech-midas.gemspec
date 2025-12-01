@@ -7,22 +7,22 @@ Gem::Specification.new do |spec|
   spec.version     = WhittakerTech::Midas::VERSION
   spec.authors     = ['Lee Whittaker']
   spec.email       = ['lee@whittakertech.com']
-  spec.homepage    = 'https://github.com/whittaker-tech/midas'
+  spec.homepage    = 'https://github.com/whittakertech/midas'
   spec.summary     = 'Multi-currency money management for Rails with polymorphic coin storage'
   spec.description = <<~DESC
-    WhittakerTech Midas is a Rails engine that provides elegant multi-currency support 
-    through a single polymorphic Coin model. Instead of adding price_cents/price_currency 
-    columns to every model, Midas stores all monetary values in one place with a simple 
+    WhittakerTech Midas is a Rails engine that provides elegant multi-currency support
+    through a single polymorphic Coin model. Instead of adding price_cents/price_currency
+    columns to every model, Midas stores all monetary values in one place with a simple
     has_coins DSL. Includes bank-style currency input fields powered by Stimulus.
   DESC
   spec.license = 'MIT'
 
   spec.metadata = {
-    'homepage_uri'      => spec.homepage,
-    'source_code_uri'   => 'https://github.com/whittakertech/midas',
-    'changelog_uri'     => 'https://github.com/whittakertech/midas/blob/main/CHANGELOG.md',
-    'bug_tracker_uri'   => 'https://github.com/whittakertech/midas/issues',
-    'documentation_uri' => 'https://github.com/whittakertech/midas/blob/main/README.md',
+    'homepage_uri' => spec.homepage,
+    'source_code_uri' => spec.homepage,
+    'changelog_uri' => "#{spec.homepage}/blob/main/CHANGELOG.md",
+    'bug_tracker_uri' => "#{spec.homepage}/issues",
+    'documentation_uri' => 'https://midas.whittakertech.com/',
     'rubygems_mfa_required' => 'true'
   }
 
@@ -36,7 +36,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '>= 7.1.5.2'
 
   spec.add_development_dependency 'factory_bot_rails', '~> 6.4'
-  spec.add_development_dependency 'pg', '~> 1.5'
   spec.add_development_dependency 'puma', '~> 6.0'
   spec.add_development_dependency 'rspec-rails', '~> 7.0'
   spec.add_development_dependency 'shoulda-matchers', '~> 6.5'

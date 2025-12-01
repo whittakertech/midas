@@ -1,6 +1,8 @@
-require:
+plugins:
+  - rubocop-factory_bot
   - rubocop-rails
   - rubocop-rspec
+  - rubocop-rspec_rails
 
 AllCops:
   NewCops: enable
@@ -30,6 +32,11 @@ Metrics/BlockLength:
 
 Metrics/MethodLength:
   Max: 15
+  CountAsOne:
+    - hash
+    - array
+    - heredoc
+    - method_call
   Exclude:
     - 'app/models/concerns/**/*'
 
@@ -38,11 +45,18 @@ Metrics/AbcSize:
   Exclude:
     - 'app/models/concerns/**/*'
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Enabled: false  # Allow has_coin, has_coins
 
 Rails/InverseOf:
   Enabled: false  # Polymorphic associations don't need inverse_of
+
+RSpec/ExampleLength:
+  Max: 10
+  CountAsOne:
+    - array
+    - heredoc
+    - method_call
 
 RSpec/MultipleExpectations:
   Max: 3

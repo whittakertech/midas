@@ -8,7 +8,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
   end
 
   describe 'validations' do
-    subject { create(:wt_midas_coin) }
+    subject(:coin) { create(:wt_midas_coin) }
 
     it { should validate_presence_of(:resource_label) }
 
@@ -17,8 +17,9 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
 
     it do
-      expect(subject).to validate_uniqueness_of(:resource_label).scoped_to(%i[resource_type
-                                                                              resource_id]).case_insensitive
+      expect(coin).to validate_uniqueness_of(:resource_label)
+        .scoped_to(%i[resource_type resource_id])
+        .case_insensitive
     end
 
     it { should validate_presence_of(:currency_code) }
@@ -225,8 +226,8 @@ RSpec.describe WhittakerTech::Midas::Coin do
       coin.reload
       retrieved_amount = coin.amount
 
-      expect(retrieved_amount.cents).to eq(5000)
-      expect(retrieved_amount.currency.iso_code).to eq('GBP')
+      expect(retrieved_amount.cents).to eq(original_money.cents)
+      expect(retrieved_amount.currency.iso_code).to eq(original_money.currency.iso_code)
     end
   end
 

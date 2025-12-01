@@ -148,17 +148,9 @@ module WhittakerTech
           #   product.set_price(amount: 2999, currency_code: 'USD') # 2999 cents
           define_method("set_#{name}") do |amount:, currency_code:|
             iso = currency_code.to_s.upcase
-            cents =
-              case amount
-              when Money then amount.cents
-              when Integer then amount
-              when Numeric then (BigDecimal(amount.to_s) * (10**decimals_for(iso))).round.to_i
-              else raise ArgumentError, "Invalid value for #{name}: #{amount.inspect}"
-              end
-
             coin = public_send(name) || public_send("build_#{assoc_name}", resource_label: label)
             coin.currency_code  = iso
-            coin.currency_minor = cents
+            coin.currency_minor = to_cents(name, amount, iso)
             coin.resource       = self
             coin.save!
 
@@ -168,6 +160,19 @@ module WhittakerTech
       end
 
       private
+
+      def to_cents(name, amount, iso)
+        raise ArgumentError, "Invalid value for #{name}: #{amount.inspect}" unless is_valid_type?(amount)
+
+        return amount.cents if amount.is_a? Money
+        return amount if amount.is_a? Integer
+
+        (BigDecimal(amount.to_s) * (10**decimals_for(iso))).round.to_i
+      end
+
+      def is_valid_type?(amount)
+        [Money, Integer, Numeric].any? { |klass| amount.is_a?(klass) }
+      end
 
       # Determines the number of decimal places for a given currency.
       #

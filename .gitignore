@@ -1,0 +1,5 @@
+.idea/
+*.gem
+pkg/
+spec/dummy/log/
+tmp/

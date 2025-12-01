@@ -1,15 +1,29 @@
 # WhittakerTech::Midas
 
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](MIT-LICENSE)
+[![Ruby 3.4](https://img.shields.io/badge/ruby-3.4+-red.svg)]()
+[![Rails 7.1](https://img.shields.io/badge/rails-7.1+-crimson.svg)]()
+[![Gem Version](https://badge.fury.io/rb/whittaker_tech-midas.svg)](https://badge.fury.io/rb/whittaker_tech-midas)
+[![CI](https://github.com/WhittakerTech/midas/actions/workflows/ci.yml/badge.svg)](https://github.com/WhittakerTech/midas/actions)
+
 A Rails engine for elegant monetary value management with multi-currency support. Midas provides a single source of truth for all currency values in your application, eliminating schema bloat and unifying currency behavior.
 
-## Features
+## Why I Made Midas
+Midas was created because monetization code becomes one of the most fragile parts of a Rails application.
+Teams duplicate currency logic across dozens of models, leading to rounding inconsistencies, schema bloat, and costly refactors during growth phases.
+Midas centralizes all monetary behavior into a single, predictable source of truth.
+This design keeps your pricing, billing, and financial reporting consistent across the entire system.
 
-- 🪙 **Single Source of Truth**: One `Coin` model stores all monetary values
-- 💰 **Multi-Currency Support**: Built on the Money gem with automatic conversion
-- 🎨 **Headless UI**: Bank-style currency input field (Stimulus) that you style
-- 🔧 **Rails-Friendly DSL**: Simple `has_coins` macro for declarative money attributes
-- 📊 **Zero Schema Bloat**: No `price_cents`/`price_currency` columns everywhere
-- ✅ **Battle-Tested**: 90%+ test coverage with comprehensive specs
+## Key Capabilities
+
+- Single canonical `Coin` model as a unified monetary ledger
+- Declarative monetary attributes via `has_coin` and `has_coins`
+- Money-safe arithmetic backed by RubyMoney’s precision library
+- Automatic minor-unit conversion for all input types (int, float, Money)
+- Multi-currency support with configurable exchange rates
+- Headless currency input UI for form builders
+- Test suite with >90% coverage
+- Zero schema duplication&mdash;no proliferation of `_cents` columns
 
 ## Requirements
 
@@ -250,6 +264,15 @@ end
 
 ## Architecture
 
+```mermaid
+graph TD
+  A[Model with Bankable] --> B[has_coin :price]
+  B --> C[Coin Record]
+  C --> D[Money Object]
+  D --> E[Formatting/Display]
+  D --> F[Conversions / Exchange Rates]
+```
+
 ### Why This Design?
 
 **Problem:** Traditional Rails apps duplicate currency logic everywhere:
@@ -371,6 +394,7 @@ product.set_price(amount: 29.99, currency_code: 'USD')
 - [ ] Built-in exchange rate fetching
 - [ ] Coin versioning for audit trails
 - [ ] ViewComponent integration
+- [ ] Stripe/LemonSqueezy integration examples
 
 ## Contributing
 
@@ -386,7 +410,7 @@ MIT License. See [MIT-LICENSE](MIT-LICENSE) for details.
 
 ## Credits
 
-Built with ❤️ by WhittakerTech
+Built by WhittakerTech
 
 Powered by:
 - [Money gem](https://github.com/RubyMoney/money)
