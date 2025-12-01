@@ -1,0 +1,39 @@
+site_name: WhittakerTech Midas
+site_url: https://midas.whittakertech.com
+repo_url: https://github.com/WhittakerTech/midas
+repo_name: WhittakerTech/midas
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+  - tables
+  - pymdownx.superfences
+
+nav:
+  - Introduction: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - Architecture: architecture.md
+  - API Reference: api.md
+  - Examples: examples.md
+  - Changelog: changelog.md

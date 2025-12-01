@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.version     = WhittakerTech::Midas::VERSION
   spec.authors     = ['Lee Whittaker']
   spec.email       = ['lee@whittakertech.com']
-  spec.homepage    = 'https://github.com/whittaker-tech/midas'
+  spec.homepage    = 'https://github.com/whittakertech/midas'
   spec.summary     = 'Multi-currency money management for Rails with polymorphic coin storage'
   spec.description = <<~DESC
     WhittakerTech Midas is a Rails engine that provides elegant multi-currency support 
@@ -19,10 +19,10 @@ Gem::Specification.new do |spec|
 
   spec.metadata = {
     'homepage_uri'      => spec.homepage,
-    'source_code_uri'   => 'https://github.com/whittakertech/midas',
-    'changelog_uri'     => 'https://github.com/whittakertech/midas/blob/main/CHANGELOG.md',
-    'bug_tracker_uri'   => 'https://github.com/whittakertech/midas/issues',
-    'documentation_uri' => 'https://github.com/whittakertech/midas/blob/main/README.md',
+    'source_code_uri'   => spec.homepage,
+    'changelog_uri'     => "#{spec.homepage}/blob/main/CHANGELOG.md",
+    'bug_tracker_uri'   => "#{spec.homepage}/issues",
+    'documentation_uri' => 'https://midas.whittakertech.com/',
     'rubygems_mfa_required' => 'true'
   }
 
