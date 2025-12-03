@@ -35,13 +35,13 @@ This design keeps your pricing, billing, and financial reporting consistent acro
 
 Add to your `Gemfile`:
 ```ruby
-gem 'whittaker_tech-midas', path: 'engines/whittaker_tech-midas'
+gem 'whittaker_tech-midas'
 ```
 
 Install and run migrations:
 ```bash
 bundle install
-bin/rails railties:install:migrations FROM=whittaker_tech_midas
+bin/rails railties:install:migrations
 bin/rails db:migrate
 ```
 
