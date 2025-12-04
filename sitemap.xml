@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://midas.whittakertech.com/</loc>
+         <lastmod>2025-12-04</lastmod>
+    </url>
+    <url>
+         <loc>https://midas.whittakertech.com/api/</loc>
+         <lastmod>2025-12-04</lastmod>
+    </url>
+    <url>
+         <loc>https://midas.whittakertech.com/architecture/</loc>
+         <lastmod>2025-12-04</lastmod>
+    </url>
+    <url>
+         <loc>https://midas.whittakertech.com/changelog/</loc>
+         <lastmod>2025-12-04</lastmod>
+    </url>
+    <url>
+         <loc>https://midas.whittakertech.com/examples/</loc>
+         <lastmod>2025-12-04</lastmod>
+    </url>
+    <url>
+         <loc>https://midas.whittakertech.com/installation/</loc>
+         <lastmod>2025-12-04</lastmod>
+    </url>
+    <url>
+         <loc>https://midas.whittakertech.com/usage/</loc>
+         <lastmod>2025-12-04</lastmod>
+    </url>
+</urlset>
