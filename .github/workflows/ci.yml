@@ -44,7 +44,13 @@ jobs:
       - name: Build gem
         run: gem build whittaker_tech-midas.gemspec
 
-      - name: Publish to RubyGems
-        run: gem push whittaker_tech-midas-*.gem
+      - name: Configure RubyGems credentials
+        run: |
+          mkdir -p ~/.gem
+          echo e "---\n:rubygems_api_key: ${RUBYGEMS_API_KEY}" > ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
         env:
           RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+
+      - name: Publish to RubyGems
+        run: gem push whittaker_tech-midas-*.gem
