@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [0.1.1] – 2025-12-03
+## [0.1.1] – 2025-12-04
 ### Added
 - Added `whittaker_tech:midas:install` Rails generator to install migrations.
 - Added namespaced Rake task `midas:install:migrations` for copying engine migrations.
