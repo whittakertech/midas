@@ -22,8 +22,7 @@ Gem::Specification.new do |spec|
     'source_code_uri' => spec.homepage,
     'changelog_uri' => "#{spec.homepage}/blob/master/CHANGELOG.md",
     'bug_tracker_uri' => "#{spec.homepage}/issues",
-    'documentation_uri' => 'https://midas.whittakertech.com/',
-    'rubygems_mfa_required' => 'true'
+    'documentation_uri' => 'https://midas.whittakertech.com/'
   }
 
   spec.required_ruby_version = '>= 3.4.0'
