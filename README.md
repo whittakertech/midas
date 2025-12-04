@@ -41,7 +41,7 @@ gem 'whittaker_tech-midas'
 Install and run migrations:
 ```bash
 bundle install
-bin/rails railties:install:migrations
+bin/rails whittaker_tech:midas:install
 bin/rails db:migrate
 ```
 

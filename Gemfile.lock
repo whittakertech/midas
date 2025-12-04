@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    whittaker_tech-midas (0.1.0)
+    whittaker_tech-midas (0.1.1)
       money (~> 6.19.0)
       rails (>= 7.1.5.2)
 

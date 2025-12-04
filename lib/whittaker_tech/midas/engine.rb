@@ -112,6 +112,11 @@ module WhittakerTech
           include WhittakerTech::Midas::FormHelper
         end
       end
+
+      rake_tasks do
+        tasks_path = root.join('tasks/**/*.rake')
+        Dir[tasks_path].each { |file| load file }
+      end
     end
   end
 end
