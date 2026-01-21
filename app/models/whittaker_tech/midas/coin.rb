@@ -3,6 +3,8 @@
 module WhittakerTech
   module Midas
     class Coin < ApplicationRecord
+      include PolymorphicJoins
+
       self.table_name = 'wt_midas_coins'
 
       belongs_to :resource, polymorphic: true
