@@ -1,5 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+
 ENV['RAILS_ENV'] ||= 'test'
 # ENV['DATABASE_URL'] ||= 'postgres://postgres:postgres@db:5432/whittaker_tech_midas_test'
 require_relative 'dummy/config/environment'

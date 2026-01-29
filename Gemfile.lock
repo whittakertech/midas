@@ -200,6 +200,10 @@ GEM
     regexp_parser (2.11.3)
     reline (0.6.2)
       io-console (~> 0.5)
+    rspec (3.13.2)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
     rspec-core (3.13.5)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
@@ -297,7 +301,8 @@ PLATFORMS
 
 DEPENDENCIES
   factory_bot_rails (~> 6.4)
-  puma
+  puma (~> 6.0)
+  rspec
   rspec-rails (~> 7.0)
   rubocop
   rubocop-factory_bot
@@ -306,7 +311,7 @@ DEPENDENCIES
   shoulda-matchers (~> 6.5)
   simplecov (~> 0.22)
   simplecov-console (~> 0.9)
-  sprockets-rails
+  sprockets-rails (~> 3.5)
   sqlite3
   whittaker_tech-midas!
 

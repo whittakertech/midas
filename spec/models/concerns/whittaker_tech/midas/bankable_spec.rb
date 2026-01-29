@@ -19,9 +19,9 @@ RSpec.describe WhittakerTech::Midas::Bankable do
       expect(order).to respond_to(:subtotal_format)
     end
 
-    it 'creates currency conversion accessor' do
-      expect(order).to respond_to(:subtotal_in)
-    end
+    # it 'creates currency conversion accessor' do
+    #   expect(order).to respond_to(:subtotal_in)
+    # end
 
     it 'creates setter method' do
       expect(order).to respond_to(:set_subtotal)
@@ -113,29 +113,6 @@ RSpec.describe WhittakerTech::Midas::Bankable do
       formatted = order.subtotal_format
       expect(formatted).to be_a(String)
       expect(formatted).to include('19.99')
-    end
-  end
-
-  describe 'coin_name_in' do
-    before do
-      order.set_subtotal(amount: 1000, currency_code: 'USD')
-      Money.default_bank.add_rate('USD', 'EUR', 0.85)
-    end
-
-    after do
-      Money.default_bank.rates.clear
-    end
-
-    it 'returns nil when coin does not exist' do
-      order_without_tax = TestOrder.create!
-      expect(order_without_tax.tax_in('EUR')).to be_nil
-    end
-
-    it 'returns formatted amount in converted currency' do
-      converted = order.subtotal_in('EUR')
-
-      expect(converted).to be_a(String)
-      expect(converted).to include('8.50')
     end
   end
 

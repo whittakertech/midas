@@ -4,11 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Specify your gem's dependencies in whittaker_tech-midas.gemspec.
 gemspec
 
-gem 'puma'
-
 gem 'sqlite3'
-
-gem 'sprockets-rails'
 
 gem 'rubocop'
 gem 'rubocop-factory_bot'

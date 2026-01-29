@@ -3,3 +3,6 @@
 pkg/
 spec/dummy/log/
 tmp/
+coverage/
+
+.DS_Store

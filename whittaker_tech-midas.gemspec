@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'factory_bot_rails', '~> 6.4'
   spec.add_development_dependency 'puma', '~> 6.0'
+  spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'rspec-rails', '~> 7.0'
   spec.add_development_dependency 'shoulda-matchers', '~> 6.5'
   spec.add_development_dependency 'simplecov', '~> 0.22'

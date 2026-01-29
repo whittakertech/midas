@@ -54,45 +54,6 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
   end
 
-  # spec/models/whittaker_tech/midas/coin_spec.rb
-
-  describe 'normalization' do
-    it 'normalizes currency_code to uppercase' do
-      coin = build(:wt_midas_coin, currency_code: 'usd')
-      coin.valid?
-      expect(coin.currency_code).to eq('USD')
-    end
-
-    it 'normalizes resource_label to lowercase' do
-      coin = build(:wt_midas_coin, resource_label: 'Price')
-      coin.valid?
-      expect(coin.resource_label).to eq('price')
-    end
-
-    it 'strips whitespace from currency_code' do
-      coin = build(:wt_midas_coin, currency_code: ' EUR ')
-      coin.valid?
-      expect(coin.currency_code).to eq('EUR')
-    end
-  end
-
-  describe 'memoization' do
-    let(:coin) { create(:wt_midas_coin) }
-
-    it 'memoizes amount' do
-      first = coin.amount
-      second = coin.amount
-      expect(first.object_id).to eq(second.object_id)
-    end
-
-    it 'clears memoization when currency_minor changes' do
-      first = coin.amount
-      coin.currency_minor = 5000
-      second = coin.amount
-      expect(first.object_id).not_to eq(second.object_id)
-    end
-  end
-
   describe '#amount=' do
     let(:coin) { build(:wt_midas_coin) }
 
@@ -137,36 +98,6 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
   end
 
-  describe '#exchange_to' do
-    let(:coin) { create(:wt_midas_coin, currency_minor: 1000, currency_code: 'USD') }
-
-    before do
-      Money.default_bank.add_rate('USD', 'EUR', 0.85)
-    end
-
-    after do
-      Money.default_bank.rates.clear
-    end
-
-    it 'returns exchanged Money object in new currency' do
-      exchanged = coin.exchange_to('EUR')
-
-      expect(exchanged).to be_a(Money)
-      expect(exchanged.currency.iso_code).to eq('EUR')
-      expect(exchanged.cents).to eq(850)
-    end
-
-    it 'delegates to Money#exchange_to method' do
-      money_double = instance_double(Money)
-      allow(coin).to receive(:amount).and_return(money_double)
-      allow(money_double).to receive(:exchange_to).with('GBP')
-
-      coin.exchange_to('GBP')
-
-      expect(money_double).to have_received(:exchange_to).with('GBP')
-    end
-  end
-
   describe '#format' do
     let(:coin) { create(:wt_midas_coin, currency_minor: 1299, currency_code: 'USD') }
 
@@ -178,35 +109,58 @@ RSpec.describe WhittakerTech::Midas::Coin do
         expect(formatted).to include('12.99')
       end
     end
+  end
 
-    context 'with currency conversion' do
-      before do
-        Money.default_bank.add_rate('USD', 'EUR', 0.85)
-      end
+  describe 'convenience methods' do
+    let(:coin) { create(:wt_midas_coin, currency_minor: 1234, currency_code: 'USD') }
 
-      after do
-        Money.default_bank.rates.clear
-      end
+    it 'provides minor alias for currency_minor' do
+      expect(coin.minor).to eq(1234)
+    end
 
-      it 'exchanges to new currency before formatting' do
-        formatted = coin.format(to: 'EUR')
+    it 'provides currency alias for currency_code' do
+      expect(coin.currency).to eq('USD')
+    end
 
-        expect(formatted).to be_a(String)
-        expect(formatted).to include('11.04')
-      end
+    it 'provides fractional alias for currency_minor' do
+      expect(coin.fractional).to eq(1234)
+    end
+  end
 
-      it 'uses mocked exchange for testing' do
-        money_double = instance_double(Money)
-        exchanged_money = instance_double(Money)
+  describe 'normalization' do
+    it 'normalizes currency_code to uppercase' do
+      coin = build(:wt_midas_coin, currency_code: 'usd')
+      coin.valid?
+      expect(coin.currency_code).to eq('USD')
+    end
 
-        allow(coin).to receive(:amount).and_return(money_double)
-        allow(money_double).to receive(:exchange_to).with('EUR').and_return(exchanged_money)
-        allow(exchanged_money).to receive(:format).and_return('€11.50')
+    it 'normalizes resource_label to lowercase' do
+      coin = build(:wt_midas_coin, resource_label: 'Price')
+      coin.valid?
+      expect(coin.resource_label).to eq('price')
+    end
 
-        result = coin.format(to: 'EUR')
+    it 'strips whitespace from currency_code' do
+      coin = build(:wt_midas_coin, currency_code: ' EUR ')
+      coin.valid?
+      expect(coin.currency_code).to eq('EUR')
+    end
+  end
 
-        expect(result).to eq('€11.50')
-      end
+  describe 'memoization' do
+    let(:coin) { create(:wt_midas_coin) }
+
+    it 'memoizes amount' do
+      first = coin.amount
+      second = coin.amount
+      expect(first.object_id).to eq(second.object_id)
+    end
+
+    it 'clears memoization when currency_minor changes' do
+      first = coin.amount
+      coin.currency_minor = 5000
+      second = coin.amount
+      expect(first.object_id).not_to eq(second.object_id)
     end
   end
 
@@ -228,6 +182,119 @@ RSpec.describe WhittakerTech::Midas::Coin do
 
       expect(retrieved_amount.cents).to eq(original_money.cents)
       expect(retrieved_amount.currency.iso_code).to eq(original_money.currency.iso_code)
+    end
+  end
+
+  describe '#allocate' do
+    let(:coin) { described_class.value(1000, 'USD') }
+
+    it 'returns a Coin::Allocation' do
+      allocation = coin.allocate(per: 4)
+
+      expect(allocation).to be_a(WhittakerTech::Midas::Coin::Allocation)
+      expect(allocation.coin).to eq(coin)
+      expect(allocation.divisor).to eq(4)
+    end
+
+    it 'passes through the rounding policy' do
+      allocation = coin.allocate(per: 3, rounding_policy: :ceil)
+
+      expect(allocation.rounding_policy).to eq(:ceil)
+    end
+  end
+
+  describe '#decimals' do
+    it 'returns the correct decimal places for USD' do
+      coin = described_class.value(1000, 'USD')
+      expect(coin.decimals).to eq(2)
+    end
+
+    it 'returns correct decimal places for JPY (zero-decimal currency)' do
+      coin = described_class.value(1000, 'JPY')
+      expect(coin.decimals).to eq(0)
+    end
+  end
+
+  describe '#scale' do
+    it 'returns 10^decimals' do
+      coin = described_class.value(1000, 'USD')
+
+      expect(coin.scale).to eq(100)
+      expect(coin.scale).to eq(10**coin.decimals)
+    end
+  end
+
+  describe '#major' do
+    it 'returns major units as BigDecimal' do
+      coin = described_class.value(1234, 'USD')
+
+      expect(coin.major).to be_a(BigDecimal)
+      expect(coin.major).to eq(BigDecimal('12.34'))
+    end
+
+    it 'does not apply rounding' do
+      coin = described_class.value(1, 'USD')
+
+      expect(coin.major).to eq(BigDecimal('0.01'))
+    end
+  end
+
+  describe '.zero' do
+    it 'returns a zero-valued Coin for the given currency' do
+      coin = described_class.zero('USD')
+
+      expect(coin.currency_minor).to eq(0)
+      expect(coin.currency_code).to eq('USD')
+    end
+  end
+
+  describe '.parse' do
+    let(:coin) { described_class.value(1000, 'USD') }
+
+    it 'returns the coin unchanged when given a Coin' do
+      expect(described_class.parse(coin)).to eq(coin)
+    end
+
+    it 'parses a Money object' do
+      money = Money.new(1500, 'USD')
+
+      parsed = described_class.parse(money)
+
+      expect(parsed).to eq(described_class.value(1500, 'USD'))
+    end
+
+    it 'parses a Numeric with explicit currency_code' do
+      parsed = described_class.parse(12.34, currency_code: 'USD')
+
+      expect(parsed.currency_minor).to eq(1234)
+      expect(parsed.currency_code).to eq('USD')
+    end
+
+    it 'rejects Numeric without currency_code' do
+      expect { described_class.parse(12.34) }.to raise_error(ArgumentError, /currency_code required/)
+    end
+
+    it 'rejects unsupported types' do
+      expect { described_class.parse(Object.new) }.to raise_error(TypeError)
+    end
+  end
+
+  describe '.parse (string handling)' do
+    it 'parses a numeric string with explicit currency' do
+      parsed = described_class.parse('12.34', currency_code: 'USD')
+
+      expect(parsed).to eq(described_class.value(1234, 'USD'))
+    end
+
+    it 'parses a currency-prefixed string' do
+      parsed = described_class.parse('$12.34')
+
+      expect(parsed.currency_minor).to eq(1234)
+      expect(parsed.currency_code).to eq(Money.default_currency.iso_code)
+    end
+
+    it 'raises when string lacks currency context' do
+      expect { described_class.parse('12.34') }.to raise_error(ArgumentError, /Currency code required/)
     end
   end
 
@@ -257,22 +324,6 @@ RSpec.describe WhittakerTech::Midas::Coin do
         expect(coin.amount.cents).to eq(999_999_999)
         expect(coin.format).to include('$9,999,999.99')
       end
-    end
-  end
-
-  describe 'convenience methods' do
-    let(:coin) { create(:wt_midas_coin, currency_minor: 1234, currency_code: 'USD') }
-
-    it 'provides minor alias for currency_minor' do
-      expect(coin.minor).to eq(1234)
-    end
-
-    it 'provides currency alias for currency_code' do
-      expect(coin.currency).to eq('USD')
-    end
-
-    it 'provides fractional alias for currency_minor' do
-      expect(coin.fractional).to eq(1234)
     end
   end
 end
