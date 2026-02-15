@@ -1,8 +1,4 @@
-module WhittakerTech
-  module Midas
-    class ApplicationMailer < ActionMailer::Base
-      default from: 'from@example.com'
-      layout 'mailer'
-    end
-  end
+class WhittakerTech::Midas::ApplicationMailer < ActionMailer::Base
+  default from: 'from@example.com'
+  layout 'mailer'
 end

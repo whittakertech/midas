@@ -24,6 +24,9 @@ Style/Documentation:
 Style/StringLiterals:
   EnforcedStyle: single_quotes
 
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'

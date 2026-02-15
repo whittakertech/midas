@@ -1,6 +1,2 @@
-module WhittakerTech
-  module Midas
-    module ApplicationHelper
-    end
-  end
+module WhittakerTech::Midas::ApplicationHelper
 end

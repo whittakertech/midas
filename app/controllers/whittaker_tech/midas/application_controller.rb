@@ -1,6 +1,2 @@
-module WhittakerTech
-  module Midas
-    class ApplicationController < ActionController::Base
-    end
-  end
+class WhittakerTech::Midas::ApplicationController < ActionController::Base
 end

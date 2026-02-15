@@ -1,6 +1,2 @@
-module WhittakerTech
-  module Midas
-    class ApplicationJob < ActiveJob::Base
-    end
-  end
+class WhittakerTech::Midas::ApplicationJob < ActiveJob::Base
 end

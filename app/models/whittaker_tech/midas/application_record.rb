@@ -1,7 +1,3 @@
-module WhittakerTech
-  module Midas
-    class ApplicationRecord < ActiveRecord::Base
-      self.abstract_class = true
-    end
-  end
+class WhittakerTech::Midas::ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
 end
