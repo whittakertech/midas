@@ -3,6 +3,7 @@
 require 'whittaker_tech/midas/version'
 require 'whittaker_tech/midas/engine'
 require 'money'
+require 'poly'
 
 # WhittakerTech::Midas is a Rails engine for multi-currency monetary value
 # management. It replaces scattered `*_cents` and `*_currency` columns with a

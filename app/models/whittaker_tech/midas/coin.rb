@@ -14,7 +14,7 @@
 # ## Storage
 #
 # Every Coin is persisted in `wt_midas_coins` and belongs polymorphically to
-# any domain object (`resource_type` / `resource_id`). The `resource_label`
+# any domain object (`resource_type` / `resource_id`). The `resource_role`
 # distinguishes multiple coins on the same resource (e.g. `"price"`,
 # `"cost"`, `"tax"`).
 #
@@ -57,14 +57,20 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Coins belong polymorphically to a domain object (ledger, entry, product, etc.)
   belongs_to :resource, polymorphic: true
 
-  # Normalize user input before validation to ensure consistent storage
-  before_validation :normalize_fields
+  # Poly::Joins defines joins_resource(klass) for typed polymorphic joins
+  include Poly::Joins
+  # Poly::Role validates resource_role, normalises it, and provides for_role scope
+  include Poly::Role
 
-  # Each resource may only have one Coin per resource_label
-  validates :resource_label,
-            presence: true,
-            format: { with: /\A[a-z0-9_]+\z/ },
-            length: { maximum: 64 },
+  # Normalize user input before validation to ensure consistent storage
+  before_validation :normalize_currency_code
+
+  # Delegates presence, format `/\A[a-z0-9_]+\z/`, length (max 64), and
+  # before_validation normalisation to Poly::Role
+  poly_role :resource
+
+  # Each resource may only have one Coin per resource_role
+  validates :resource_role,
             uniqueness: { scope: %i[resource_type resource_id], case_sensitive: false }
 
   # Currency code is stored as a 3-letter ISO string (e.g. "USD")
@@ -260,13 +266,12 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   private
 
-  # Normalizes resource_label and currency_code before validation.
+  # Normalizes currency_code before validation.
   #
-  # - `resource_label` is stripped and downcased
   # - `currency_code` is stripped and upcased
+  # - `resource_role` normalisation is handled by {Poly::Role}
   # @return [void]
-  def normalize_fields
-    self.resource_label = resource_label.to_s.strip.downcase.presence if resource_label
+  def normalize_currency_code
     self.currency_code = currency_code.to_s.strip.upcase.presence if currency_code
   end
 end

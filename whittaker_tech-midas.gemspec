@@ -25,13 +25,14 @@ Gem::Specification.new do |spec|
     'documentation_uri' => 'https://midas.whittakertech.com/'
   }
 
-  spec.required_ruby_version = '>= 3.4.0'
+  spec.required_ruby_version = '>= 3.2.0'
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   end
 
   spec.add_dependency 'money', '~> 6.19.0'
+  spec.add_dependency 'poly', '~> 1.0'
   spec.add_dependency 'rails', '>= 7.1.5.2'
 
   spec.add_development_dependency 'factory_bot_rails', '~> 6.4'
