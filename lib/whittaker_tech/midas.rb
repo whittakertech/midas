@@ -8,14 +8,14 @@ require 'poly'
 
 # WhittakerTech::Midas is a Rails engine for multi-currency monetary value
 # management. It replaces scattered `*_cents` and `*_currency` columns with a
-# single polymorphic {Coin} model backed by a centralized `wt_midas_coins`
+# single polymorphic {Coin} model backed by a centralized `midas_coins`
 # table.
 #
 # ## Configuration
 #
 # ### Table namespace (PostgreSQL schema)
 #
-# By default all coins are stored in `wt_midas_coins`. To place the table
+# By default all coins are stored in `midas_coins`. To place the table
 # inside a PostgreSQL schema set {.table_namespace} in an initializer:
 #
 #   WhittakerTech::Midas.table_namespace = 'finance'
@@ -59,7 +59,7 @@ module WhittakerTech::Midas
 
   # Optional PostgreSQL schema name used to namespace the coins table.
   #
-  # When `nil` (default) the table is created as `wt_midas_coins`.
+  # When `nil` (default) the table is created as `midas_coins`.
   # When set, the table becomes `<namespace>.coins` and requires a PostgreSQL
   # adapter.
   #
@@ -83,7 +83,7 @@ module WhittakerTech::Midas
   # @return [String] the namespaced table name
   # @raise [RuntimeError] if {.table_namespace} is set and the adapter is not PostgreSQL
   def self.table_name(name)
-    return "wt_midas_#{name}" if table_namespace.blank?
+    return "midas_#{name}" if table_namespace.blank?
 
     adapter = ActiveRecord::Base.connection.adapter_name
     raise "WhittakerTech::Midas.table_namespace requires PostgreSQL (got #{adapter})" unless adapter == 'PostgreSQL'

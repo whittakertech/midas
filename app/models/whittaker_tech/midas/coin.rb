@@ -13,7 +13,7 @@
 # ## Storage
 #
 #
-# Every Coin is persisted in `wt_midas_coins` and belongs polymorphically to
+# Every Coin is persisted in `midas_coins` and belongs polymorphically to
 # any domain object (`resource_type` / `resource_id`). The `resource_role`
 # distinguishes multiple coins on the same resource (e.g. `"price"`,
 # `"cost"`, `"tax"`).
@@ -42,8 +42,8 @@
 # @see Coin::Arithmetic
 # @see Coin::Allocation
 # @since 0.1.0
+# rubocop:disable Metrics/ClassLength
 class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
-  # RuboCop:disable Metrics/ClassLength
   # Arithmetic: exact arithmetic and equality semantics
   include Arithmetic
   # Bidi: bidirectional currency conversion
@@ -307,3 +307,4 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     self.currency_code = currency_code.to_s.strip.upcase.presence if currency_code
   end
 end
+# rubocop:enable Metrics/ClassLength
