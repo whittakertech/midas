@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'whittaker_tech/midas/version'
+require 'whittaker_tech/midas/deprecation'
 require 'whittaker_tech/midas/engine'
 require 'money'
 require 'poly'
@@ -65,6 +66,17 @@ module WhittakerTech::Midas
   # @return [String, nil]
   mattr_accessor :table_namespace, default: nil
 
+  # Controls how deprecation notices are emitted.
+  #
+  # | Value      | Behavior                                        |
+  # |------------|-------------------------------------------------|
+  # | `:warn`    | Prints to STDERR via `Kernel.warn` (default)    |
+  # | `:raise`   | Raises `Deprecation::DeprecationError`          |
+  # | `:silence` | Suppresses all notices                          |
+  #
+  # @return [Symbol]
+  mattr_accessor :deprecation_behavior, default: :warn
+
   # Resolves the fully-qualified table name for a given base name.
   #
   # @param name [String] base table name, e.g. `"coins"`
@@ -98,5 +110,17 @@ module WhittakerTech::Midas
   # @return [Symbol] `:ltr` or `:rtl`
   def self.currency_direction_for(currency_code)
     currency_directions[currency_code.to_s.upcase]
+  end
+
+  # Resets all mutable configuration to defaults.
+  #
+  # Intended for use in test suite `after` blocks when specs mutate
+  # engine-level configuration.
+  #
+  # @return [void]
+  def self.reset_configuration!
+    self.table_namespace      = nil
+    self.deprecation_behavior = :warn
+    @currency_directions      = nil
   end
 end

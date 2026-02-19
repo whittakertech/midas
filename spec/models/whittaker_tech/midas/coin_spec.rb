@@ -298,6 +298,54 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
   end
 
+  describe 'deprecated shims' do
+    before  { WhittakerTech::Midas.deprecation_behavior = :raise }
+    after   { WhittakerTech::Midas.reset_configuration! }
+
+    let(:coin) { create(:wt_midas_coin, resource_role: 'price') }
+
+    describe '#resource_label' do
+      it 'raises a DeprecationError' do
+        expect { coin.resource_label }
+          .to raise_error(WhittakerTech::Midas::Deprecation::DeprecationError)
+      end
+
+      it 'returns the same value as resource_role when warned' do
+        WhittakerTech::Midas.deprecation_behavior = :warn
+        allow(Kernel).to receive(:warn)
+        expect(coin.resource_label).to eq(coin.resource_role)
+      end
+    end
+
+    describe '#resource_label=' do
+      it 'raises a DeprecationError' do
+        expect { coin.resource_label = 'cost' }
+          .to raise_error(WhittakerTech::Midas::Deprecation::DeprecationError)
+      end
+
+      it 'sets resource_role when warned' do
+        WhittakerTech::Midas.deprecation_behavior = :warn
+        allow(Kernel).to receive(:warn)
+        coin.resource_label = 'cost'
+        expect(coin.resource_role).to eq('cost')
+      end
+    end
+
+    describe '.for_label' do
+      it 'raises a DeprecationError' do
+        expect { described_class.for_label('price') }
+          .to raise_error(WhittakerTech::Midas::Deprecation::DeprecationError)
+      end
+
+      it 'returns the same relation as .for_role when warned' do
+        WhittakerTech::Midas.deprecation_behavior = :warn
+        allow(Kernel).to receive(:warn)
+        expect(described_class.for_label('price').to_sql)
+          .to eq(described_class.for_role('price').to_sql)
+      end
+    end
+  end
+
   describe 'edge cases' do
     context 'with zero amount' do
       let(:coin) { create(:wt_midas_coin, currency_minor: 0) }

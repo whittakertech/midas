@@ -8,7 +8,7 @@ PATH
 PATH
   remote: .
   specs:
-    whittaker_tech-midas (0.1.1)
+    whittaker_tech-midas (0.2.0)
       money (~> 6.19.0)
       poly (~> 1.0)
       rails (>= 7.1.5.2)
@@ -306,6 +306,7 @@ GEM
 PLATFORMS
   aarch64-linux-gnu
   arm64-darwin-24
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES
