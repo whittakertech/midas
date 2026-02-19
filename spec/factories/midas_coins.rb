@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :wt_midas_coin, class: 'WhittakerTech::Midas::Coin' do
+  factory :midas_coin, class: 'WhittakerTech::Midas::Coin' do
     resource_role { 'subtotal' }
     currency_code { 'USD' }
     currency_minor { 1295 }

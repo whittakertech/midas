@@ -9,8 +9,8 @@ RSpec.describe WhittakerTech::Midas do
     context 'when no table_namespace is set' do
       before { described_class.table_namespace = nil }
 
-      it 'prefixes with wt_midas_' do
-        expect(described_class.table_name(name)).to eq('wt_midas_coins')
+      it 'prefixes with midas_' do
+        expect(described_class.table_name(name)).to eq('midas_coins')
       end
     end
 
