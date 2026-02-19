@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_173602) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_19_120000) do
   create_table "test_orders", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -19,12 +19,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_173602) do
   create_table "wt_midas_coins", force: :cascade do |t|
     t.string "resource_type", null: false
     t.bigint "resource_id", null: false
-    t.string "resource_label", null: false
+    t.string "resource_role", null: false
     t.string "currency_code", limit: 3, null: false
     t.bigint "currency_minor", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["resource_id", "resource_type", "resource_label"], name: "index_wt_midas_coins_on_resource_and_label"
+    t.index ["resource_id", "resource_type", "resource_role"], name: "index_wt_midas_coins_on_resource_and_role"
     t.index ["resource_type", "resource_id"], name: "index_wt_midas_coins_on_resource"
   end
 end

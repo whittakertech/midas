@@ -118,7 +118,7 @@ module WhittakerTech::Midas::Bankable
       assoc_name = :"#{name}_coin"
 
       has_one assoc_name,
-              -> { where(resource_label: label) },
+              -> { for_role(label) },
               as: :resource,
               class_name: 'WhittakerTech::Midas::Coin',
               dependent: dependent
@@ -146,7 +146,7 @@ module WhittakerTech::Midas::Bankable
       #   product.set_price(amount: 2999, currency_code: 'USD') # 2999 cents
       define_method("set_#{name}") do |amount:, currency_code:|
         iso = currency_code.to_s.upcase
-        coin = public_send(name) || public_send("build_#{assoc_name}", resource_label: label)
+        coin = public_send(name) || public_send("build_#{assoc_name}", resource_role: label)
         coin.currency_code  = iso
         coin.currency_minor = to_cents(name, amount, iso)
         coin.resource       = self

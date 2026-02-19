@@ -117,10 +117,10 @@ RSpec.describe WhittakerTech::Midas::Bankable do
   end
 
   describe 'association behavior' do
-    it 'creates coin with correct resource_label' do
+    it 'creates coin with correct resource_role' do
       order.set_subtotal(amount: 100, currency_code: 'USD')
 
-      expect(order.subtotal.resource_label).to eq('subtotal')
+      expect(order.subtotal.resource_role).to eq('subtotal')
     end
 
     it 'associates coin with correct resource' do

@@ -10,14 +10,14 @@ RSpec.describe WhittakerTech::Midas::Coin do
   describe 'validations' do
     subject(:coin) { create(:wt_midas_coin) }
 
-    it { should validate_presence_of(:resource_label) }
+    it { should validate_presence_of(:resource_role) }
 
     %w[price cost value money subtotal tax total shipping].each do |label|
-      it { should allow_value(label).for(:resource_label) }
+      it { should allow_value(label).for(:resource_role) }
     end
 
     it do
-      expect(coin).to validate_uniqueness_of(:resource_label)
+      expect(coin).to validate_uniqueness_of(:resource_role)
         .scoped_to(%i[resource_type resource_id])
         .case_insensitive
     end
@@ -134,10 +134,10 @@ RSpec.describe WhittakerTech::Midas::Coin do
       expect(coin.currency_code).to eq('USD')
     end
 
-    it 'normalizes resource_label to lowercase' do
-      coin = build(:wt_midas_coin, resource_label: 'Price')
+    it 'normalizes resource_role to lowercase' do
+      coin = build(:wt_midas_coin, resource_role: 'Price')
       coin.valid?
-      expect(coin.resource_label).to eq('price')
+      expect(coin.resource_role).to eq('price')
     end
 
     it 'strips whitespace from currency_code' do
