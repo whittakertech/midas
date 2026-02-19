@@ -2,13 +2,46 @@
 
 # Coin is the canonical, persisted representation of a monetary value.
 #
-# Conceptually:
-# - Coin represents *payable money* (integer minor units, specific currency)
-# - Coin is immutable by convention (operations return new Coins)
-# - Coin owns arithmetic truth, not presentation or pricing interpretation
+# ## Conceptual model
 #
-# Coin participates in persistence (ActiveRecord) but exposes
-# value-object semantics via mixins (Arithmetic, Converter).
+# - A Coin represents *payable money*: an exact integer count of minor units
+#   (cents, pence, etc.) in a specific currency.
+# - A Coin is **immutable by convention**: arithmetic operations return new
+#   frozen Coins rather than mutating the receiver.
+# - A Coin owns **arithmetic truth** — not presentation, pricing
+#   interpretation, or currency conversion.
+#
+# ## Storage
+#
+# Every Coin is persisted in `wt_midas_coins` and belongs polymorphically to
+# any domain object (`resource_type` / `resource_id`). The `resource_label`
+# distinguishes multiple coins on the same resource (e.g. `"price"`,
+# `"cost"`, `"tax"`).
+#
+# ## Modules
+#
+# Behaviour is composed via mixins:
+#
+# | Module        | Responsibility                              |
+# |---------------|---------------------------------------------|
+# | {Arithmetic}  | `+`, `-`, `*`, `/`, `%`, `negate`, equality |
+# | {Bidi}        | Unicode bidirectional text isolation        |
+# | {Converter}   | Currency conversion (reserved, not yet live) |
+# | {Presenter}   | Token-based formatting grammar              |
+#
+# ## Usage via {Bankable}
+#
+# The typical entry point is the {Bankable} concern; direct Coin construction
+# is mostly used in service objects and tests.
+#
+#   product.set_price(amount: 29.99, currency_code: 'USD')
+#   product.price         # => #<WhittakerTech::Midas::Coin ...>
+#   product.price_amount  # => #<Money @fractional=2999 @currency="USD">
+#
+# @see Bankable
+# @see Coin::Arithmetic
+# @see Coin::Allocation
+# @since 0.1.0
 class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Arithmetic: exact arithmetic and equality semantics
   include Arithmetic
@@ -42,17 +75,26 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   # Returns a Money object representing the stored monetary value.
   #
-  # This is a *projection*, not the canonical value.
-  # Memoized for performance, cleared when underlying fields change.
+  # This is a *projection*, not the canonical value. Use {#currency_minor}
+  # and {#currency_code} as the source of truth.
+  #
+  # Memoized for performance. The memo is cleared automatically when
+  # {#currency_minor=} or {#currency_code=} are called.
+  #
+  # @return [Money]
   def amount
     @amount ||= Money.new(currency_minor, currency_code)
   end
 
-  # Sets the coin's monetary value from supported input types.
+  # Sets the coin's monetary value from a Money object or raw minor-unit integer.
   #
-  # NOTE:
-  # - Numeric assignment assumes the value is already in minor units.
-  # - No rounding or scaling is performed here
+  # @param value [Money, Integer, Numeric] the value to assign
+  #   - {Money} — copies `cents` and `currency.iso_code` directly.
+  #   - {Numeric} — treated as already-scaled minor units; requires
+  #     {#currency_code} to already be set.
+  # @raise [ArgumentError] if a Numeric is given without a prior currency_code
+  # @raise [ArgumentError] if the value type is not supported
+  # @return [void]
   def amount=(value)
     case value
     when Money
@@ -67,43 +109,63 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     end
   end
 
-  # Formats the Coin for display, optionally converting currency
+  # Formats the Coin for display, optionally converting to another currency first.
   #
-  # This is a convenience wrapper; full formatting customization
-  # belongs in a dedicated formatter layer.
+  # This is a convenience wrapper around the Money gem's `#format`. For
+  # richer formatting use {#present} with a pattern string.
+  #
+  # @param to [String, nil] target ISO 4217 currency code for conversion,
+  #   or `nil` to format in the native currency.
+  # @return [String] the formatted monetary string, e.g. `"$29.99"`
   def format(to: nil)
     (to ? exchange_to(to) : amount).format
   end
 
-  # Scalar accessors for form helpers and introspection
+  # @return [Integer] the raw minor-unit count (alias for {#currency_minor})
   def minor
     currency_minor
   end
 
+  # @return [String] the ISO currency code (alias for {#currency_code})
   def currency
     currency_code
   end
 
+  # @return [Integer] the raw minor-unit count (alias for {#currency_minor})
   def fractional
     currency_minor
   end
 
-  # Clear memoized Money projection when underlying data changes
+  # Clears the memoized Money projection when the minor-unit value changes.
+  # @param value [Integer]
+  # @return [void]
   def currency_minor=(value)
     @amount = nil
     super
   end
 
+  # Clears the memoized Money projection when the currency code changes.
+  # @param value [String]
+  # @return [void]
   def currency_code=(value)
     @amount = nil
     super
   end
 
-  # Constructs an Allocation object representing this Coin
-  # interpreted per N units using a named rounding policy.
+  # Constructs an {Coin::Allocation} that interprets this Coin as a per-unit price.
   #
-  # Coin remains unchanged; Allocation encapsulates interpretation.
-  # @return [WhittakerTech::Midas::Coin::Allocation]
+  # The Coin itself is unchanged; {Coin::Allocation} encapsulates the
+  # per-unit interpretation and rounding policy.
+  #
+  # @param per [Numeric] number of units this Coin covers (the divisor)
+  # @param rounding_policy [Symbol] one of {WhittakerTech::Midas::ROUNDING_POLICIES}
+  # @return [Coin::Allocation]
+  #
+  # @example Price per item from a bulk price
+  #   bulk = Coin.value(10_000, 'USD')  # $100.00 for 6 units
+  #   alloc = bulk.allocate(per: 6, rounding_policy: :ceil)
+  #   alloc.value          # => Coin($16.67)
+  #   alloc.price(qty: 3)  # => Coin($50.00)
   def allocate(per:, rounding_policy: WhittakerTech::Midas::DEFAULT_ROUNDING_POLICY)
     WhittakerTech::Midas::Coin::Allocation.new(
       coin: self,
@@ -112,43 +174,85 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     )
   end
 
-  # Returns the number of decimal places for the currency.
+  # Returns the number of decimal places defined by the currency specification.
   #
+  # For example: USD = 2, JPY = 0, BHD = 3.
   # This is informational and does not imply rounding or formatting.
+  #
+  # @return [Integer]
   def decimals
     Money::Currency.new(currency_code).decimal_places
   end
 
-  # Returns the scaling factor for converting major to minor units.
+  # Returns the scaling factor used to convert major units to minor units.
+  #
+  # Equivalent to `10 ** decimals`. For USD this is `100`; for JPY it is `1`.
+  #
+  # @return [Integer]
   def scale
     10**decimals
   end
 
-  # Returns the major-unit value as a BigDecimal.
+  # Returns the major-unit value as a precise BigDecimal.
   #
-  # NOTE:
-  # - This is *not* payable money
-  # - No rounding policy is applied
-  # - Intended for inspection and formatting only
+  # **This is NOT payable money.** It is intended for inspection and
+  # formatting only. No rounding policy is applied.
+  #
+  # @return [BigDecimal]
+  #
+  # @example
+  #   Coin.value(2999, 'USD').major  # => BigDecimal("29.99")
+  #   Coin.value(100, 'JPY').major   # => BigDecimal("100")
   def major
     BigDecimal(currency_minor) / scale
   end
 
   class << self
-    # Constructs a Coin directly from minor units and currency code.
+    # Constructs a Coin directly from an integer minor-unit count and an ISO
+    # currency code.
     #
-    # This is the lowest-level factory and enforces integer minor units.
+    # This is the lowest-level factory. It enforces that `currency_minor` is
+    # an Integer (fractional minor units are not permitted).
+    #
+    # @param currency_minor [Integer] the amount in minor units (e.g. cents)
+    # @param currency_code [String] ISO 4217 currency code, e.g. `"USD"`
+    # @return [Coin]
+    # @raise [TypeError] if `currency_minor` is not an Integer
+    #
+    # @example
+    #   Coin.value(2999, 'USD')  # => $29.99
+    #   Coin.value(0, 'JPY')     # => ¥0
     def value(currency_minor, currency_code)
       raise TypeError unless currency_minor.is_a?(Integer)
 
       new(currency_minor:, currency_code:)
     end
 
-    # Convenience constructor for a zero-valued Coin.
+    # Returns a zero-valued Coin in the given currency.
+    #
+    # @param currency_code [String] ISO 4217 currency code
+    # @return [Coin]
+    #
+    # @example
+    #   Coin.zero('USD')  # => $0.00
     def zero(currency_code)
       new(currency_minor: 0, currency_code:)
     end
 
+    # Parses a heterogeneous input into a Coin using {Coin::Parser}.
+    #
+    # Accepted input types: {Coin}, {Money}, {Numeric}, {String}.
+    #
+    # @param value [Coin, Money, Numeric, String] the value to parse
+    # @param currency_code [String, nil] required for Numeric and bare String inputs
+    # @return [Coin]
+    # @raise [TypeError] if the input type cannot be converted
+    # @raise [ArgumentError] if a currency_code is required but not provided
+    #
+    # @example
+    #   Coin.parse(Money.new(2999, 'USD'))
+    #   Coin.parse(29.99, currency_code: 'USD')
+    #   Coin.parse('$29.99')
     def parse(value, currency_code: nil)
       Parser.parse(value, currency_code:)
     end
@@ -156,7 +260,11 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   private
 
-  # Normalizes user input to ensure consistency and reliable uniqueness.
+  # Normalizes resource_label and currency_code before validation.
+  #
+  # - `resource_label` is stripped and downcased
+  # - `currency_code` is stripped and upcased
+  # @return [void]
   def normalize_fields
     self.resource_label = resource_label.to_s.strip.downcase.presence if resource_label
     self.currency_code = currency_code.to_s.strip.upcase.presence if currency_code

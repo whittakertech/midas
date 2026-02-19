@@ -159,6 +159,19 @@ module WhittakerTech::Midas::Bankable
 
   private
 
+  # Converts an amount in various representations to an integer minor-unit count.
+  #
+  # | Input type | Conversion                                             |
+  # |------------|--------------------------------------------------------|
+  # | {Money}    | Uses `money.cents` directly (already minor units)      |
+  # | Integer    | Assumed to already be minor units; returned as-is      |
+  # | Numeric    | Treated as major units; scaled by `10 ** decimals_for` |
+  #
+  # @param name [Symbol] attribute name used in error messages
+  # @param amount [Money, Integer, Numeric] the amount to convert
+  # @param iso [String] uppercased ISO 4217 currency code
+  # @return [Integer] minor-unit count (e.g. cents)
+  # @raise [ArgumentError] if `amount` is not a supported type
   def to_cents(name, amount, iso)
     raise ArgumentError, "Invalid value for #{name}: #{amount.inspect}" unless is_valid_type?(amount)
 
@@ -168,11 +181,18 @@ module WhittakerTech::Midas::Bankable
     (BigDecimal(amount.to_s) * (10**decimals_for(iso))).round.to_i
   end
 
+  # Returns true if `amount` is one of the accepted input types.
+  # @param amount [Object]
+  # @return [Boolean]
   def is_valid_type?(amount)
     [Money, Integer, Numeric].any? { |klass| amount.is_a?(klass) }
   end
 
   # Determines the number of decimal places for a given currency.
+  #
+  # Reads from `midas.ui.currencies.{ISO}.decimal_count` in I18n, falling
+  # back to `midas.ui.defaults.decimal_count` (default: `2`). Clamped to
+  # `[0, 12]` to prevent pathological scaling.
   #
   # @param iso [String] The ISO currency code
   # @return [Integer] Number of decimal places (0-12)

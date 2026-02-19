@@ -10,5 +10,6 @@ gem 'rubocop'
 gem 'rubocop-factory_bot'
 gem 'rubocop-rails'
 gem 'rubocop-rspec_rails'
+gem 'yard'
 # Start debugger with binding.b [https://github.com/ruby/debug]
 # gem "debug", ">= 1.0.0"

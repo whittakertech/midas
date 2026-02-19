@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: WhittakerTech::Midas::Coin::Bidi
+  
+    &mdash; WhittakerTech::Midas API Reference
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "WhittakerTech::Midas::Coin::Bidi";
+  relpath = '../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../_index.html">Index (B)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../WhittakerTech.html" title="WhittakerTech (module)">WhittakerTech</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Midas.html" title="WhittakerTech::Midas (module)">Midas</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Coin.html" title="WhittakerTech::Midas::Coin (class)">Coin</a></span></span>
+     &raquo; 
+    <span class="title">Bidi</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: WhittakerTech::Midas::Coin::Bidi
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+  <dl>
+    <dt>Included in:</dt>
+    <dd><span class='object_link'><a href="../Coin.html" title="WhittakerTech::Midas::Coin (class)">WhittakerTech::Midas::Coin</a></span></dd>
+  </dl>
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>app/models/whittaker_tech/midas/coin/bidi.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Bidi provides Unicode bidirectional-text isolation helpers so that currency strings render correctly when embedded in mixed LTR/RTL sentences.</p>
+
+<h2 id="label-Background">Background</h2>
+
+<p>In HTML, the Unicode Bidirectional Algorithm can reorder numeric and symbol characters in ways that produce confusing output when currency strings appear inside an RTL sentence (e.g. Arabic or Hebrew UI). Wrapping currency text in Unicode isolation marks prevents the algorithm from treating it as part of the surrounding paragraph direction.</p>
+
+<h2 id="label-Isolation+marks+used">Isolation marks used</h2>
+
+<table role="table">
+<thead>
+<tr>
+<th>Constant</th>
+<th>Codepoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class='object_link'><a href="#LRI-constant" title="WhittakerTech::Midas::Coin::Bidi::LRI (constant)">LRI</a></span></td>
+<td>U+2066</td>
+<td>Left-to-Right Isolate</td>
+</tr>
+<tr>
+<td><span class='object_link'><a href="#RLI-constant" title="WhittakerTech::Midas::Coin::Bidi::RLI (constant)">RLI</a></span></td>
+<td>U+2067</td>
+<td>Right-to-Left Isolate</td>
+</tr>
+<tr>
+<td><span class='object_link'><a href="#PDI-constant" title="WhittakerTech::Midas::Coin::Bidi::PDI (constant)">PDI</a></span></td>
+<td>U+2069</td>
+<td>Pop Directional Isolate (close)</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="label-Direction+configuration">Direction configuration</h2>
+
+<p>Currency direction defaults to <code>:ltr</code> for all currencies. Override per currency in an initializer:</p>
+
+<p><a href="&#39;ILS&#39;">WhittakerTech::Midas.currency_directions</a> = :rtl <a href="&#39;AED&#39;">WhittakerTech::Midas.currency_directions</a> = :rtl</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><span class='object_link'><a href="../../Midas.html#currency_direction_for-class_method" title="WhittakerTech::Midas.currency_direction_for (method)">WhittakerTech::Midas.currency_direction_for</a></span></li>
+    
+  </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="LRI-constant" class="">LRI =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Unicode Left-to-Right Isolate mark (U+2066)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\u2066</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="RLI-constant" class="">RLI =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Unicode Right-to-Left Isolate mark (U+2067)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\u2067</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="PDI-constant" class="">PDI =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Unicode Pop Directional Isolate mark — closes an isolation span (U+2069)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\u2069</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bidi_currency_dir-instance_method" title="#bidi_currency_dir (instance method)">#<strong>bidi_currency_dir</strong>(currency_code)  &#x21d2; Symbol </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Resolves the configured display direction for a currency code.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bidi_isolate-instance_method" title="#bidi_isolate (instance method)">#<strong>bidi_isolate</strong>(text, dir:)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Wraps <code>text</code> in a Unicode directional-isolate span.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bidi_isolate_number-instance_method" title="#bidi_isolate_number (instance method)">#<strong>bidi_isolate_number</strong>(text)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Wraps a number string with LTR isolation.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="bidi_currency_dir-instance_method">
+  
+    #<strong>bidi_currency_dir</strong>(currency_code)  &#x21d2; <tt>Symbol</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Resolves the configured display direction for a currency code.</p>
+
+<p>Reads from <span class='object_link'><a href="../../Midas.html#currency_directions-class_method" title="WhittakerTech::Midas.currency_directions (method)">WhittakerTech::Midas.currency_directions</a></span>. Defaults to <code>:ltr</code> for any currency not explicitly configured.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>currency_code</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>ISO 4217 currency code</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p><code>:ltr</code> or <code>:rtl</code></p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+84
+85
+86</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/whittaker_tech/midas/coin/bidi.rb', line 84</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bidi_currency_dir'>bidi_currency_dir</span><span class='lparen'>(</span><span class='id identifier rubyid_currency_code'>currency_code</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../../../WhittakerTech.html" title="WhittakerTech (module)">WhittakerTech</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Midas.html" title="WhittakerTech::Midas (module)">Midas</a></span></span><span class='period'>.</span><span class='id identifier rubyid_currency_direction_for'><span class='object_link'><a href="../../Midas.html#currency_direction_for-class_method" title="WhittakerTech::Midas.currency_direction_for (method)">currency_direction_for</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_currency_code'>currency_code</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="bidi_isolate-instance_method">
+  
+    #<strong>bidi_isolate</strong>(text, dir:)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Wraps <code>text</code> in a Unicode directional-isolate span.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h4 class="tag_title">Examples:</h4>
+    
+      
+      <pre class="example code"><code><span class='id identifier rubyid_bidi_isolate'>bidi_isolate</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>$29.99</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>dir:</span> <span class='symbol'>:ltr</span><span class='rparen'>)</span>  <span class='comment'># =&gt; &quot;\u2066$29.99\u2069&quot;
+</span><span class='id identifier rubyid_bidi_isolate'>bidi_isolate</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>29.99</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>  <span class='label'>dir:</span> <span class='kw'>nil</span><span class='rparen'>)</span>   <span class='comment'># =&gt; &quot;29.99&quot;</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>text</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the text to isolate; <code>nil</code> returns <code>&quot;&quot;</code></p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dir</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p><code>:ltr</code>, <code>:rtl</code>, or <code>nil</code> (no wrapping)</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if <code>dir</code> is not <code>:ltr</code>, <code>:rtl</code>, or <code>nil</code></p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/whittaker_tech/midas/coin/bidi.rb', line 52</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bidi_isolate'>bidi_isolate</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='comma'>,</span> <span class='label'>dir:</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+
+  <span class='id identifier rubyid_s'>s</span> <span class='op'>=</span> <span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_s'>s</span> <span class='kw'>if</span> <span class='id identifier rubyid_dir'>dir</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+
+  <span class='kw'>case</span> <span class='id identifier rubyid_dir'>dir</span>
+  <span class='kw'>when</span> <span class='symbol'>:ltr</span> <span class='kw'>then</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#LRI-constant" title="WhittakerTech::Midas::Coin::Bidi::LRI (constant)">LRI</a></span></span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_s'>s</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#PDI-constant" title="WhittakerTech::Midas::Coin::Bidi::PDI (constant)">PDI</a></span></span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>when</span> <span class='symbol'>:rtl</span> <span class='kw'>then</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#RLI-constant" title="WhittakerTech::Midas::Coin::Bidi::RLI (constant)">RLI</a></span></span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_s'>s</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#PDI-constant" title="WhittakerTech::Midas::Coin::Bidi::PDI (constant)">PDI</a></span></span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unknown bidi dir: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_dir'>dir</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="bidi_isolate_number-instance_method">
+  
+    #<strong>bidi_isolate_number</strong>(text)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Wraps a number string with LTR isolation.</p>
+
+<p>Numbers are always rendered LTR. This prevents the bidi algorithm from reordering digit sequences when they appear in an RTL context.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>text</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Integer</tt>, <tt>BigDecimal</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the numeric value to isolate</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+73
+74
+75</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/whittaker_tech/midas/coin/bidi.rb', line 73</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bidi_isolate_number'>bidi_isolate_number</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_bidi_isolate'>bidi_isolate</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='comma'>,</span> <span class='label'>dir:</span> <span class='symbol'>:ltr</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Feb 19 14:19:12 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.38 (ruby-3.4.5).
+</div>
+
+    </div>
+  </body>
+</html>

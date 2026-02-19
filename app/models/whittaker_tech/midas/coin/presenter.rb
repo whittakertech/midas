@@ -1,14 +1,53 @@
 # frozen_string_literal: true
 
-# Presenter provides a strftime-like grammar for rendering Coins.
+# Presenter provides a strftime-like token grammar for rendering {Coin} values.
 #
-# - Declarative (token → method map)
-# - Pure (no mutation, no rounding, no conversion)
-# - Direction-safe via Coin::Bidi
+# ## Design principles
 #
-# This object answers only one question:
-#   "How should this Coin be shown to a human?"
+# - **Declarative** — tokens map directly to named handler methods.
+# - **Pure** — no mutation, rounding, or currency conversion.
+# - **Direction-safe** — all text is wrapped with Unicode bidirectional
+#   isolation markers via {Coin::Bidi} to prevent display corruption in
+#   mixed LTR/RTL contexts.
+#
+# ## Token reference
+#
+# Patterns are strings containing `%x` tokens (similar to `strftime`).
+#
+# | Token | Output                           | Example (`$29.99 USD`) |
+# |-------|----------------------------------|------------------------|
+# | `%t`  | Formatted total (symbol + amount)| `$29.99`               |
+# | `%m`  | Minor units (raw integer)        | `2999`                 |
+# | `%M`  | Major units (decimal string)     | `29.99`                |
+# | `%c`  | Currency code                    | `USD`                  |
+# | `%s`  | Currency symbol                  | `$`                    |
+# | `%n`  | Number only (no symbol)          | `29.99`                |
+# | `%u`  | Custom units label (see opts)    | `per kg`               |
+# | `%p`  | Custom per-exact label (see opts)| `0.2997`               |
+# | `~`   | Approximate marker (`≈` or empty)| `≈`                    |
+# | `%%`  | Literal percent sign             | `%`                    |
+#
+# ## Usage
+#
+#   coin = Coin.value(2999, 'USD')
+#   coin.present('%s%M %c')          # => "$29.99 USD"
+#   coin.present('~%t', approx: true) # => "≈$29.99"
+#
+# ## Options
+#
+# Pass keyword options to `present` / `format` to populate optional tokens:
+#
+# - `approx:` [Boolean] — if true, `~` expands to `≈`; otherwise empty string.
+# - `units:` [String] — value for `%u` token.
+# - `per_exact:` [String] — value for `%p` token.
+# - `currency_dir:` [Symbol] — override the currency display direction
+#   (`:ltr` or `:rtl`); defaults to the value from
+#   {WhittakerTech::Midas.currency_direction_for}.
+#
+# @since 0.1.0
 module WhittakerTech::Midas::Coin::Presenter
+  # Internal rendering context. Populated from the Coin and caller-supplied options.
+  # @!visibility private
   Context = Struct.new(
     :coin,
     :currency_dir,
@@ -18,15 +57,25 @@ module WhittakerTech::Midas::Coin::Presenter
     keyword_init: true
   )
 
-  # Public entrypoint
+  # Renders this Coin using a format pattern.
+  #
+  # @param pattern [String] the format pattern containing `%x` tokens
+  # @param opts [Hash] optional rendering context overrides (see module docs)
+  # @return [String]
+  # @raise [ArgumentError] if the pattern contains an unknown or unterminated token
+  #
+  # @example
+  #   coin.present('%s%M')          # => "$29.99"
+  #   coin.present('%t (%c)')       # => "$29.99 (USD)"
+  #   coin.present('~%t', approx: true) # => "≈$29.99"
   def present(pattern, **)
     WhittakerTech::Midas::Coin::Presenter.format(self, pattern, **)
   end
 
   class << self
-    # Registry of supported tokens.
+    # Registry of recognised tokens and their handler method names.
     #
-    # Each token maps to a private method on this module.
+    # @return [Hash{String => Symbol}]
     TOKEN_MAP = {
       '%' => :token_percent,
       't' => :token_total,
@@ -40,7 +89,17 @@ module WhittakerTech::Midas::Coin::Presenter
       '~' => :token_approx
     }.freeze
 
-    # Main formatter
+    # Formats a Coin using a pattern string.
+    #
+    # This is the class-level entry point; instance-level access is via
+    # {Coin#present}.
+    #
+    # @param coin [Coin] the value to format
+    # @param pattern [String] the format pattern
+    # @param opts [Hash] optional context overrides
+    # @return [String]
+    # @raise [ArgumentError] if `pattern` is nil, contains an unknown token,
+    #   or has an unterminated `%` escape
     def format(coin, pattern, **)
       raise ArgumentError, 'pattern required' if pattern.nil?
 
@@ -48,6 +107,15 @@ module WhittakerTech::Midas::Coin::Presenter
       scan(pattern, ctx)
     end
 
+    # Builds a {Context} struct from a Coin and caller-supplied options.
+    #
+    # @param coin [Coin]
+    # @param opts [Hash]
+    # @option opts [Symbol] :currency_dir (:ltr or :rtl) override direction
+    # @option opts [Boolean] :approx whether to render `~` as `≈`
+    # @option opts [String, nil] :units value for `%u` token
+    # @option opts [String, nil] :per_exact value for `%p` token
+    # @return [Context]
     def build_context(coin, **opts)
       Context.new(coin:,
                   currency_dir: opts[:currency_dir] || coin.bidi_currency_dir(coin.currency_code),
@@ -56,6 +124,12 @@ module WhittakerTech::Midas::Coin::Presenter
                   per_exact: opts[:per_exact] || nil)
     end
 
+    # Scans a pattern string, expanding `%x` tokens into rendered values.
+    #
+    # @param pattern [String]
+    # @param ctx [Context]
+    # @return [String]
+    # @raise [ArgumentError] on unknown or unterminated tokens
     def scan(pattern, ctx)
       is_token = false
       out = +'' # output buffer
@@ -76,6 +150,12 @@ module WhittakerTech::Midas::Coin::Presenter
       out
     end
 
+    # Dispatches a single token character to its handler.
+    #
+    # @param token [String] single character following `%`
+    # @param ctx [Context]
+    # @return [String]
+    # @raise [ArgumentError] if the token is not in {TOKEN_MAP}
     def dispatch(token, ctx)
       handler = TOKEN_MAP[token]
       raise ArgumentError, "Unknown presenter token: %#{token}" unless handler
@@ -87,32 +167,39 @@ module WhittakerTech::Midas::Coin::Presenter
     # Token implementations
     # -------------------------
 
+    # @api private
     def token_percent(**)
       '%'
     end
 
+    # @api private
     def token_total(coin:, currency_dir:, **)
       coin.bidi_isolate(coin.amount.format, dir: currency_dir)
     end
 
+    # @api private
     def token_minor(coin:, **)
       coin.bidi_isolate_number(coin.currency_minor)
     end
 
+    # @api private
     def token_major(coin:, **)
       coin.bidi_isolate_number(coin.major.to_s('F'))
     end
 
+    # @api private
     def token_currency_code(coin:, **)
       # Currency codes are neutral; isolate as LTR for stability
       coin.bidi_isolate(coin.currency_code, dir: :ltr)
     end
 
+    # @api private
     def token_currency_symbol(coin:, currency_dir:, **)
       symbol = Money::Currency.new(coin.currency_code).symbol
       coin.bidi_isolate(symbol, dir: currency_dir)
     end
 
+    # @api private
     def token_number_only(coin:, **)
       # Best-effort extraction of the numeric portion
       formatted = coin.amount.format
@@ -124,14 +211,17 @@ module WhittakerTech::Midas::Coin::Presenter
       coin.bidi_isolate_number(numberish)
     end
 
+    # @api private
     def token_units(units:, **)
       units.nil? ? '' : units.to_s
     end
 
+    # @api private
     def token_per_exact(per_exact:, **)
       per_exact.nil? ? '' : per_exact.to_s
     end
 
+    # @api private
     def token_approx(approx:, **)
       approx ? '≈' : ''
     end
