@@ -1,8 +1,16 @@
 PATH
+  remote: ../poly
+  specs:
+    poly (1.0.0)
+      activerecord (>= 7.1)
+      activesupport (>= 7.1)
+
+PATH
   remote: .
   specs:
     whittaker_tech-midas (0.1.1)
       money (~> 6.19.0)
+      poly (~> 1.0)
       rails (>= 7.1.5.2)
 
 GEM
@@ -292,6 +300,7 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    yard (0.9.38)
     zeitwerk (2.7.3)
 
 PLATFORMS
@@ -301,6 +310,7 @@ PLATFORMS
 
 DEPENDENCIES
   factory_bot_rails (~> 6.4)
+  poly!
   puma (~> 6.0)
   rspec
   rspec-rails (~> 7.0)
@@ -314,6 +324,7 @@ DEPENDENCIES
   sprockets-rails (~> 3.5)
   sqlite3
   whittaker_tech-midas!
+  yard
 
 BUNDLED WITH
    2.6.9

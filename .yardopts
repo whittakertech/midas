@@ -1,0 +1,11 @@
+--output-dir docs/api
+--markup markdown
+--title "WhittakerTech::Midas API Reference"
+--protected
+app/models/**/*.rb
+app/models/concerns/**/*.rb
+lib/whittaker_tech/midas.rb
+lib/whittaker_tech/midas/version.rb
+lib/whittaker_tech/midas/engine.rb
+-
+README.md

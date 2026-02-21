@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: WhittakerTech::Midas
+  
+    &mdash; WhittakerTech::Midas API Reference
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "WhittakerTech::Midas";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (M)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../WhittakerTech.html" title="WhittakerTech (module)">WhittakerTech</a></span></span>
+     &raquo; 
+    <span class="title">Midas</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: WhittakerTech::Midas
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/whittaker_tech/midas.rb<span class="defines">,<br />
+  lib/whittaker_tech/midas/version.rb</span>
+</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>WhittakerTech::Midas is a Rails engine for multi-currency monetary value management. It replaces scattered <code>*_cents</code> and <code>*_currency</code> columns with a single polymorphic <span class='object_link'><a href="Midas/Coin.html" title="WhittakerTech::Midas::Coin (class)">Coin</a></span> model backed by a centralized <code>wt_midas_coins</code> table.</p>
+
+<h2 id="label-Configuration">Configuration</h2>
+
+<h3 id="label-Table+namespace+-28PostgreSQL+schema-29">Table namespace (PostgreSQL schema)</h3>
+
+<p>By default all coins are stored in <code>wt_midas_coins</code>. To place the table inside a PostgreSQL schema set <span class='object_link'><a href="#table_namespace-instance_method" title="WhittakerTech::Midas#table_namespace (method)">#table_namespace</a></span> in an initializer:</p>
+
+<p>WhittakerTech::Midas.table_namespace = ‘finance’ # =&gt; table becomes finance.coins</p>
+
+<h3 id="label-Bidirectional+text">Bidirectional text</h3>
+
+<p>Currency display direction defaults to LTR for every currency code. Override individual currencies as needed:</p>
+
+<p><a href="&#39;ILS&#39;">WhittakerTech::Midas.currency_directions</a> = :rtl <a href="&#39;AED&#39;">WhittakerTech::Midas.currency_directions</a> = :rtl</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><span class='object_link'><a href="Midas/Coin.html" title="WhittakerTech::Midas::Coin (class)">Coin</a></span></li>
+    
+      <li><span class='object_link'><a href="Midas/Coin/Arithmetic.html" title="WhittakerTech::Midas::Coin::Arithmetic (module)">Coin::Arithmetic</a></span></li>
+    
+      <li><span class='object_link'><a href="Midas/Bankable.html" title="WhittakerTech::Midas::Bankable (module)">Bankable</a></span></li>
+    
+  </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Midas/Bankable.html" title="WhittakerTech::Midas::Bankable (module)">Bankable</a></span>
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Midas/ApplicationRecord.html" title="WhittakerTech::Midas::ApplicationRecord (class)">ApplicationRecord</a></span>, <span class='object_link'><a href="Midas/Coin.html" title="WhittakerTech::Midas::Coin (class)">Coin</a></span>, <span class='object_link'><a href="Midas/Engine.html" title="WhittakerTech::Midas::Engine (class)">Engine</a></span>
+    
+  
+</p>
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="VERSION-constant" class="">VERSION =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0.1.1</span><span class='tstring_end'>&#39;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="ROUNDING_POLICIES-constant" class="">ROUNDING_POLICIES =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Rounding strategies available for division operations.</p>
+
+<p>Each value is a lambda that accepts a Float and returns a rounded value.</p>
+
+<table role="table">
+<thead>
+<tr>
+<th>Key</th>
+<th>Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:round</code></td>
+<td>Round half-up (standard commercial rounding)</td>
+</tr>
+<tr>
+<td><code>:ceil</code></td>
+<td>Always round up (ceiling)</td>
+</tr>
+<tr>
+<td><code>:floor</code></td>
+<td>Always round down (floor / truncate)</td>
+</tr>
+<tr>
+<td><code>:bankers</code></td>
+<td>Round half-to-even (banker’s rounding)</td>
+</tr>
+</tbody>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; Proc}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='label'>round:</span> <span class='tlambda'>-&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='tlambeg'>{</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+  <span class='label'>ceil:</span> <span class='tlambda'>-&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='tlambeg'>{</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_ceil'>ceil</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+  <span class='label'>floor:</span> <span class='tlambda'>-&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='tlambeg'>{</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_floor'>floor</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+  <span class='label'>bankers:</span> <span class='tlambda'>-&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='tlambeg'>{</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='int'>0</span><span class='comma'>,</span> <span class='label'>half:</span> <span class='symbol'>:even</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="DEFAULT_ROUNDING_POLICY-constant" class="">DEFAULT_ROUNDING_POLICY =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>The rounding policy applied when no explicit policy is supplied.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='symbol'>:round</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#currency_direction_for-class_method" title="currency_direction_for (class method)">.<strong>currency_direction_for</strong>(currency_code)  &#x21d2; Symbol </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the configured display direction for the given currency code.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#currency_directions-class_method" title="currency_directions (class method)">.<strong>currency_directions</strong>  &#x21d2; Hash{String =&gt; Symbol} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Per-currency display direction map.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#table_name-class_method" title="table_name (class method)">.<strong>table_name</strong>(name)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Resolves the fully-qualified table name for a given base name.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#table_namespace-instance_method" title="#table_namespace (instance method)">#<strong>table_namespace</strong>  &#x21d2; String<sup>?</sup> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Optional PostgreSQL schema name used to namespace the coins table.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="currency_direction_for-class_method">
+  
+    .<strong>currency_direction_for</strong>(currency_code)  &#x21d2; <tt>Symbol</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the configured display direction for the given currency code.</p>
+
+<p>Falls back to <code>:ltr</code> for any currency not explicitly configured.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>currency_code</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>ISO 4217 currency code, e.g. <code>&quot;USD&quot;</code></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p><code>:ltr</code> or <code>:rtl</code></p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+98
+99
+100</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/whittaker_tech/midas.rb', line 98</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_currency_direction_for'>currency_direction_for</span><span class='lparen'>(</span><span class='id identifier rubyid_currency_code'>currency_code</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_currency_directions'>currency_directions</span><span class='lbracket'>[</span><span class='id identifier rubyid_currency_code'>currency_code</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_upcase'>upcase</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="currency_directions-class_method">
+  
+    .<strong>currency_directions</strong>  &#x21d2; <tt>Hash{String =&gt; Symbol}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Per-currency display direction map. Defaults all currencies to <code>:ltr</code>.</p>
+
+<p>Modify to configure RTL currencies in your initializer:</p>
+
+<p><a href="&#39;ILS&#39;">WhittakerTech::Midas.currency_directions</a> = :rtl</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{String =&gt; Symbol}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maps uppercased ISO currency code to <code>:ltr</code> or <code>:rtl</code></p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+88
+89
+90</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/whittaker_tech/midas.rb', line 88</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_currency_directions'>currency_directions</span>
+  <span class='ivar'>@currency_directions</span> <span class='op'>||=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='symbol'>:ltr</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="table_name-class_method">
+  
+    .<strong>table_name</strong>(name)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Resolves the fully-qualified table name for a given base name.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>base table name, e.g. <code>&quot;coins&quot;</code></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the namespaced table name</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RuntimeError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if <span class='object_link'><a href="#table_namespace-instance_method" title="WhittakerTech::Midas#table_namespace (method)">#table_namespace</a></span> is set and the adapter is not PostgreSQL</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+72
+73
+74
+75
+76
+77
+78
+79</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/whittaker_tech/midas.rb', line 72</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_table_name'>table_name</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>wt_midas_</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_table_namespace'>table_namespace</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
+
+  <span class='id identifier rubyid_adapter'>adapter</span> <span class='op'>=</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span><span class='period'>.</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_adapter_name'>adapter_name</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>WhittakerTech::Midas.table_namespace requires PostgreSQL (got </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_adapter'>adapter</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_adapter'>adapter</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>PostgreSQL</span><span class='tstring_end'>&#39;</span></span>
+
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table_namespace'>table_namespace</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="table_namespace-instance_method">
+  
+    #<strong>table_namespace</strong>  &#x21d2; <tt>String</tt><sup>?</sup> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Optional PostgreSQL schema name used to namespace the coins table.</p>
+
+<p>When <code>nil</code> (default) the table is created as <code>wt_midas_coins</code>. When set, the table becomes <code>&lt;namespace&gt;.coins</code> and requires a PostgreSQL adapter.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.1.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+65</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/whittaker_tech/midas.rb', line 65</span>
+
+<span class='id identifier rubyid_mattr_accessor'>mattr_accessor</span> <span class='symbol'>:table_namespace</span><span class='comma'>,</span> <span class='label'>default:</span> <span class='kw'>nil</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Feb 19 14:19:12 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.38 (ruby-3.4.5).
+</div>
+
+    </div>
+  </body>
+</html>

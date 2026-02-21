@@ -2,16 +2,33 @@
 
 # Arithmetic defines the arithmetic and equality semantics of a Coin.
 #
-# This module is intentionally:
-# - immutable (all operations return new Coins)
-# - closed under Coin (operations return Coin, not primitives)
-# - policy-aware only where unavoidable (division)
+# ## Design invariants
 #
-# Formatting, presentation, and pricing interpretation do NOT live here.
+# - **Immutable** — all operations return new, frozen {Coin} objects.
+# - **Closed** — operations always return a {Coin}, never a primitive.
+# - **Policy-aware only where unavoidable** — division accepts a rounding
+#   policy; all other operations are exact.
+# - **Currency-strict** — binary operations (`+`, `-`, `==`) raise
+#   {ArgumentError} when the operands have different currency codes.
+#
+# ## Convenience division helpers
+#
+# For each key in {WhittakerTech::Midas::ROUNDING_POLICIES} a named shorthand
+# is generated:
+#
+#   coin.divide_round(3)   # same as coin.divide(3, rounding_policy: :round)
+#   coin.divide_ceil(3)
+#   coin.divide_floor(3)
+#   coin.divide_bankers(3)
+#
+# @since 0.1.0
 module WhittakerTech::Midas::Coin::Arithmetic
-  # Two Coins are equal if they represent the same currency
-  # and the same minor-unit amount.
+  # Tests value equality with another Coin.
   #
+  # Two Coins are equal when they have the same currency code **and** the
+  # same minor-unit amount. A Coin is never equal to a non-Coin object.
+  #
+  # @param other [Object] the object to compare
   # @return [Boolean]
   def ==(other)
     other.is_a?(WhittakerTech::Midas::Coin) &&
@@ -19,49 +36,78 @@ module WhittakerTech::Midas::Coin::Arithmetic
       currency_minor == other.currency_minor
   end
 
+  # Value-based equality alias, compatible with {#hash}.
+  #
+  # Suitable for use in Sets and as Hash keys.
+  # @param other [Object]
+  # @return [Boolean]
   alias eql? ==
 
-  # Hash consistency for use in Sets, Hash keys, etc.
+  # Returns a hash value consistent with {#eql?}.
+  #
+  # Coins with the same currency code and minor-unit amount produce the same
+  # hash, making them interchangeable as Hash keys or Set members.
+  #
+  # @return [Integer]
   def hash
     [currency_code, currency_minor].hash
   end
 
-  # Adds two Coins together. Raises an error if the currencies do not match.
+  # Adds two Coins and returns the sum as a new Coin.
   #
-  # This operation is exact and policy-free.
+  # @param other [Coin] must have the same currency code as the receiver
+  # @return [Coin] a new, frozen Coin
+  # @raise [TypeError] if `other` is not a {Coin}
+  # @raise [ArgumentError] if the currencies do not match
   #
-  # @return [Coin]
+  # @example
+  #   a = Coin.value(1000, 'USD')
+  #   b = Coin.value(500,  'USD')
+  #   a + b  # => Coin($15.00)
   def +(other)
     ensure_same_currency!(other)
     WhittakerTech::Midas::Coin.value(currency_minor + other.currency_minor, currency_code).freeze
   end
 
-  # Subtracts one Coin from another. Raises an error if the currencies do not match.
+  # Subtracts another Coin from the receiver and returns the difference.
   #
-  # This operation is exact and policy-free.
+  # @param other [Coin] must have the same currency code as the receiver
+  # @return [Coin] a new, frozen Coin
+  # @raise [TypeError] if `other` is not a {Coin}
+  # @raise [ArgumentError] if the currencies do not match
   #
-  # @return [Coin]
+  # @example
+  #   a = Coin.value(1000, 'USD')
+  #   b = Coin.value(300,  'USD')
+  #   a - b  # => Coin($7.00)
   def -(other)
     ensure_same_currency!(other)
     WhittakerTech::Midas::Coin.value(currency_minor - other.currency_minor, currency_code).freeze
   end
 
-  # Multiplies a Coin by a numeric value.
+  # Multiplies the Coin by an integer scalar.
   #
-  # This operation is exact and policy-free.
+  # @param other [Integer] the multiplier
+  # @return [Coin] a new, frozen Coin
+  # @raise [TypeError] if `other` is not an Integer
   #
-  # @return [Coin]
+  # @example
+  #   Coin.value(500, 'USD') * 3  # => Coin($15.00)
   def *(other)
     raise TypeError unless other.is_a?(Integer)
 
     WhittakerTech::Midas::Coin.value(currency_minor * other, currency_code).freeze
   end
 
-  # Returns the remainder Coin after dividing by an integer divisor.
+  # Returns the remainder after dividing by an integer.
   #
-  # This operation is exact and policy-free.
+  # @param other [Integer] the divisor
+  # @return [Coin] a new, frozen Coin representing the remainder
+  # @raise [TypeError] if `other` is not an Integer
+  # @raise [ZeroDivisionError] if `other` is zero
   #
-  # @return [Coin]
+  # @example
+  #   Coin.value(1001, 'USD') % 3  # => Coin($0.02)  (1001 % 3 == 2 cents)
   def %(other)
     raise TypeError unless other.is_a?(Integer)
     raise ZeroDivisionError if other.zero?
@@ -69,30 +115,40 @@ module WhittakerTech::Midas::Coin::Arithmetic
     WhittakerTech::Midas::Coin.value(currency_minor % other, currency_code).freeze
   end
 
-  # Reverses the sign of a Coin.
+  # Returns a new Coin with the sign reversed.
   #
-  # @return [Coin]
+  # @return [Coin] a new, frozen Coin
+  #
+  # @example
+  #   Coin.value(500, 'USD').negate  # => Coin(-$5.00)
   def negate
     WhittakerTech::Midas::Coin.value(-currency_minor, currency_code).freeze
   end
 
-  # Unary negation: -coin
+  # Unary minus operator — shorthand for {#negate}.
+  #
+  # @return [Coin]
   def -@
     negate
   end
 
-  # Divides a Coin by a numeric value.
+  # Divides the Coin by a numeric divisor and returns the quotient.
   #
-  # Raises TypeError if the divisor is not a numeric value.
+  # Division is the only arithmetic operation that requires a rounding policy
+  # because dividing integer minor units can produce a non-integer result.
   #
-  # Raises ZeroDivisionError if the divisor is zero.
+  # @param divisor [Numeric] the divisor; must be non-zero
+  # @param rounding_policy [Symbol] one of the keys in
+  #   {WhittakerTech::Midas::ROUNDING_POLICIES} (default:
+  #   {WhittakerTech::Midas::DEFAULT_ROUNDING_POLICY})
+  # @return [Coin] a new, frozen Coin
+  # @raise [TypeError] if `divisor` is not Numeric
+  # @raise [ZeroDivisionError] if `divisor` is zero
   #
-  # Warns if the rounding policy is not recognized.
-  # Accepted rounding policies are defined in Midas::ROUNDING_POLICIES.
-  #
-  # This operation is policy-aware.
-  #
-  # @return [Coin]
+  # @example
+  #   Coin.value(1000, 'USD').divide(3, rounding_policy: :ceil)   # => Coin($3.34)
+  #   Coin.value(1000, 'USD').divide(3, rounding_policy: :floor)  # => Coin($3.33)
+  #   Coin.value(1000, 'USD').divide(3, rounding_policy: :bankers)# => Coin($3.33)
   def divide(divisor, rounding_policy: WhittakerTech::Midas::DEFAULT_ROUNDING_POLICY)
     raise TypeError unless divisor.is_a?(Numeric)
     raise ZeroDivisionError if divisor.zero?
@@ -131,7 +187,10 @@ module WhittakerTech::Midas::Coin::Arithmetic
 
   private
 
-  # Ensures arithmetic operations are only performed on compatible currencies.
+  # Raises if `other` is not a {Coin} with the same currency code.
+  # @param other [Object]
+  # @raise [TypeError] if `other` is not a Coin
+  # @raise [ArgumentError] if currencies differ
   def ensure_same_currency!(other)
     raise TypeError unless other.is_a?(WhittakerTech::Midas::Coin)
     raise ArgumentError, 'Currencies must match' unless currency_code == other.currency_code
