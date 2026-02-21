@@ -10,7 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Breaking Changes
 
-- Renamed `resource_label` column to `resource_role` in `wt_midas_coins`.
+- Renamed table `wt_midas_coins` → `midas_coins` (align with doctrine table prefix convention).
+  Run migration `20260219150000_rename_wt_midas_coins_to_midas_coins.rb`.
+- Renamed `resource_label` column to `resource_role` in `midas_coins`.
   Run the bundled migration `20260219120000_rename_resource_label_to_resource_role_in_wt_midas_coins.rb`.
 - Polymorphic role semantics now delegated to the `Poly::Role` mixin via `poly ~> 1.0`.
 - `Coin.for_label` scope renamed to `Coin.for_role` (deprecated alias provided).

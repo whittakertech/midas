@@ -8,7 +8,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
   end
 
   describe 'validations' do
-    subject(:coin) { create(:wt_midas_coin) }
+    subject(:coin) { create(:midas_coin) }
 
     it { should validate_presence_of(:resource_role) }
 
@@ -31,14 +31,14 @@ RSpec.describe WhittakerTech::Midas::Coin do
 
   describe 'table_name' do
     it 'uses the correct table name' do
-      expect(described_class.table_name).to eq('wt_midas_coins')
+      expect(described_class.table_name).to eq('midas_coins')
     end
   end
 
   describe '#amount' do
     let(:cents) { 1299 }
     let(:currency_code) { 'USD' }
-    let(:coin) { create(:wt_midas_coin, currency_minor: cents, currency_code: currency_code) }
+    let(:coin) { create(:midas_coin, currency_minor: cents, currency_code: currency_code) }
     let(:amount) { coin.amount }
 
     it 'returns a Money object' do
@@ -55,7 +55,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
   end
 
   describe '#amount=' do
-    let(:coin) { build(:wt_midas_coin) }
+    let(:coin) { build(:midas_coin) }
 
     context 'when setting with a Money object' do
       it 'sets currency_minor and currency_code from Money object' do
@@ -92,14 +92,14 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
 
     it 'raises error when setting numeric without currency' do
-      coin = build(:wt_midas_coin, currency_code: nil)
+      coin = build(:midas_coin, currency_code: nil)
       expect { coin.amount = 100 }
         .to raise_error(ArgumentError, /currency_code required/)
     end
   end
 
   describe '#format' do
-    let(:coin) { create(:wt_midas_coin, currency_minor: 1299, currency_code: 'USD') }
+    let(:coin) { create(:midas_coin, currency_minor: 1299, currency_code: 'USD') }
 
     context 'without currency conversion' do
       it 'formats the amount in its original currency' do
@@ -112,7 +112,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
   end
 
   describe 'convenience methods' do
-    let(:coin) { create(:wt_midas_coin, currency_minor: 1234, currency_code: 'USD') }
+    let(:coin) { create(:midas_coin, currency_minor: 1234, currency_code: 'USD') }
 
     it 'provides minor alias for currency_minor' do
       expect(coin.minor).to eq(1234)
@@ -129,26 +129,26 @@ RSpec.describe WhittakerTech::Midas::Coin do
 
   describe 'normalization' do
     it 'normalizes currency_code to uppercase' do
-      coin = build(:wt_midas_coin, currency_code: 'usd')
+      coin = build(:midas_coin, currency_code: 'usd')
       coin.valid?
       expect(coin.currency_code).to eq('USD')
     end
 
     it 'normalizes resource_role to lowercase' do
-      coin = build(:wt_midas_coin, resource_role: 'Price')
+      coin = build(:midas_coin, resource_role: 'Price')
       coin.valid?
       expect(coin.resource_role).to eq('price')
     end
 
     it 'strips whitespace from currency_code' do
-      coin = build(:wt_midas_coin, currency_code: ' EUR ')
+      coin = build(:midas_coin, currency_code: ' EUR ')
       coin.valid?
       expect(coin.currency_code).to eq('EUR')
     end
   end
 
   describe 'memoization' do
-    let(:coin) { create(:wt_midas_coin) }
+    let(:coin) { create(:midas_coin) }
 
     it 'memoizes amount' do
       first = coin.amount
@@ -165,7 +165,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
   end
 
   describe 'integration tests' do
-    let(:coin) { create(:wt_midas_coin) }
+    let(:coin) { create(:midas_coin) }
 
     it 'can be created with valid attributes' do
       expect(coin).to be_valid
@@ -302,7 +302,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
     before  { WhittakerTech::Midas.deprecation_behavior = :raise }
     after   { WhittakerTech::Midas.reset_configuration! }
 
-    let(:coin) { create(:wt_midas_coin, resource_role: 'price') }
+    let(:coin) { create(:midas_coin, resource_role: 'price') }
 
     describe '#resource_label' do
       it 'raises a DeprecationError' do
@@ -348,7 +348,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
 
   describe 'edge cases' do
     context 'with zero amount' do
-      let(:coin) { create(:wt_midas_coin, currency_minor: 0) }
+      let(:coin) { create(:midas_coin, currency_minor: 0) }
 
       it 'handles zero amounts correctly' do
         expect(coin.amount.cents).to eq(0)
@@ -357,7 +357,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
 
     context 'with negative amounts' do
-      let(:coin) { create(:wt_midas_coin, currency_minor: -500) }
+      let(:coin) { create(:midas_coin, currency_minor: -500) }
 
       it 'handles negative amounts correctly' do
         expect(coin.amount.cents).to eq(-500)
@@ -366,7 +366,7 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
 
     context 'with large amounts' do
-      let(:coin) { create(:wt_midas_coin, currency_minor: 999_999_999) }
+      let(:coin) { create(:midas_coin, currency_minor: 999_999_999) }
 
       it 'handles large amounts correctly' do
         expect(coin.amount.cents).to eq(999_999_999)
