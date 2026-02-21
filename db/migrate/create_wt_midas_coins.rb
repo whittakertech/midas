@@ -14,7 +14,7 @@ class CreateWtMidasCoins < ActiveRecord::Migration[8.0]
 
       t.index %i[resource_id resource_type resource_label],
               unique: true,
-              name: 'index_wt_midas_coins_on_owner_and_label'
+              name: 'index_midas_coins_on_owner_and_label'
     end
   end
 end

@@ -1,20 +1,21 @@
 # frozen_string_literal: true
 
 require 'whittaker_tech/midas/version'
+require 'whittaker_tech/midas/deprecation'
 require 'whittaker_tech/midas/engine'
 require 'money'
 require 'poly'
 
 # WhittakerTech::Midas is a Rails engine for multi-currency monetary value
 # management. It replaces scattered `*_cents` and `*_currency` columns with a
-# single polymorphic {Coin} model backed by a centralized `wt_midas_coins`
+# single polymorphic {Coin} model backed by a centralized `midas_coins`
 # table.
 #
 # ## Configuration
 #
 # ### Table namespace (PostgreSQL schema)
 #
-# By default all coins are stored in `wt_midas_coins`. To place the table
+# By default all coins are stored in `midas_coins`. To place the table
 # inside a PostgreSQL schema set {.table_namespace} in an initializer:
 #
 #   WhittakerTech::Midas.table_namespace = 'finance'
@@ -58,12 +59,23 @@ module WhittakerTech::Midas
 
   # Optional PostgreSQL schema name used to namespace the coins table.
   #
-  # When `nil` (default) the table is created as `wt_midas_coins`.
+  # When `nil` (default) the table is created as `midas_coins`.
   # When set, the table becomes `<namespace>.coins` and requires a PostgreSQL
   # adapter.
   #
   # @return [String, nil]
   mattr_accessor :table_namespace, default: nil
+
+  # Controls how deprecation notices are emitted.
+  #
+  # | Value      | Behavior                                        |
+  # |------------|-------------------------------------------------|
+  # | `:warn`    | Prints to STDERR via `Kernel.warn` (default)    |
+  # | `:raise`   | Raises `Deprecation::DeprecationError`          |
+  # | `:silence` | Suppresses all notices                          |
+  #
+  # @return [Symbol]
+  mattr_accessor :deprecation_behavior, default: :warn
 
   # Resolves the fully-qualified table name for a given base name.
   #
@@ -71,7 +83,7 @@ module WhittakerTech::Midas
   # @return [String] the namespaced table name
   # @raise [RuntimeError] if {.table_namespace} is set and the adapter is not PostgreSQL
   def self.table_name(name)
-    return "wt_midas_#{name}" if table_namespace.blank?
+    return "midas_#{name}" if table_namespace.blank?
 
     adapter = ActiveRecord::Base.connection.adapter_name
     raise "WhittakerTech::Midas.table_namespace requires PostgreSQL (got #{adapter})" unless adapter == 'PostgreSQL'
@@ -98,5 +110,17 @@ module WhittakerTech::Midas
   # @return [Symbol] `:ltr` or `:rtl`
   def self.currency_direction_for(currency_code)
     currency_directions[currency_code.to_s.upcase]
+  end
+
+  # Resets all mutable configuration to defaults.
+  #
+  # Intended for use in test suite `after` blocks when specs mutate
+  # engine-level configuration.
+  #
+  # @return [void]
+  def self.reset_configuration!
+    self.table_namespace      = nil
+    self.deprecation_behavior = :warn
+    @currency_directions      = nil
   end
 end

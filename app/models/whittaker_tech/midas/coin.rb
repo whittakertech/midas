@@ -10,17 +10,17 @@
 #   frozen Coins rather than mutating the receiver.
 # - A Coin owns **arithmetic truth** — not presentation, pricing
 #   interpretation, or currency conversion.
-#
 # ## Storage
 #
-# Every Coin is persisted in `wt_midas_coins` and belongs polymorphically to
+#
+# Every Coin is persisted in `midas_coins` and belongs polymorphically to
 # any domain object (`resource_type` / `resource_id`). The `resource_role`
 # distinguishes multiple coins on the same resource (e.g. `"price"`,
 # `"cost"`, `"tax"`).
 #
 # ## Modules
 #
-# Behaviour is composed via mixins:
+# Behavior is composed via mixins:
 #
 # | Module        | Responsibility                              |
 # |---------------|---------------------------------------------|
@@ -42,6 +42,7 @@
 # @see Coin::Arithmetic
 # @see Coin::Allocation
 # @since 0.1.0
+# rubocop:disable Metrics/ClassLength
 class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Arithmetic: exact arithmetic and equality semantics
   include Arithmetic
@@ -59,14 +60,16 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   # Poly::Joins defines joins_resource(klass) for typed polymorphic joins
   include Poly::Joins
-  # Poly::Role validates resource_role, normalises it, and provides for_role scope
+  # Poly::Role validates resource_role, normalizes it, and provides for_role scope
   include Poly::Role
+  # Poly::Owners defines owner_resource(klass) for typed polymorphic ownership
+  include Poly::Owners
 
   # Normalize user input before validation to ensure consistent storage
   before_validation :normalize_currency_code
 
   # Delegates presence, format `/\A[a-z0-9_]+\z/`, length (max 64), and
-  # before_validation normalisation to Poly::Role
+  # before_validation normalization to Poly::Role
   poly_role :resource
 
   # Each resource may only have one Coin per resource_role
@@ -81,7 +84,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   # Returns a Money object representing the stored monetary value.
   #
-  # This is a *projection*, not the canonical value. Use {#currency_minor}
+  # This is a *projection*, not canonical value. Use {#currency_minor}
   # and {#currency_code} as the source of truth.
   #
   # Memoized for performance. The memo is cleared automatically when
@@ -182,7 +185,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   # Returns the number of decimal places defined by the currency specification.
   #
-  # For example: USD = 2, JPY = 0, BHD = 3.
+  # For example, USD = 2, JPY = 0, BHD = 3
   # This is informational and does not imply rounding or formatting.
   #
   # @return [Integer]
@@ -194,7 +197,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   #
   # Equivalent to `10 ** decimals`. For USD this is `100`; for JPY it is `1`.
   #
-  # @return [Integer]
+  # @return [Numeric]
   def scale
     10**decimals
   end
@@ -220,7 +223,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     # This is the lowest-level factory. It enforces that `currency_minor` is
     # an Integer (fractional minor units are not permitted).
     #
-    # @param currency_minor [Integer] the amount in minor units (e.g. cents)
+    # @param currency_minor [Integer] the amount in minor units (e.g., cents)
     # @param currency_code [String] ISO 4217 currency code, e.g. `"USD"`
     # @return [Coin]
     # @raise [TypeError] if `currency_minor` is not an Integer
@@ -264,14 +267,44 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     end
   end
 
+  # ── Deprecated ────────────────────────────────────────────────────────── #
+
+  # @deprecated Use {#resource_role} instead. Will be removed in v0.4.0.
+  def resource_label
+    WhittakerTech::Midas::Deprecation.warn(
+      'Coin#resource_label is deprecated. Use Coin#resource_role instead.',
+      caller_locations(1, 1)&.first
+    )
+    resource_role
+  end
+
+  # @deprecated Use {#resource_role=} instead. Will be removed in v0.4.0.
+  def resource_label=(value)
+    WhittakerTech::Midas::Deprecation.warn(
+      'Coin#resource_label= is deprecated. Use Coin#resource_role= instead.',
+      caller_locations(1, 1)&.first
+    )
+    self.resource_role = value
+  end
+
+  # @deprecated Use {.for_role} instead. Will be removed in v0.4.0.
+  def self.for_label(label)
+    WhittakerTech::Midas::Deprecation.warn(
+      'Coin.for_label is deprecated. Use Coin.for_role instead.',
+      caller_locations(1, 1)&.first
+    )
+    for_role(label)
+  end
+
   private
 
   # Normalizes currency_code before validation.
   #
-  # - `currency_code` is stripped and upcased
+  # - `currency_code` is stripped and capitalized
   # - `resource_role` normalisation is handled by {Poly::Role}
   # @return [void]
   def normalize_currency_code
     self.currency_code = currency_code.to_s.strip.upcase.presence if currency_code
   end
 end
+# rubocop:enable Metrics/ClassLength

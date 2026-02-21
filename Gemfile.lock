@@ -1,14 +1,7 @@
 PATH
-  remote: ../poly
-  specs:
-    poly (1.0.0)
-      activerecord (>= 7.1)
-      activesupport (>= 7.1)
-
-PATH
   remote: .
   specs:
-    whittaker_tech-midas (0.1.1)
+    whittaker_tech-midas (0.2.0)
       money (~> 6.19.0)
       poly (~> 1.0)
       rails (>= 7.1.5.2)
@@ -153,6 +146,9 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
+    poly (1.0.0)
+      activerecord (>= 7.1)
+      activesupport (>= 7.1)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -306,11 +302,11 @@ GEM
 PLATFORMS
   aarch64-linux-gnu
   arm64-darwin-24
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES
   factory_bot_rails (~> 6.4)
-  poly!
   puma (~> 6.0)
   rspec
   rspec-rails (~> 7.0)

@@ -6,7 +6,7 @@ class RenameResourceLabelToResourceRoleInWtMidasCoins < ActiveRecord::Migration[
   def change
     rename_column WhittakerTech::Midas.table_name('coins'), :resource_label, :resource_role
     rename_index  WhittakerTech::Midas.table_name('coins'),
-                  'index_wt_midas_coins_on_resource_and_label',
-                  'index_wt_midas_coins_on_resource_and_role'
+                  'index_midas_coins_on_owner_and_label',
+                  'index_midas_coins_on_resource_and_role'
   end
 end
