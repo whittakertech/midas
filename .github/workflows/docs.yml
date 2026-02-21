@@ -27,6 +27,19 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: false
 
+      - name: 🧱 Cache gem Dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('*.gemspec') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: 📦 Install Ruby Dependencies
+        run: |
+          bundle config set --local path vendor/bundle
+          bundle install
+
       - name: 🐍 Setup Python
         uses: actions/setup-python@v5
         with:
@@ -39,19 +52,6 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
-      - name: 🧱 Cache gem Dependencies
-        uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('*.gemspec') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      - name: 📦 Install Ruby Dependencies
-        run: |
-          gem install bundler
-          bundle install --path vendor/bundle
 
       - name: 📦 Install Python Dependencies
         run: pip install -r requirements.txt
