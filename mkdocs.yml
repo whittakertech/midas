@@ -34,7 +34,10 @@ nav:
   - Installation: installation.md
   - Usage: usage.md
   - Architecture: architecture.md
-  - API Reference: api.md
+  - API Reference:
+    - Overview: api/index.md
+    - Coin: api/WhittakerTech/Midas/Coin.md
+    - Money: api/WhittakerTech/Midas/Money.md
   - Examples: examples.md
   - Changelog: changelog.md
 
