@@ -1,66 +1,56 @@
-name: 🚀 Deploy Midas Docs (MkDocs Material)
+name: CI
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    branches: [ "master" ]
+    tags:
+      - "v*.*.*"
+  pull_request:
 
 jobs:
-  build-deploy:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 🧩 Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 💎 Setup Ruby
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
-          bundler-cache: false
+          ruby-version: '3.4'
+          bundler-cache: true
 
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v5
+      - name: Install SQLite
+        run: sudo apt-get install -y sqlite3 libsqlite3-dev
+
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+
+      - name: Run RSpec
+        run: bundle exec rspec
+
+  release:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          python-version: '3.11'
+          ruby-version: '3.4'
+          bundler-cache: true
 
-      - name: 🧱 Cache pip Dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+      - name: Build gem
+        run: gem build whittaker_tech-midas.gemspec
 
-      - name: 🧱 Cache gem Dependencies
-        uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('*.gemspec') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      - name: 📦 Install Ruby Dependencies
+      - name: Configure RubyGems credentials
         run: |
-          gem install bundler
-          bundle install --path vendor/bundle
+          mkdir -p ~/.gem
+          echo -e "---\n:rubygems_api_key: ${RUBYGEMS_API_KEY}" > ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
 
-      - name: 📦 Install Python Dependencies
-        run: pip install -r requirements.txt
-
-      - name: 📝 Generate YARD API Docs
-        run: bundle exec yardoc
-
-      - name: 🧪 Build MkDocs Site
-        run: mkdocs build --strict
-
-      - name: 🚀 Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force --clean --message "Deploy Midas Docs [skip ci]"
+      - name: Publish to RubyGems
+        run: gem push whittaker_tech-midas-*.gem
