@@ -4,13 +4,10 @@ on:
   push:
     branches:
       - main
-      - master
   workflow_dispatch:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: "pages"
@@ -24,25 +21,45 @@ jobs:
       - name: 🧩 Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 💎 Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: false
+
       - name: 🐍 Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: 🧱 Cache MkDocs Dependencies
+      - name: 🧱 Cache pip Dependencies
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: 📦 Install Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install "mkdocs>=1.6,<2.0" "mkdocs-material>=9.5,<10.0" pymdown-extensions
+      - name: 🧱 Cache gem Dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('*.gemspec') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
 
-      - name: 🧪 Build Site
+      - name: 📦 Install Ruby Dependencies
+        run: |
+          gem install bundler
+          bundle install --path vendor/bundle
+
+      - name: 📦 Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: 📝 Generate YARD API Docs
+        run: bundle exec yardoc
+
+      - name: 🧪 Build MkDocs Site
         run: mkdocs build --strict
 
       - name: 🚀 Deploy to GitHub Pages
