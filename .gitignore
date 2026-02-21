@@ -6,4 +6,5 @@ tmp/
 coverage/
 
 .DS_Store
+docs/api/
 .yardoc/
