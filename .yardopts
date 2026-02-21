@@ -1,4 +1,5 @@
 --output-dir docs/api
+--plugin markdown
 --markup markdown
 --title "WhittakerTech::Midas API Reference"
 --protected
