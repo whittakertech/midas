@@ -66,7 +66,7 @@
 # == Currency Configuration
 #
 # The module uses I18n for currency-specific configuration:
-# - `midas.ui.currencies.{ISO_CODE}.decimal_count`: Decimal places for specific currency
+# - `midas.ui.currencies.<ISO_CODE>.decimal_count`: Decimal places for specific currency
 # - `midas.ui.defaults.decimal_count`: Default decimal places (defaults to 2)
 #
 # == Thread Safety
@@ -74,7 +74,7 @@
 # This module is designed to be thread-safe when used with Rails' standard
 # Active Record patterns.
 #
-# @see WhittakerTech::Midas::Coin
+# See also: `WhittakerTech::Midas::Coin`
 # @since 0.1.0
 module WhittakerTech::Midas::Bankable
   extend ActiveSupport::Concern
@@ -161,11 +161,11 @@ module WhittakerTech::Midas::Bankable
 
   # Converts an amount in various representations to an integer minor-unit count.
   #
-  # | Input type | Conversion                                             |
-  # |------------|--------------------------------------------------------|
-  # | {Money}    | Uses `money.cents` directly (already minor units)      |
-  # | Integer    | Assumed to already be minor units; returned as-is      |
-  # | Numeric    | Treated as major units; scaled by `10 ** decimals_for` |
+  # Input conversion rules:
+  #
+  # - `Money`: Uses `money.cents` directly (already minor units)
+  # - `Integer`: Assumed to already be minor units; returned as-is
+  # - `Numeric`: Treated as major units; scaled by `10 ** decimals_for`
   #
   # @param name [Symbol] attribute name used in error messages
   # @param amount [Money, Integer, Numeric] the amount to convert
@@ -190,7 +190,7 @@ module WhittakerTech::Midas::Bankable
 
   # Determines the number of decimal places for a given currency.
   #
-  # Reads from `midas.ui.currencies.{ISO}.decimal_count` in I18n, falling
+  # Reads from `midas.ui.currencies.<ISO>.decimal_count` in I18n, falling
   # back to `midas.ui.defaults.decimal_count` (default: `2`). Clamped to
   # `[0, 12]` to prevent pathological scaling.
   #

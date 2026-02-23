@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-# Parser coerces heterogeneous inputs into a {Coin}.
+# Parser coerces heterogeneous inputs into a `Coin`.
 #
 # Accepted input types:
 #
-# | Type    | Behaviour                                                    |
-# |---------|--------------------------------------------------------------|
-# | {Coin}  | Returned as-is — no conversion.                              |
-# | {Money} | Wraps `money.cents` + `money.currency.iso_code` into a Coin. |
-# | Numeric | Treated as a **major-unit** amount; `currency_code` required. |
-# | String  | Strips non-numeric characters; `currency_code` recommended.   |
+# Accepted input types:
+#
+# - `Coin`: Returned as-is (no conversion)
+# - `Money`: Wraps `money.cents` + `money.currency.iso_code` into a Coin
+# - `Numeric`: Treated as a major-unit amount; `currency_code` required
+# - `String`: Strips non-numeric characters; `currency_code` recommended
 #
 # ### Numeric vs. Integer semantics
 #
 # The Parser treats all Numeric inputs (including Integer) as **major units**
 # (dollars, euros, etc.) and scales them to minor units using
-# `Money.from_amount`. This differs from {Coin#amount=} and {Coin.value},
+# `Money.from_amount`. This differs from `Coin#amount=` and `Coin.value`,
 # which expect minor units directly.
 #
 # If you already have cents use `Coin.value(2999, 'USD')` instead.
@@ -29,7 +29,7 @@
 # @since 0.1.0
 class WhittakerTech::Midas::Coin::Parser
   class << self
-    # Parses a value into a {Coin}.
+    # Parses a value into a `Coin`.
     #
     # @param value [Coin, Money, Numeric, String] the value to parse
     # @param currency_code [String, nil] required for bare Numeric and plain

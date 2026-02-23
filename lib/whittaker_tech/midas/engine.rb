@@ -96,9 +96,11 @@
 # The engine can be developed and tested independently using its own
 # test suite, or integrated into a host application for testing.
 #
-# @see WhittakerTech::Midas::Bankable
-# @see WhittakerTech::Midas::Coin
-# @see WhittakerTech::Midas::FormHelper
+# See also:
+#
+# - `WhittakerTech::Midas::Bankable`
+# - `WhittakerTech::Midas::Coin`
+# - `WhittakerTech::Midas::FormHelper`
 # @since 0.1.0
 class WhittakerTech::Midas::Engine < Rails::Engine
   isolate_namespace WhittakerTech::Midas

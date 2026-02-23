@@ -13,11 +13,11 @@
 #
 # ## Isolation marks used
 #
-# | Constant | Codepoint | Purpose                        |
-# |----------|-----------|--------------------------------|
-# | {LRI}    | U+2066    | Left-to-Right Isolate          |
-# | {RLI}    | U+2067    | Right-to-Left Isolate          |
-# | {PDI}    | U+2069    | Pop Directional Isolate (close)|
+# Constants:
+#
+# - `LRI` (U+2066): Left-to-Right Isolate
+# - `RLI` (U+2067): Right-to-Left Isolate
+# - `PDI` (U+2069): Pop Directional Isolate (close)
 #
 # ## Direction configuration
 #
@@ -27,7 +27,7 @@
 #   WhittakerTech::Midas.currency_directions['ILS'] = :rtl
 #   WhittakerTech::Midas.currency_directions['AED'] = :rtl
 #
-# @see WhittakerTech::Midas.currency_direction_for
+# See also: `WhittakerTech::Midas.currency_direction_for`
 # @since 0.1.0
 module WhittakerTech::Midas::Coin::Bidi
   # Unicode Left-to-Right Isolate mark (U+2066)
@@ -76,7 +76,7 @@ module WhittakerTech::Midas::Coin::Bidi
 
   # Resolves the configured display direction for a currency code.
   #
-  # Reads from {WhittakerTech::Midas.currency_directions}. Defaults to
+  # Reads from `WhittakerTech::Midas.currency_directions`. Defaults to
   # `:ltr` for any currency not explicitly configured.
   #
   # @param currency_code [String] ISO 4217 currency code

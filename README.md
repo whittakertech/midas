@@ -1,8 +1,8 @@
 # WhittakerTech::Midas
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](MIT-LICENSE)
-[![Ruby 3.4](https://img.shields.io/badge/ruby-3.4+-red.svg)]()
-[![Rails 7.1](https://img.shields.io/badge/rails-7.1+-crimson.svg)]()
+![Ruby 3.4](https://img.shields.io/badge/ruby-3.4+-red.svg)
+![Rails 7.1](https://img.shields.io/badge/rails-7.1+-crimson.svg)
 [![Gem Version](https://badge.fury.io/rb/whittaker_tech-midas.svg)](https://badge.fury.io/rb/whittaker_tech-midas)
 [![CI](https://github.com/WhittakerTech/midas/actions/workflows/ci.yml/badge.svg)](https://github.com/WhittakerTech/midas/actions)
 

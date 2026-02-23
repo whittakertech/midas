@@ -4,18 +4,18 @@
 #
 # It exists as a clear architectural placeholder to separate concerns:
 #
-# | Module      | Responsibility                     |
-# |-------------|------------------------------------|
-# | {Arithmetic}| Integer arithmetic on minor units  |
-# | {Allocation}| Per-unit pricing interpretation    |
-# | Converter   | Cross-currency rate conversion *(planned)* |
+# Related modules:
+#
+# - `Arithmetic`: Integer arithmetic on minor units
+# - `Allocation`: Per-unit pricing interpretation
+# - `Converter`: Cross-currency rate conversion (planned)
 #
 # When implemented, Converter will handle:
 # - Exchange rate sources (live API, snapshot, historical)
 # - Historical conversions with a specific timestamp
 # - Regulatory rounding rules per jurisdiction
 #
-# @note All methods in this module raise {NotImplementedError} intentionally.
+# @note All methods in this module raise `NotImplementedError` intentionally.
 #   Use the Money gem's exchange rate infrastructure directly for now.
 # @since 0.1.0
 module WhittakerTech::Midas::Coin::Converter

@@ -1,0 +1,2154 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://midas.whittakertech.com/api/">
+      
+      
+        <link rel="prev" href="../architecture/">
+      
+      
+        <link rel="next" href="WhittakerTech/Midas/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Overview - WhittakerTech Midas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="WhittakerTech Midas" class="md-header__button md-logo" aria-label="WhittakerTech Midas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            WhittakerTech Midas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/WhittakerTech/midas" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WhittakerTech/midas
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="WhittakerTech Midas" class="md-nav__button md-logo" aria-label="WhittakerTech Midas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    WhittakerTech Midas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/WhittakerTech/midas" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WhittakerTech/midas
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#whittakertechmidas-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WhittakerTech::Midas (module)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="WhittakerTech::Midas (module)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-methods-accessors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance methods — accessors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-methods-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance methods — behaviour
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinarithmetic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Arithmetic
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinallocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Allocation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinpresenter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Presenter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coin::Presenter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token_map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TOKEN_MAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-methods_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options-for-present-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Options for present / format
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinparser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Parser
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinbidi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Bidi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bankable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bankable
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bankable">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-methods-in-activerecord-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class methods (in ActiveRecord model)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generated-instance-methods-for-has_coin-price" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generated instance methods (for has_coin :price)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set_-amount-coercion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        set_* amount coercion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formhelper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FormHelper
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WhittakerTech::Midas
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    WhittakerTech::Midas
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Root Module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Bankable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bankable
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2_3" id="__nav_5_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coin
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Coin
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Coin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Root Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Coin/Allocation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Allocation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Coin/Arithmetic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arithmetic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Coin/Bidi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bidi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Coin/Converter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Converter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Coin/Parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Coin/Presenter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presenter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="WhittakerTech/Midas/Engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#whittakertechmidas-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WhittakerTech::Midas (module)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="WhittakerTech::Midas (module)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-methods-accessors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance methods — accessors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-methods-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance methods — behaviour
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinarithmetic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Arithmetic
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinallocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Allocation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinpresenter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Presenter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coin::Presenter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token_map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TOKEN_MAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-methods_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options-for-present-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Options for present / format
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinparser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Parser
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coinbidi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coin::Bidi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bankable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bankable
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bankable">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-methods-in-activerecord-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class methods (in ActiveRecord model)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generated-instance-methods-for-has_coin-price" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generated instance methods (for has_coin :price)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set_-amount-coercion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        set_* amount coercion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formhelper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FormHelper
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
+<p>Full YARD-generated API documentation is available at
+<a href="WhittakerTech/Midas/"><code>api/WhittakerTech/Midas.md</code></a> — generated by <code>bundle exec yard doc --format markdown</code>.</p>
+<p>To browse it locally:</p>
+<div class="highlight"><pre><span></span><code>bundle<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>yard<span class="w"> </span>server
+<span class="c1"># =&gt; http://localhost:8808</span>
+</code></pre></div>
+<p>To regenerate after source changes:</p>
+<div class="highlight"><pre><span></span><code>bundle<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>yard<span class="w"> </span>doc
+</code></pre></div>
+<hr />
+<h2 id="whittakertechmidas-module">WhittakerTech::Midas (module)<a class="headerlink" href="#whittakertechmidas-module" title="Permanent link">&para;</a></h2>
+<h3 id="constants">Constants<a class="headerlink" href="#constants" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ROUNDING_POLICIES</code></td>
+<td><code>{ round:, ceil:, floor:, bankers: }</code> — lambdas</td>
+</tr>
+<tr>
+<td><code>DEFAULT_ROUNDING_POLICY</code></td>
+<td><code>:round</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="module-methods">Module methods<a class="headerlink" href="#module-methods" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>table_name(name)</code></td>
+<td><code>String</code></td>
+<td>Resolves fully-qualified table name</td>
+</tr>
+<tr>
+<td><code>table_namespace=</code></td>
+<td>—</td>
+<td>Sets PostgreSQL schema namespace</td>
+</tr>
+<tr>
+<td><code>currency_directions</code></td>
+<td><code>Hash</code></td>
+<td>Per-currency direction map (<code>:ltr</code> / <code>:rtl</code>)</td>
+</tr>
+<tr>
+<td><code>currency_direction_for(code)</code></td>
+<td><code>Symbol</code></td>
+<td>Returns <code>:ltr</code> or <code>:rtl</code> for a currency code</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="coin">Coin<a class="headerlink" href="#coin" title="Permanent link">&para;</a></h2>
+<h3 id="class-methods">Class methods<a class="headerlink" href="#class-methods" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Coin.value(currency_minor, currency_code)</code></td>
+<td><code>Coin</code></td>
+<td>Lowest-level factory (requires Integer)</td>
+</tr>
+<tr>
+<td><code>Coin.zero(currency_code)</code></td>
+<td><code>Coin</code></td>
+<td>Zero-valued Coin</td>
+</tr>
+<tr>
+<td><code>Coin.parse(value, currency_code: nil)</code></td>
+<td><code>Coin</code></td>
+<td>Coerces Money / Numeric / String</td>
+</tr>
+</tbody>
+</table>
+<h3 id="instance-methods-accessors">Instance methods — accessors<a class="headerlink" href="#instance-methods-accessors" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td><code>Money</code></td>
+<td>Projection (memoized). Not the source of truth.</td>
+</tr>
+<tr>
+<td><code>amount=(value)</code></td>
+<td>—</td>
+<td>Accepts <code>Money</code> or <code>Numeric</code> (minor units)</td>
+</tr>
+<tr>
+<td><code>currency_code</code></td>
+<td><code>String</code></td>
+<td>ISO 4217 code (3 letters, uppercase)</td>
+</tr>
+<tr>
+<td><code>currency_minor</code></td>
+<td><code>Integer</code></td>
+<td>Raw minor units (cents, pence, etc.)</td>
+</tr>
+<tr>
+<td><code>minor</code></td>
+<td><code>Integer</code></td>
+<td>Alias for <code>currency_minor</code></td>
+</tr>
+<tr>
+<td><code>fractional</code></td>
+<td><code>Integer</code></td>
+<td>Alias for <code>currency_minor</code></td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td><code>String</code></td>
+<td>Alias for <code>currency_code</code></td>
+</tr>
+<tr>
+<td><code>decimals</code></td>
+<td><code>Integer</code></td>
+<td>Decimal places defined by the currency</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td><code>Integer</code></td>
+<td><code>10 ** decimals</code></td>
+</tr>
+<tr>
+<td><code>major</code></td>
+<td><code>BigDecimal</code></td>
+<td>Major-unit value. Not payable money.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="instance-methods-behaviour">Instance methods — behaviour<a class="headerlink" href="#instance-methods-behaviour" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format(to: nil)</code></td>
+<td><code>String</code></td>
+<td>Delegates to Money#format</td>
+</tr>
+<tr>
+<td><code>present(pattern, **opts)</code></td>
+<td><code>String</code></td>
+<td>Token-based formatting; see Presenter</td>
+</tr>
+<tr>
+<td><code>allocate(per:, rounding_policy: :round)</code></td>
+<td><code>Allocation</code></td>
+<td>Returns per-unit value object</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="coinarithmetic">Coin::Arithmetic<a class="headerlink" href="#coinarithmetic" title="Permanent link">&para;</a></h2>
+<p>Mixed into <code>Coin</code>. All operations return new frozen Coins.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Raises</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>==(other)</code></td>
+<td>Boolean</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>eql?(other)</code></td>
+<td>Boolean</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>hash</code></td>
+<td>Integer</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>+(other)</code></td>
+<td>Coin</td>
+<td><code>TypeError</code>, <code>ArgumentError</code> (currency mismatch)</td>
+</tr>
+<tr>
+<td><code>-(other)</code></td>
+<td>Coin</td>
+<td><code>TypeError</code>, <code>ArgumentError</code></td>
+</tr>
+<tr>
+<td><code>*(integer)</code></td>
+<td>Coin</td>
+<td><code>TypeError</code> (non-Integer)</td>
+</tr>
+<tr>
+<td><code>%(integer)</code></td>
+<td>Coin</td>
+<td><code>TypeError</code>, <code>ZeroDivisionError</code></td>
+</tr>
+<tr>
+<td><code>negate</code></td>
+<td>Coin</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>-@</code></td>
+<td>Coin</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>divide(divisor, rounding_policy: :round)</code></td>
+<td>Coin</td>
+<td><code>TypeError</code>, <code>ZeroDivisionError</code></td>
+</tr>
+<tr>
+<td><code>divide_round(divisor)</code></td>
+<td>Coin</td>
+<td>Generated shorthand</td>
+</tr>
+<tr>
+<td><code>divide_ceil(divisor)</code></td>
+<td>Coin</td>
+<td>Generated shorthand</td>
+</tr>
+<tr>
+<td><code>divide_floor(divisor)</code></td>
+<td>Coin</td>
+<td>Generated shorthand</td>
+</tr>
+<tr>
+<td><code>divide_bankers(divisor)</code></td>
+<td>Coin</td>
+<td>Generated shorthand</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="coinallocation">Coin::Allocation<a class="headerlink" href="#coinallocation" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>coin</code></td>
+<td>Coin</td>
+<td>The source Coin (frozen)</td>
+</tr>
+<tr>
+<td><code>divisor</code> / <code>per</code></td>
+<td>Numeric</td>
+<td>Number of units</td>
+</tr>
+<tr>
+<td><code>rounding_policy</code></td>
+<td>Symbol</td>
+<td>e.g. <code>:round</code>, <code>:ceil</code></td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>Coin</td>
+<td>Per-unit Coin</td>
+</tr>
+<tr>
+<td><code>price(qty: 1)</code></td>
+<td>Coin</td>
+<td>Total for N units</td>
+</tr>
+<tr>
+<td><code>currency_code</code></td>
+<td>String</td>
+<td>Delegated from coin</td>
+</tr>
+<tr>
+<td><code>decimals</code></td>
+<td>Integer</td>
+<td>Delegated from coin</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td>Integer</td>
+<td>Delegated from coin</td>
+</tr>
+<tr>
+<td><code>zero?</code></td>
+<td>Boolean</td>
+<td>Delegated from coin</td>
+</tr>
+<tr>
+<td><code>positive?</code></td>
+<td>Boolean</td>
+<td>Delegated from coin</td>
+</tr>
+<tr>
+<td><code>negative?</code></td>
+<td>Boolean</td>
+<td>Delegated from coin</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="coinpresenter">Coin::Presenter<a class="headerlink" href="#coinpresenter" title="Permanent link">&para;</a></h2>
+<h3 id="token_map"><code>TOKEN_MAP</code><a class="headerlink" href="#token_map" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_percent</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;t&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_total</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;m&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_minor</span><span class="p">,</span>
+<span class="w">  </span><span class="s1">&#39;M&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_major</span><span class="p">,</span><span class="w">   </span><span class="s1">&#39;c&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_currency_code</span><span class="p">,</span>
+<span class="w">  </span><span class="s1">&#39;s&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_currency_symbol</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;n&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_number_only</span><span class="p">,</span>
+<span class="w">  </span><span class="s1">&#39;u&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_units</span><span class="p">,</span><span class="w">   </span><span class="s1">&#39;p&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_per_exact</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;~&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="ss">:token_approx</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="class-methods_1">Class methods<a class="headerlink" href="#class-methods_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format(coin, pattern, **)</code></td>
+<td>String</td>
+<td>Main entry point</td>
+</tr>
+<tr>
+<td><code>build_context(coin, **opts)</code></td>
+<td>Context</td>
+<td>Assembles rendering struct</td>
+</tr>
+<tr>
+<td><code>scan(pattern, ctx)</code></td>
+<td>String</td>
+<td>Tokenises and expands pattern</td>
+</tr>
+</tbody>
+</table>
+<h3 id="options-for-present-format">Options for <code>present</code> / <code>format</code><a class="headerlink" href="#options-for-present-format" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Token</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>approx:</code></td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td><code>~</code></td>
+</tr>
+<tr>
+<td><code>units:</code></td>
+<td>String</td>
+<td><code>nil</code> (renders empty)</td>
+<td><code>%u</code></td>
+</tr>
+<tr>
+<td><code>per_exact:</code></td>
+<td>String</td>
+<td><code>nil</code> (renders empty)</td>
+<td><code>%p</code></td>
+</tr>
+<tr>
+<td><code>currency_dir:</code></td>
+<td>Symbol</td>
+<td>From <code>Midas.currency_direction_for</code></td>
+<td>all</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="coinparser">Coin::Parser<a class="headerlink" href="#coinparser" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Raises</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parse(value, currency_code: nil)</code></td>
+<td>Coin</td>
+<td><code>TypeError</code>, <code>ArgumentError</code></td>
+</tr>
+</tbody>
+</table>
+<p>Input coercion rules:</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Coin</code></td>
+<td>Returned unchanged</td>
+</tr>
+<tr>
+<td><code>Money</code></td>
+<td>Wraps <code>money.cents</code> + <code>money.currency.iso_code</code></td>
+</tr>
+<tr>
+<td>Numeric</td>
+<td>Major units; scaled to minor. Requires <code>currency_code</code>.</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Strips non-numeric chars. Requires <code>currency_code</code> or embedded symbol.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="coinbidi">Coin::Bidi<a class="headerlink" href="#coinbidi" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method / Constant</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LRI</code> = <code>"\u2066"</code></td>
+<td>Left-to-Right Isolate mark</td>
+</tr>
+<tr>
+<td><code>RLI</code> = <code>"\u2067"</code></td>
+<td>Right-to-Left Isolate mark</td>
+</tr>
+<tr>
+<td><code>PDI</code> = <code>"\u2069"</code></td>
+<td>Pop Directional Isolate mark (closes span)</td>
+</tr>
+<tr>
+<td><code>bidi_isolate(text, dir:)</code></td>
+<td>Wraps text; <code>dir:</code> is <code>:ltr</code>, <code>:rtl</code>, or <code>nil</code></td>
+</tr>
+<tr>
+<td><code>bidi_isolate_number(text)</code></td>
+<td>Shorthand for LTR isolation of numeric strings</td>
+</tr>
+<tr>
+<td><code>bidi_currency_dir(currency_code)</code></td>
+<td>Reads from <code>Midas.currency_directions</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="bankable">Bankable<a class="headerlink" href="#bankable" title="Permanent link">&para;</a></h2>
+<h3 id="class-methods-in-activerecord-model">Class methods (in ActiveRecord model)<a class="headerlink" href="#class-methods-in-activerecord-model" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_coin(name, dependent: :destroy)</code></td>
+<td>Declares a single monetary attribute</td>
+</tr>
+<tr>
+<td><code>has_coins(*names, dependent: :destroy)</code></td>
+<td>Declares multiple at once</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generated-instance-methods-for-has_coin-price">Generated instance methods (for <code>has_coin :price</code>)<a class="headerlink" href="#generated-instance-methods-for-has_coin-price" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>price</code></td>
+<td><code>Coin?</code></td>
+<td>Returns the persisted Coin or nil</td>
+</tr>
+<tr>
+<td><code>price_coin</code></td>
+<td><code>Coin?</code></td>
+<td>The <code>has_one</code> association</td>
+</tr>
+<tr>
+<td><code>price_amount</code></td>
+<td><code>Money?</code></td>
+<td><code>coin.amount</code> or nil</td>
+</tr>
+<tr>
+<td><code>price_format</code></td>
+<td><code>String?</code></td>
+<td>Formatted string or nil</td>
+</tr>
+<tr>
+<td><code>set_price(amount:, currency_code:)</code></td>
+<td><code>Coin</code></td>
+<td>Creates or updates the Coin</td>
+</tr>
+<tr>
+<td><code>midas_coins</code></td>
+<td>Relation</td>
+<td>All coins on this resource</td>
+</tr>
+</tbody>
+</table>
+<h3 id="set_-amount-coercion"><code>set_*</code> amount coercion<a class="headerlink" href="#set_-amount-coercion" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Input type</th>
+<th>Treated as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Money</code></td>
+<td>Minor units from <code>money.cents</code></td>
+</tr>
+<tr>
+<td><code>Integer</code></td>
+<td>Already minor units</td>
+</tr>
+<tr>
+<td><code>Float</code> / <code>Numeric</code></td>
+<td>Major units × <code>10 ** decimals_for(currency)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="formhelper">FormHelper<a class="headerlink" href="#formhelper" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>midas_currency_field(form, attribute, currency_code:, **opts)</code></td>
+<td>String (HTML)</td>
+<td>Renders display + hidden fields</td>
+</tr>
+</tbody>
+</table>
+<p>Options:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>currency_code:</code></td>
+<td>String</td>
+<td>Required. ISO 4217 code.</td>
+</tr>
+<tr>
+<td><code>label:</code></td>
+<td>String</td>
+<td>Field label text</td>
+</tr>
+<tr>
+<td><code>decimals:</code></td>
+<td>Integer</td>
+<td>Decimal places override (default: 2)</td>
+</tr>
+<tr>
+<td><code>input_html:</code></td>
+<td>Hash</td>
+<td>Passed to the visible display input</td>
+</tr>
+<tr>
+<td><code>wrapper_html:</code></td>
+<td>Hash</td>
+<td>Passed to the wrapper <code>&lt;div&gt;</code></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

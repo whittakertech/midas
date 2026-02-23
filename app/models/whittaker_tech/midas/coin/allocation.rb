@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Allocation represents a per-unit interpretation of a {Coin}.
+# Allocation represents a per-unit interpretation of a `Coin`.
 #
 # ## Conceptual model
 #
@@ -11,8 +11,8 @@
 #
 # An Allocation answers two questions:
 #
-# 1. **What does one unit cost?** — {#value}
-# 2. **What does a given quantity cost?** — {#price}
+# 1. **What does one unit cost?** — `#value`
+# 2. **What does a given quantity cost?** — `#price`
 #
 # ## Immutability
 #
@@ -29,7 +29,7 @@
 #   alloc.value          # => Coin($16.67)
 #   alloc.price(qty: 2)  # => Coin($33.34)
 #
-# @see Coin#allocate
+# See also: `Coin#allocate`
 # @since 0.1.0
 class WhittakerTech::Midas::Coin::Allocation
   # @return [Coin] the total monetary amount this Allocation is based on
@@ -41,7 +41,7 @@ class WhittakerTech::Midas::Coin::Allocation
   # @return [Symbol] the rounding policy applied to per-unit calculations
   attr_reader :rounding_policy
 
-  # Alias for {#divisor}. Reads as "this coin, per N units".
+  # Alias for `#divisor`. Reads as "this coin, per N units".
   alias per divisor
 
   # Delegate invariant facts from the underlying Coin.
@@ -57,8 +57,8 @@ class WhittakerTech::Midas::Coin::Allocation
 
   # @param coin [Coin] the total monetary value
   # @param divisor [Numeric] the number of units; must be positive
-  # @param rounding_policy [Symbol] one of {WhittakerTech::Midas::ROUNDING_POLICIES}
-  # @raise [TypeError] if `coin` is not a {Coin}
+  # @param rounding_policy [Symbol] one of `WhittakerTech::Midas::ROUNDING_POLICIES`
+  # @raise [TypeError] if `coin` is not a `Coin`
   # @raise [TypeError] if `divisor` is not a positive Numeric
   # @raise [ArgumentError] if `rounding_policy` is not a recognised policy key
   def initialize(coin:, divisor:, rounding_policy:)
@@ -71,10 +71,10 @@ class WhittakerTech::Midas::Coin::Allocation
     @rounding_policy = rounding_policy.freeze
   end
 
-  # Returns the per-unit Coin after dividing by {#divisor} and applying the
-  # {#rounding_policy}.
+  # Returns the per-unit Coin after dividing by `#divisor` and applying the
+  # `#rounding_policy`.
   #
-  # The result is still a {Coin} — payable money representing a single unit.
+  # The result is still a `Coin` — payable money representing a single unit.
   #
   # @return [Coin]
   def value
@@ -83,7 +83,7 @@ class WhittakerTech::Midas::Coin::Allocation
 
   # Returns the total price for a given quantity of units.
   #
-  # Uses `(total_minor * qty) / divisor` rounded via {#rounding_policy}.
+  # Uses `(total_minor * qty) / divisor` rounded via `#rounding_policy`.
   # Equivalent to `qty` units at the per-unit rate, but computed from the
   # original total to minimise accumulated rounding error.
   #
@@ -111,7 +111,7 @@ class WhittakerTech::Midas::Coin::Allocation
 
   private
 
-  # Applies the configured {#rounding_policy} to a raw Numeric amount and
+  # Applies the configured `#rounding_policy` to a raw Numeric amount and
   # returns an Integer suitable for Coin construction.
   # @param amount [Numeric]
   # @return [Integer]

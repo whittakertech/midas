@@ -1,31 +1,31 @@
 # frozen_string_literal: true
 
-# Presenter provides a strftime-like token grammar for rendering {Coin} values.
+# Presenter provides a strftime-like token grammar for rendering `Coin` values.
 #
 # ## Design principles
 #
 # - **Declarative** — tokens map directly to named handler methods.
 # - **Pure** — no mutation, rounding, or currency conversion.
 # - **Direction-safe** — all text is wrapped with Unicode bidirectional
-#   isolation markers via {Coin::Bidi} to prevent display corruption in
+#   isolation markers via `Coin::Bidi` to prevent display corruption in
 #   mixed LTR/RTL contexts.
 #
 # ## Token reference
 #
 # Patterns are strings containing `%x` tokens (similar to `strftime`).
 #
-# | Token | Output                           | Example (`$29.99 USD`) |
-# |-------|----------------------------------|------------------------|
-# | `%t`  | Formatted total (symbol + amount)| `$29.99`               |
-# | `%m`  | Minor units (raw integer)        | `2999`                 |
-# | `%M`  | Major units (decimal string)     | `29.99`                |
-# | `%c`  | Currency code                    | `USD`                  |
-# | `%s`  | Currency symbol                  | `$`                    |
-# | `%n`  | Number only (no symbol)          | `29.99`                |
-# | `%u`  | Custom units label (see opts)    | `per kg`               |
-# | `%p`  | Custom per-exact label (see opts)| `0.2997`               |
-# | `~`   | Approximate marker (`≈` or empty)| `≈`                    |
-# | `%%`  | Literal percent sign             | `%`                    |
+# Tokens:
+#
+# - `%t`: Formatted total (symbol + amount), e.g. `$29.99`
+# - `%m`: Minor units (raw integer), e.g. `2999`
+# - `%M`: Major units (decimal string), e.g. `29.99`
+# - `%c`: Currency code, e.g. `USD`
+# - `%s`: Currency symbol, e.g. `$`
+# - `%n`: Number only (no symbol), e.g. `29.99`
+# - `%u`: Custom units label (see opts), e.g. `per kg`
+# - `%p`: Custom per-exact label (see opts), e.g. `0.2997`
+# - `~`: Approximate marker (`≈` or empty)
+# - `%%`: Literal percent sign
 #
 # ## Usage
 #
@@ -42,7 +42,7 @@
 # - `per_exact:` [String] — value for `%p` token.
 # - `currency_dir:` [Symbol] — override the currency display direction
 #   (`:ltr` or `:rtl`); defaults to the value from
-#   {WhittakerTech::Midas.currency_direction_for}.
+#   `WhittakerTech::Midas.currency_direction_for`.
 #
 # @since 0.1.0
 module WhittakerTech::Midas::Coin::Presenter
@@ -68,8 +68,8 @@ module WhittakerTech::Midas::Coin::Presenter
   #   coin.present('%s%M')          # => "$29.99"
   #   coin.present('%t (%c)')       # => "$29.99 (USD)"
   #   coin.present('~%t', approx: true) # => "≈$29.99"
-  def present(pattern, **)
-    WhittakerTech::Midas::Coin::Presenter.format(self, pattern, **)
+  def present(pattern, **opts)
+    WhittakerTech::Midas::Coin::Presenter.format(self, pattern, **opts)
   end
 
   class << self
@@ -92,7 +92,7 @@ module WhittakerTech::Midas::Coin::Presenter
     # Formats a Coin using a pattern string.
     #
     # This is the class-level entry point; instance-level access is via
-    # {Coin#present}.
+    # `Coin#present`.
     #
     # @param coin [Coin] the value to format
     # @param pattern [String] the format pattern
@@ -100,14 +100,14 @@ module WhittakerTech::Midas::Coin::Presenter
     # @return [String]
     # @raise [ArgumentError] if `pattern` is nil, contains an unknown token,
     #   or has an unterminated `%` escape
-    def format(coin, pattern, **)
+    def format(coin, pattern, **opts)
       raise ArgumentError, 'pattern required' if pattern.nil?
 
-      ctx = build_context(coin, **)
+      ctx = build_context(coin, **opts)
       scan(pattern, ctx)
     end
 
-    # Builds a {Context} struct from a Coin and caller-supplied options.
+    # Builds a `Context` struct from a Coin and caller-supplied options.
     #
     # @param coin [Coin]
     # @param opts [Hash]
@@ -155,7 +155,7 @@ module WhittakerTech::Midas::Coin::Presenter
     # @param token [String] single character following `%`
     # @param ctx [Context]
     # @return [String]
-    # @raise [ArgumentError] if the token is not in {TOKEN_MAP}
+    # @raise [ArgumentError] if the token is not in `TOKEN_MAP`
     def dispatch(token, ctx)
       handler = TOKEN_MAP[token]
       raise ArgumentError, "Unknown presenter token: %#{token}" unless handler

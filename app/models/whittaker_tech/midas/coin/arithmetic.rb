@@ -4,16 +4,16 @@
 #
 # ## Design invariants
 #
-# - **Immutable** — all operations return new, frozen {Coin} objects.
-# - **Closed** — operations always return a {Coin}, never a primitive.
+# - **Immutable** — all operations return new, frozen `Coin` objects.
+# - **Closed** — operations always return a `Coin`, never a primitive.
 # - **Policy-aware only where unavoidable** — division accepts a rounding
 #   policy; all other operations are exact.
 # - **Currency-strict** — binary operations (`+`, `-`, `==`) raise
-#   {ArgumentError} when the operands have different currency codes.
+#   `ArgumentError` when the operands have different currency codes.
 #
 # ## Convenience division helpers
 #
-# For each key in {WhittakerTech::Midas::ROUNDING_POLICIES} a named shorthand
+# For each key in `WhittakerTech::Midas::ROUNDING_POLICIES` a named shorthand
 # is generated:
 #
 #   coin.divide_round(3)   # same as coin.divide(3, rounding_policy: :round)
@@ -36,14 +36,12 @@ module WhittakerTech::Midas::Coin::Arithmetic
       currency_minor == other.currency_minor
   end
 
-  # Value-based equality alias, compatible with {#hash}.
+  # Value-based equality alias, compatible with `#hash`.
   #
   # Suitable for use in Sets and as Hash keys.
-  # @param other [Object]
-  # @return [Boolean]
   alias eql? ==
 
-  # Returns a hash value consistent with {#eql?}.
+  # Returns a hash value consistent with `#eql?`.
   #
   # Coins with the same currency code and minor-unit amount produce the same
   # hash, making them interchangeable as Hash keys or Set members.
@@ -57,7 +55,7 @@ module WhittakerTech::Midas::Coin::Arithmetic
   #
   # @param other [Coin] must have the same currency code as the receiver
   # @return [Coin] a new, frozen Coin
-  # @raise [TypeError] if `other` is not a {Coin}
+  # @raise [TypeError] if `other` is not a `Coin`
   # @raise [ArgumentError] if the currencies do not match
   #
   # @example
@@ -73,7 +71,7 @@ module WhittakerTech::Midas::Coin::Arithmetic
   #
   # @param other [Coin] must have the same currency code as the receiver
   # @return [Coin] a new, frozen Coin
-  # @raise [TypeError] if `other` is not a {Coin}
+  # @raise [TypeError] if `other` is not a `Coin`
   # @raise [ArgumentError] if the currencies do not match
   #
   # @example
@@ -125,7 +123,7 @@ module WhittakerTech::Midas::Coin::Arithmetic
     WhittakerTech::Midas::Coin.value(-currency_minor, currency_code).freeze
   end
 
-  # Unary minus operator — shorthand for {#negate}.
+  # Unary minus operator — shorthand for `#negate`.
   #
   # @return [Coin]
   def -@
@@ -139,8 +137,8 @@ module WhittakerTech::Midas::Coin::Arithmetic
   #
   # @param divisor [Numeric] the divisor; must be non-zero
   # @param rounding_policy [Symbol] one of the keys in
-  #   {WhittakerTech::Midas::ROUNDING_POLICIES} (default:
-  #   {WhittakerTech::Midas::DEFAULT_ROUNDING_POLICY})
+  #   `WhittakerTech::Midas::ROUNDING_POLICIES` (default:
+  #   `WhittakerTech::Midas::DEFAULT_ROUNDING_POLICY`)
   # @return [Coin] a new, frozen Coin
   # @raise [TypeError] if `divisor` is not Numeric
   # @raise [ZeroDivisionError] if `divisor` is zero
@@ -187,7 +185,7 @@ module WhittakerTech::Midas::Coin::Arithmetic
 
   private
 
-  # Raises if `other` is not a {Coin} with the same currency code.
+  # Raises if `other` is not a `Coin` with the same currency code.
   # @param other [Object]
   # @raise [TypeError] if `other` is not a Coin
   # @raise [ArgumentError] if currencies differ

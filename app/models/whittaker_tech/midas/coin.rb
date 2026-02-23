@@ -22,27 +22,30 @@
 #
 # Behavior is composed via mixins:
 #
-# | Module        | Responsibility                              |
-# |---------------|---------------------------------------------|
-# | {Arithmetic}  | `+`, `-`, `*`, `/`, `%`, `negate`, equality |
-# | {Bidi}        | Unicode bidirectional text isolation        |
-# | {Converter}   | Currency conversion (reserved, not yet live) |
-# | {Presenter}   | Token-based formatting grammar              |
+#   +------------+----------------------------------------------+
+#   | Module     | Responsibility                               |
+#   +------------+----------------------------------------------+
+#   | Arithmetic | +, -, *, /, %, negate, equality              |
+#   | Bidi       | Unicode bidirectional text isolation         |
+#   | Converter  | Currency conversion (reserved, not yet live) |
+#   | Presenter  | Token-based formatting grammar               |
+#   +------------+----------------------------------------------+
 #
-# ## Usage via {Bankable}
+# ## Usage via Bankable
 #
-# The typical entry point is the {Bankable} concern; direct Coin construction
+# The typical entry point is the `WhittakerTech::Midas::Bankable` concern; direct Coin construction
 # is mostly used in service objects and tests.
 #
 #   product.set_price(amount: 29.99, currency_code: 'USD')
 #   product.price         # => #<WhittakerTech::Midas::Coin ...>
 #   product.price_amount  # => #<Money @fractional=2999 @currency="USD">
 #
-# @see Bankable
-# @see Coin::Arithmetic
-# @see Coin::Allocation
+# See also:
+#
+# - `WhittakerTech::Midas::Bankable`
+# - `WhittakerTech::Midas::Coin::Arithmetic`
+# - `WhittakerTech::Midas::Coin::Allocation`
 # @since 0.1.0
-# rubocop:disable Metrics/ClassLength
 class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Arithmetic: exact arithmetic and equality semantics
   include Arithmetic
@@ -84,11 +87,11 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   # Returns a Money object representing the stored monetary value.
   #
-  # This is a *projection*, not canonical value. Use {#currency_minor}
-  # and {#currency_code} as the source of truth.
+  # This is a *projection*, not canonical value. Use `#currency_minor`
+  # and `#currency_code` as the source of truth.
   #
   # Memoized for performance. The memo is cleared automatically when
-  # {#currency_minor=} or {#currency_code=} are called.
+  # `#currency_minor=` or `#currency_code=` are called.
   #
   # @return [Money]
   def amount
@@ -98,9 +101,9 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Sets the coin's monetary value from a Money object or raw minor-unit integer.
   #
   # @param value [Money, Integer, Numeric] the value to assign
-  #   - {Money} — copies `cents` and `currency.iso_code` directly.
-  #   - {Numeric} — treated as already-scaled minor units; requires
-  #     {#currency_code} to already be set.
+  #   - `Money` — copies `cents` and `currency.iso_code` directly.
+  #   - `Numeric` — treated as already-scaled minor units; requires
+  #     `#currency_code` to already be set.
   # @raise [ArgumentError] if a Numeric is given without a prior currency_code
   # @raise [ArgumentError] if the value type is not supported
   # @return [void]
@@ -121,7 +124,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Formats the Coin for display, optionally converting to another currency first.
   #
   # This is a convenience wrapper around the Money gem's `#format`. For
-  # richer formatting use {#present} with a pattern string.
+  # richer formatting use `#present` with a pattern string.
   #
   # @param to [String, nil] target ISO 4217 currency code for conversion,
   #   or `nil` to format in the native currency.
@@ -130,17 +133,17 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     (to ? exchange_to(to) : amount).format
   end
 
-  # @return [Integer] the raw minor-unit count (alias for {#currency_minor})
+  # @return [Integer] the raw minor-unit count (alias for `#currency_minor`)
   def minor
     currency_minor
   end
 
-  # @return [String] the ISO currency code (alias for {#currency_code})
+  # @return [String] the ISO currency code (alias for `#currency_code`)
   def currency
     currency_code
   end
 
-  # @return [Integer] the raw minor-unit count (alias for {#currency_minor})
+  # @return [Integer] the raw minor-unit count (alias for `#currency_minor`)
   def fractional
     currency_minor
   end
@@ -161,13 +164,13 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     super
   end
 
-  # Constructs an {Coin::Allocation} that interprets this Coin as a per-unit price.
+  # Constructs a `Coin::Allocation` that interprets this Coin as a per-unit price.
   #
-  # The Coin itself is unchanged; {Coin::Allocation} encapsulates the
+  # The Coin itself is unchanged; `Coin::Allocation` encapsulates the
   # per-unit interpretation and rounding policy.
   #
   # @param per [Numeric] number of units this Coin covers (the divisor)
-  # @param rounding_policy [Symbol] one of {WhittakerTech::Midas::ROUNDING_POLICIES}
+  # @param rounding_policy [Symbol] one of `WhittakerTech::Midas::ROUNDING_POLICIES`
   # @return [Coin::Allocation]
   #
   # @example Price per item from a bulk price
@@ -248,9 +251,9 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
       new(currency_minor: 0, currency_code:)
     end
 
-    # Parses a heterogeneous input into a Coin using {Coin::Parser}.
+    # Parses a heterogeneous input into a Coin using `Coin::Parser`.
     #
-    # Accepted input types: {Coin}, {Money}, {Numeric}, {String}.
+    # Accepted input types: `Coin`, `Money`, `Numeric`, `String`.
     #
     # @param value [Coin, Money, Numeric, String] the value to parse
     # @param currency_code [String, nil] required for Numeric and bare String inputs
@@ -269,7 +272,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   # ── Deprecated ────────────────────────────────────────────────────────── #
 
-  # @deprecated Use {#resource_role} instead. Will be removed in v0.4.0.
+  # @deprecated Use `#resource_role` instead. Will be removed in v0.4.0.
   def resource_label
     WhittakerTech::Midas::Deprecation.warn(
       'Coin#resource_label is deprecated. Use Coin#resource_role instead.',
@@ -278,7 +281,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     resource_role
   end
 
-  # @deprecated Use {#resource_role=} instead. Will be removed in v0.4.0.
+  # @deprecated Use `#resource_role=` instead. Will be removed in v0.4.0.
   def resource_label=(value)
     WhittakerTech::Midas::Deprecation.warn(
       'Coin#resource_label= is deprecated. Use Coin#resource_role= instead.',
@@ -287,7 +290,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     self.resource_role = value
   end
 
-  # @deprecated Use {.for_role} instead. Will be removed in v0.4.0.
+  # @deprecated Use `for_role` instead. Will be removed in v0.4.0.
   def self.for_label(label)
     WhittakerTech::Midas::Deprecation.warn(
       'Coin.for_label is deprecated. Use Coin.for_role instead.',
@@ -301,7 +304,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Normalizes currency_code before validation.
   #
   # - `currency_code` is stripped and capitalized
-  # - `resource_role` normalisation is handled by {Poly::Role}
+  # - `resource_role` normalisation is handled by `Poly::Role`
   # @return [void]
   def normalize_currency_code
     self.currency_code = currency_code.to_s.strip.upcase.presence if currency_code
