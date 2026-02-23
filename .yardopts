@@ -1,6 +1,7 @@
 --output-dir docs/api
 --plugin markdown
 --markup markdown
+--format markdown
 --title "WhittakerTech::Midas API Reference"
 --protected
 app/models/**/*.rb
