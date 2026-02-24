@@ -43,6 +43,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov', '~> 0.22'
   spec.add_development_dependency 'simplecov-console', '~> 0.9'
   spec.add_development_dependency 'sprockets-rails', '~> 3.5'
-  spec.add_development_dependency "yard"
-  spec.add_development_dependency "yard-markdown"
+  spec.add_development_dependency 'yard'
+  spec.add_development_dependency 'yard-markdown'
 end

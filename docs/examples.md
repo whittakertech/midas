@@ -256,10 +256,10 @@ Coin.parse(existing) == existing   # => true
 ## Factory pattern for tests
 
 ```ruby
-# spec/factories/wt_midas_coins.rb
+# spec/factories/midas_coins.rb
 FactoryBot.define do
   factory :midas_coin, class: 'WhittakerTech::Midas::Coin' do
-    resource_label  { 'price' }
+    resource_role   { 'price' }
     currency_code   { 'USD' }
     currency_minor  { 2999 }
     association :resource, factory: :product

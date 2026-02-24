@@ -46,6 +46,7 @@
 # - `WhittakerTech::Midas::Coin::Arithmetic`
 # - `WhittakerTech::Midas::Coin::Allocation`
 # @since 0.1.0
+# rubocop:disable Metrics/ClassLength
 class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Arithmetic: exact arithmetic and equality semantics
   include Arithmetic
@@ -130,7 +131,12 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   #   or `nil` to format in the native currency.
   # @return [String] the formatted monetary string, e.g. `"$29.99"`
   def format(to: nil)
-    (to ? exchange_to(to) : amount).format
+    if to
+      raise NotImplementedError,
+            'Currency conversion is not yet implemented. Use #amount.format for native formatting.'
+    end
+
+    amount.format
   end
 
   # @return [Integer] the raw minor-unit count (alias for `#currency_minor`)
@@ -272,7 +278,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
 
   # ── Deprecated ────────────────────────────────────────────────────────── #
 
-  # @deprecated Use `#resource_role` instead. Will be removed in v0.4.0.
+  # @deprecated Use `#resource_role` instead. Will be removed in v0.3.0.
   def resource_label
     WhittakerTech::Midas::Deprecation.warn(
       'Coin#resource_label is deprecated. Use Coin#resource_role instead.',
@@ -281,7 +287,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     resource_role
   end
 
-  # @deprecated Use `#resource_role=` instead. Will be removed in v0.4.0.
+  # @deprecated Use `#resource_role=` instead. Will be removed in v0.3.0.
   def resource_label=(value)
     WhittakerTech::Midas::Deprecation.warn(
       'Coin#resource_label= is deprecated. Use Coin#resource_role= instead.',
@@ -290,7 +296,7 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     self.resource_role = value
   end
 
-  # @deprecated Use `for_role` instead. Will be removed in v0.4.0.
+  # @deprecated Use `for_role` instead. Will be removed in v0.3.0.
   def self.for_label(label)
     WhittakerTech::Midas::Deprecation.warn(
       'Coin.for_label is deprecated. Use Coin.for_role instead.',

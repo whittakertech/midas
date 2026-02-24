@@ -36,9 +36,7 @@ files.each do |file|
       prev_is_code_indent = prev&.start_with?('    ')
 
       # Python-Markdown requires a blank line before many list starts.
-      if prev_is_nonblank && !prev_is_list && !prev_is_code_indent
-        out << ''
-      end
+      out << '' if prev_is_nonblank && !prev_is_list && !prev_is_code_indent
     end
 
     out << line

@@ -24,14 +24,14 @@
 # - `%n`: Number only (no symbol), e.g. `29.99`
 # - `%u`: Custom units label (see opts), e.g. `per kg`
 # - `%p`: Custom per-exact label (see opts), e.g. `0.2997`
-# - `~`: Approximate marker (`≈` or empty)
+# - `%~`: Approximate marker (`≈` or empty)
 # - `%%`: Literal percent sign
 #
 # ## Usage
 #
 #   coin = Coin.value(2999, 'USD')
-#   coin.present('%s%M %c')          # => "$29.99 USD"
-#   coin.present('~%t', approx: true) # => "≈$29.99"
+#   coin.present('%s%M %c')           # => "$29.99 USD"
+#   coin.present('%~%t', approx: true) # => "≈$29.99"
 #
 # ## Options
 #
@@ -68,8 +68,8 @@ module WhittakerTech::Midas::Coin::Presenter
   #   coin.present('%s%M')          # => "$29.99"
   #   coin.present('%t (%c)')       # => "$29.99 (USD)"
   #   coin.present('~%t', approx: true) # => "≈$29.99"
-  def present(pattern, **opts)
-    WhittakerTech::Midas::Coin::Presenter.format(self, pattern, **opts)
+  def present(pattern, **)
+    WhittakerTech::Midas::Coin::Presenter.format(self, pattern, **)
   end
 
   class << self
@@ -100,10 +100,10 @@ module WhittakerTech::Midas::Coin::Presenter
     # @return [String]
     # @raise [ArgumentError] if `pattern` is nil, contains an unknown token,
     #   or has an unterminated `%` escape
-    def format(coin, pattern, **opts)
+    def format(coin, pattern, **)
       raise ArgumentError, 'pattern required' if pattern.nil?
 
-      ctx = build_context(coin, **opts)
+      ctx = build_context(coin, **)
       scan(pattern, ctx)
     end
 

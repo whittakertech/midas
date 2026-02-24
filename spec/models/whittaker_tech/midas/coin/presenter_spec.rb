@@ -54,4 +54,40 @@ RSpec.describe WhittakerTech::Midas::Coin::Presenter do
     output = coin.present('%u%p%~')
     expect(output).to eq('')
   end
+
+  it '%m renders the exact raw integer value' do
+    output = coin.present('%m')
+    expect(output).to include('1234')
+  end
+
+  it '%M renders the decimal string' do
+    output = coin.present('%M')
+    expect(output).to include('12.34')
+  end
+
+  it '%t output contains LTR bidi isolation marks' do
+    lri = "\u2066"
+    pdi = "\u2069"
+    output = coin.present('%t')
+    expect(output).to include(lri)
+    expect(output).to include(pdi)
+  end
+
+  it 'renders a negative Coin correctly' do
+    neg = WhittakerTech::Midas::Coin.value(-1_234, 'USD')
+    output = neg.present('%t')
+    expect(output).to include('-')
+  end
+
+  it 'renders a zero Coin correctly' do
+    zero = WhittakerTech::Midas::Coin.value(0, 'USD')
+    output = zero.present('%t')
+    expect(output).to include('0')
+  end
+
+  it 'JPY Coin %M includes the integer amount' do
+    jpy = WhittakerTech::Midas::Coin.value(1000, 'JPY')
+    output = jpy.present('%M')
+    expect(output).to include('1000')
+  end
 end

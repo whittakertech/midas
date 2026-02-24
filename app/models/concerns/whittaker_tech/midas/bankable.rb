@@ -24,7 +24,6 @@
 #   product.price          # => Coin object
 #   product.price_amount   # => Money object
 #   product.price_format   # => "$29.99"
-#   product.price_in(:eur) # => "€26.85" (if exchange rates available)
 #
 # @example Multiple coins
 #   class Invoice < ApplicationRecord
@@ -53,7 +52,6 @@
 # - `name`: Returns the associated Coin object
 # - `name_amount`: Returns the Money object representing the amount
 # - `name_format`: Returns a formatted string representation of the amount
-# - `name_in(currency)`: Returns the amount converted to the specified currency
 # - `set_name(amount:, currency_code:)`: Sets the coin value with the given amount and currency
 #
 # == Supported Amount Types

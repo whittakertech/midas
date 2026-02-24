@@ -283,7 +283,7 @@ order.set_total(amount:  108.50,  currency_code: 'USD')
 
 # Access all coins on this record
 order.midas_coins.count  # => 3
-order.midas_coins.map(&:resource_label)
+order.midas_coins.map(&:resource_role)
 # => ["subtotal", "tax", "total"]
 
 # Arithmetic across coins

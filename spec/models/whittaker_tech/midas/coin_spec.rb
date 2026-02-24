@@ -22,6 +22,12 @@ RSpec.describe WhittakerTech::Midas::Coin do
         .case_insensitive
     end
 
+    it { should validate_length_of(:resource_role).is_at_most(64) }
+
+    it { should_not allow_value('price name').for(:resource_role) }
+    it { should_not allow_value('price-name').for(:resource_role) }
+    it { should_not allow_value('price!').for(:resource_role) }
+
     it { should validate_presence_of(:currency_code) }
     it { should validate_length_of(:currency_code).is_equal_to(3) }
 
@@ -109,6 +115,12 @@ RSpec.describe WhittakerTech::Midas::Coin do
         expect(formatted).to include('12.99')
       end
     end
+
+    context 'with to: specified' do
+      it 'raises NotImplementedError' do
+        expect { coin.format(to: 'EUR') }.to raise_error(NotImplementedError)
+      end
+    end
   end
 
   describe 'convenience methods' do
@@ -159,6 +171,13 @@ RSpec.describe WhittakerTech::Midas::Coin do
     it 'clears memoization when currency_minor changes' do
       first = coin.amount
       coin.currency_minor = 5000
+      second = coin.amount
+      expect(first.object_id).not_to eq(second.object_id)
+    end
+
+    it 'clears memoization when currency_code changes' do
+      first = coin.amount
+      coin.currency_code = 'EUR'
       second = coin.amount
       expect(first.object_id).not_to eq(second.object_id)
     end
@@ -239,6 +258,12 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
   end
 
+  describe '.value' do
+    it 'raises TypeError on Float input' do
+      expect { described_class.value(29.99, 'USD') }.to raise_error(TypeError)
+    end
+  end
+
   describe '.zero' do
     it 'returns a zero-valued Coin for the given currency' do
       coin = described_class.zero('USD')
@@ -315,6 +340,13 @@ RSpec.describe WhittakerTech::Midas::Coin do
         allow(Kernel).to receive(:warn)
         expect(coin.resource_label).to eq(coin.resource_role)
       end
+
+      it 'does not raise and does not call Kernel.warn with :silence' do
+        WhittakerTech::Midas.deprecation_behavior = :silence
+        allow(Kernel).to receive(:warn)
+        expect { coin.resource_label }.not_to raise_error
+        expect(Kernel).not_to have_received(:warn)
+      end
     end
 
     describe '#resource_label=' do
@@ -329,6 +361,13 @@ RSpec.describe WhittakerTech::Midas::Coin do
         coin.resource_label = 'cost'
         expect(coin.resource_role).to eq('cost')
       end
+
+      it 'does not raise and does not call Kernel.warn with :silence' do
+        WhittakerTech::Midas.deprecation_behavior = :silence
+        allow(Kernel).to receive(:warn)
+        expect { coin.resource_label = 'cost' }.not_to raise_error
+        expect(Kernel).not_to have_received(:warn)
+      end
     end
 
     describe '.for_label' do
@@ -342,6 +381,13 @@ RSpec.describe WhittakerTech::Midas::Coin do
         allow(Kernel).to receive(:warn)
         expect(described_class.for_label('price').to_sql)
           .to eq(described_class.for_role('price').to_sql)
+      end
+
+      it 'does not raise and does not call Kernel.warn with :silence' do
+        WhittakerTech::Midas.deprecation_behavior = :silence
+        allow(Kernel).to receive(:warn)
+        expect { described_class.for_label('price') }.not_to raise_error
+        expect(Kernel).not_to have_received(:warn)
       end
     end
   end

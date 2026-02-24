@@ -137,7 +137,7 @@ Mixed into `Coin`. All operations return new frozen Coins.
 
 | Option         | Type    | Default                      | Token |
 |----------------|---------|------------------------------|-------|
-| `approx:`      | Boolean | `false`                      | `~`   |
+| `approx:`      | Boolean | `false`                      | `%~`  |
 | `units:`       | String  | `nil` (renders empty)        | `%u`  |
 | `per_exact:`   | String  | `nil` (renders empty)        | `%p`  |
 | `currency_dir:`| Symbol  | From `Midas.currency_direction_for` | all |

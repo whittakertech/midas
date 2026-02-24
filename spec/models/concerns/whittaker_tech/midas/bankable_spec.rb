@@ -65,6 +65,19 @@ RSpec.describe WhittakerTech::Midas::Bankable do
       end
     end
 
+    context 'with float for JPY (zero-decimal via I18n override)' do
+      it 'converts Float without scaling when decimal_count is 0' do
+        allow(I18n).to receive(:t)
+          .with('midas.ui.currencies.JPY', default: {})
+          .and_return({ 'decimal_count' => 0 })
+        allow(I18n).to receive(:t)
+          .with('midas.ui.defaults.decimal_count', default: 2)
+          .and_return(2)
+        coin = order.set_subtotal(amount: 1000.0, currency_code: 'JPY')
+        expect(coin.currency_minor).to eq(1000)
+      end
+    end
+
     context 'with invalid amount' do
       it 'raises ArgumentError' do
         expect do
@@ -135,6 +148,44 @@ RSpec.describe WhittakerTech::Midas::Bankable do
       order.set_total(amount: 1100, currency_code: 'USD')
 
       expect(order.reload.midas_coins.count).to eq(3)
+    end
+
+    it 'returns nil when no Coin exists for the name' do
+      expect(order.subtotal).to be_nil
+    end
+
+    it 'two different resources can each have a Coin with the same role' do
+      other_order = TestOrder.create!
+      order.set_subtotal(amount: 100, currency_code: 'USD')
+      other_order.set_subtotal(amount: 200, currency_code: 'USD')
+
+      expect(order.subtotal.currency_minor).to eq(100)
+      expect(other_order.subtotal.currency_minor).to eq(200)
+    end
+
+    it 'calling set_* again does not duplicate coins' do
+      order.set_subtotal(amount: 100, currency_code: 'USD')
+      order.set_subtotal(amount: 200, currency_code: 'USD')
+
+      expect(order.reload.midas_coins.count).to eq(1)
+    end
+  end
+
+  describe 'decimals_for behavior' do
+    it 'falls back to 2 decimal places without I18n override' do
+      coin = order.set_subtotal(amount: 1.23, currency_code: 'USD')
+      expect(coin.currency_minor).to eq(123)
+    end
+
+    it 'uses I18n decimal_count override for a currency' do
+      allow(I18n).to receive(:t)
+        .with('midas.ui.currencies.XYZ', default: {})
+        .and_return({ 'decimal_count' => 3 })
+      allow(I18n).to receive(:t)
+        .with('midas.ui.defaults.decimal_count', default: 2)
+        .and_return(2)
+      coin = order.set_subtotal(amount: 1.0, currency_code: 'XYZ')
+      expect(coin.currency_minor).to eq(1000)
     end
   end
 

@@ -35,27 +35,27 @@ Consequences:
 
 ```ruby
 # ✅ One table, unlimited monetary attributes on any model
-create_table :wt_midas_coins do |t|
+create_table :midas_coins do |t|
   t.references :resource, polymorphic: true, null: false
-  t.string  :resource_label,  null: false, limit: 64  # "price", "tax", "deposit"
+  t.string  :resource_role,   null: false, limit: 64  # "price", "tax", "deposit"
   t.string  :currency_code,   null: false, limit: 3   # "USD", "EUR", "JPY"
   t.bigint  :currency_minor,  null: false              # integer minor units (cents)
 end
 ```
 
-A unique index on `[resource_id, resource_type, resource_label]` ensures one
+A unique index on `[resource_id, resource_type, resource_role]` ensures one
 Coin per attribute per record.
 
 ### Database schema
 
 ```
 ┌──────────────────────────────────────────┐
-│            wt_midas_coins                │
+│              midas_coins                 │
 ├──────────────────────────────────────────┤
 │ id             BIGINT        PK          │
 │ resource_type  VARCHAR       ─┐          │
 │ resource_id    BIGINT        ─┤ Polymorphic
-│ resource_label VARCHAR(64)   ─┘          │
+│ resource_role  VARCHAR(64)   ─┘          │
 │ currency_code  VARCHAR(3)                │
 │ currency_minor BIGINT                    │
 │ created_at     TIMESTAMP                 │
@@ -107,7 +107,7 @@ WhittakerTech::Midas
 |------------------|---------|----------------------------------------------------|
 | `resource_type`  | String  | Polymorphic owner class name, e.g. `"Product"`     |
 | `resource_id`    | Integer | Polymorphic owner primary key                      |
-| `resource_label` | String  | Attribute name, e.g. `"price"`. Unique per resource. |
+| `resource_role`  | String  | Attribute name, e.g. `"price"`. Unique per resource. |
 | `currency_code`  | String  | ISO 4217 3-letter code. Stored uppercase.          |
 | `currency_minor` | Integer | Amount in minor units (e.g. cents for USD)         |
 
@@ -122,7 +122,8 @@ Coin::Arithmetic
 ```
 
 All arithmetic is **exact, integer arithmetic** on minor units. No floating
-point arithmetic is ever performed on payable values.
+point arithmetic is performed on stored values; however, division uses floating
+point internally before applying a rounding policy to produce an integer result.
 
 | Operation | Policy required? | Notes                              |
 |-----------|------------------|------------------------------------|
@@ -171,14 +172,14 @@ rounding, or conversion.
 | `%n`  | Number only (symbol stripped)          |
 | `%u`  | Custom units label (option: `units:`)  |
 | `%p`  | Custom per-exact label                 |
-| `~`   | Approximate marker (`≈` or empty)      |
+| `%~`  | Approximate marker (`≈` or empty)      |
 | `%%`  | Literal `%`                            |
 
 ```ruby
 coin = Coin.value(2999, 'USD')
 coin.present('%s%M')           # => "$29.99"
 coin.present('%t (%c)')        # => "$29.99 (USD)"
-coin.present('~%t', approx: true)   # => "≈$29.99"
+coin.present('%~%t', approx: true)  # => "≈$29.99"
 coin.present('%M %u', units: 'kg')  # => "29.99 kg"
 ```
 
@@ -253,7 +254,7 @@ ActiveRecord model.
 
 When you call `has_coin :price`, Bankable:
 
-1. Creates a scoped `has_one :price_coin` association (filters on `resource_label: "price"`)
+1. Creates a scoped `has_one :price_coin` association (filters on `resource_role: "price"`)
 2. Defines `price`, `price_amount`, `price_format`, and `set_price` instance methods
 3. The parent model gets `has_many :midas_coins` for accessing all its coins together
 

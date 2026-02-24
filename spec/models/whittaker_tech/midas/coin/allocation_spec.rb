@@ -18,6 +18,12 @@ RSpec.describe WhittakerTech::Midas::Coin::Allocation do
       end.to raise_error(TypeError)
     end
 
+    it 'rejects a negative divisor' do
+      expect do
+        described_class.new(coin:, divisor: -1, rounding_policy: :round)
+      end.to raise_error(TypeError)
+    end
+
     it 'requires a known rounding policy' do
       expect do
         described_class.new(coin:, divisor: 10, rounding_policy: :unknown)
@@ -46,6 +52,22 @@ RSpec.describe WhittakerTech::Midas::Coin::Allocation do
     end
   end
 
+  describe 'delegated methods' do
+    let(:allocator) { described_class.new(coin:, divisor: 10, rounding_policy: :round) }
+
+    it 'delegates currency_code from coin' do
+      expect(allocator.currency_code).to eq('USD')
+    end
+
+    it 'delegates decimals from coin' do
+      expect(allocator.decimals).to eq(2)
+    end
+
+    it 'delegates scale from coin' do
+      expect(allocator.scale).to eq(100)
+    end
+  end
+
   describe '#price' do
     it 'returns a Coin' do
       allocator = described_class.new(coin:, divisor: 10, rounding_policy: :round)
@@ -65,6 +87,12 @@ RSpec.describe WhittakerTech::Midas::Coin::Allocation do
       expect do
         allocator.price(qty: -1)
       end.to raise_error(ArgumentError)
+    end
+
+    it 'price(qty: 1) equals value for an evenly divisible coin' do
+      even_coin = WhittakerTech::Midas::Coin.value(1000, 'USD')
+      allocator = described_class.new(coin: even_coin, divisor: 4, rounding_policy: :round)
+      expect(allocator.price(qty: 1)).to eq(allocator.value)
     end
 
     it 'does not compound rounding across quantity' do
