@@ -52,6 +52,8 @@
 # - `name`: Returns the associated Coin object
 # - `name_amount`: Returns the Money object representing the amount
 # - `name_format`: Returns a formatted string representation of the amount
+# - `name_in(currency_code)`: Converts and formats the coin in another currency
+#   (writes an Exchange audit row on every call — see `Coin::Converter`)
 # - `set_name(amount:, currency_code:)`: Sets the coin value with the given amount and currency
 #
 # == Supported Amount Types
@@ -129,7 +131,7 @@ module WhittakerTech::Midas::Bankable
 
       define_method("#{name}_amount")   { public_send(name)&.amount }
       define_method("#{name}_format")   { public_send(name)&.amount&.format }
-      # define_method("#{name}_in")       { |to| public_send(name)&.exchange_to(to)&.format }
+      define_method("#{name}_in") { |to| public_send(name)&.exchange_to(to)&.format }
 
       # Sets the coin value with the specified amount and currency.
       #
