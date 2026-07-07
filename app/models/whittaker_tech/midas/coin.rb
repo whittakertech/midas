@@ -27,7 +27,7 @@
 #   +------------+----------------------------------------------+
 #   | Arithmetic | +, -, *, /, %, negate, equality              |
 #   | Bidi       | Unicode bidirectional text isolation         |
-#   | Converter  | Currency conversion (reserved, not yet live) |
+#   | Converter  | Currency conversion (live, audited via Exchange) |
 #   | Presenter  | Token-based formatting grammar               |
 #   +------------+----------------------------------------------+
 #
@@ -46,13 +46,12 @@
 # - `WhittakerTech::Midas::Coin::Arithmetic`
 # - `WhittakerTech::Midas::Coin::Allocation`
 # @since 0.1.0
-# rubocop:disable Metrics/ClassLength
 class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # Arithmetic: exact arithmetic and equality semantics
   include Arithmetic
   # Bidi: bidirectional currency conversion
   include Bidi
-  # Converter: future currency conversion logic
+  # Converter: live currency conversion + Exchange audit trail
   include Converter
   # Presenter: formatting and presentation logic
   include Presenter
@@ -127,16 +126,18 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
   # This is a convenience wrapper around the Money gem's `#format`. For
   # richer formatting use `#present` with a pattern string.
   #
+  # @note When `to` is given, this performs a live conversion (via
+  #   `#convert_to`) and writes an Exchange audit row on every call. If
+  #   formatting the same converted value repeatedly (e.g. in a view loop),
+  #   convert once and reuse the result's `#amount.format` instead.
+  #
   # @param to [String, nil] target ISO 4217 currency code for conversion,
   #   or `nil` to format in the native currency.
   # @return [String] the formatted monetary string, e.g. `"$29.99"`
   def format(to: nil)
-    if to
-      raise NotImplementedError,
-            'Currency conversion is not yet implemented. Use #amount.format for native formatting.'
-    end
+    return amount.format unless to
 
-    amount.format
+    convert_to(to).amount.format
   end
 
   # @return [Integer] the raw minor-unit count (alias for `#currency_minor`)
@@ -276,35 +277,6 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     end
   end
 
-  # ── Deprecated ────────────────────────────────────────────────────────── #
-
-  # @deprecated Use `#resource_role` instead. Will be removed in v0.3.0.
-  def resource_label
-    WhittakerTech::Midas::Deprecation.warn(
-      'Coin#resource_label is deprecated. Use Coin#resource_role instead.',
-      caller_locations(1, 1)&.first
-    )
-    resource_role
-  end
-
-  # @deprecated Use `#resource_role=` instead. Will be removed in v0.3.0.
-  def resource_label=(value)
-    WhittakerTech::Midas::Deprecation.warn(
-      'Coin#resource_label= is deprecated. Use Coin#resource_role= instead.',
-      caller_locations(1, 1)&.first
-    )
-    self.resource_role = value
-  end
-
-  # @deprecated Use `for_role` instead. Will be removed in v0.3.0.
-  def self.for_label(label)
-    WhittakerTech::Midas::Deprecation.warn(
-      'Coin.for_label is deprecated. Use Coin.for_role instead.',
-      caller_locations(1, 1)&.first
-    )
-    for_role(label)
-  end
-
   private
 
   # Normalizes currency_code before validation.
@@ -316,4 +288,3 @@ class WhittakerTech::Midas::Coin < WhittakerTech::Midas::ApplicationRecord
     self.currency_code = currency_code.to_s.strip.upcase.presence if currency_code
   end
 end
-# rubocop:enable Metrics/ClassLength
