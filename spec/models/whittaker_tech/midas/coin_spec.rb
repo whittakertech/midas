@@ -117,8 +117,16 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
 
     context 'with to: specified' do
-      it 'raises NotImplementedError' do
-        expect { coin.format(to: 'EUR') }.to raise_error(NotImplementedError)
+      around do |example|
+        original_bank = Money.default_bank
+        Money.default_bank = Money::Bank::VariableExchange.new
+        Money.default_bank.add_rate('USD', 'EUR', 0.85)
+        example.run
+        Money.default_bank = original_bank
+      end
+
+      it 'converts then formats in the target currency (see Coin::Converter spec for conversion coverage)' do
+        expect(coin.format(to: 'EUR')).to be_a(String)
       end
     end
   end
