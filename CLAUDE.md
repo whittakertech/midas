@@ -49,11 +49,11 @@ Each module handles one responsibility:
 - **Presenter** — Token-based formatting using strftime-like patterns (`%t`, `%M`, `%m`, `%c`, `%s`, `%n`, `%u`, `%p`, `%~`). Pure function, no mutation.
 - **Bidi** — Unicode bidirectional text isolation for RTL currency display.
 - **Parser** — Coerces Money, Numeric, String, and Coin inputs into Coin objects.
-- **Converter** — Placeholder module, intentionally unimplemented.
+- **Converter** — `#convert_to`/`#exchange_to` for live currency conversion via a provider-agnostic adapter (default: `Coin::Converter::BankProvider` wrapping `Money.default_bank`). Every conversion writes an immutable `Exchange` audit row (`app/models/whittaker_tech/midas/exchange.rb`) via `has_coins :from, :to`.
 
 ### Bankable Concern (`app/models/concerns/whittaker_tech/midas/bankable.rb`)
 
-Mixin for any ActiveRecord model. `has_coin :name` / `has_coins :name1, :name2` generates accessors: `name`, `name_coin`, `name_amount` (Money), `name_format`, `set_name(amount:, currency_code:)`, `midas_coins`. Handles input coercion (Money objects, integers as minor units, floats via currency decimal conversion).
+Mixin for any ActiveRecord model. `has_coin :name` / `has_coins :name1, :name2` generates accessors: `name`, `name_coin`, `name_amount` (Money), `name_format`, `name_in(currency_code)` (conversion, audited via `Exchange`), `set_name(amount:, currency_code:)`, `midas_coins`. Handles input coercion (Money objects, integers as minor units, floats via currency decimal conversion).
 
 ### Frontend (`app/javascript/controllers/midas_currency_controller.js`)
 

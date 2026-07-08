@@ -78,10 +78,13 @@ WhittakerTech::Midas
 ├── Coin                         ← persisted ActiveRecord model
 │   ├── Coin::Arithmetic         ← immutable math (+, -, *, /, %, negate)
 │   ├── Coin::Bidi               ← Unicode RTL/LTR isolation
-│   ├── Coin::Converter          ← placeholder (not yet implemented)
+│   ├── Coin::Converter          ← live rates + Exchange audit trail
+│   │   └── Coin::Converter::BankProvider  ← default adapter around Money.default_bank
 │   ├── Coin::Presenter          ← strftime-like formatting grammar
 │   ├── Coin::Parser             ← input coercion (Money / Numeric / String → Coin)
 │   └── Coin::Allocation         ← per-unit pricing value object
+│
+├── Exchange                     ← persisted audit log for conversions (Bankable host)
 │
 ├── Bankable                     ← concern: has_coin / has_coins DSL
 │
@@ -239,11 +242,31 @@ WhittakerTech::Midas.currency_directions['ILS'] = :rtl
 WhittakerTech::Midas.currency_directions['AED'] = :rtl
 ```
 
-### Converter (reserved)
+### Converter
 
-`Coin::Converter` is a placeholder module. It raises `NotImplementedError`
-today. When implemented it will handle exchange rates, historical rates, and
-regulatory rounding. Use the Money gem's exchange rate API directly for now.
+`Coin::Converter` implements live currency conversion, provider-agnostic by
+design. `#convert_to(currency_code, at: nil, using: nil)` (aliased
+`#exchange_to`) resolves a provider — by default `Coin::Converter::BankProvider`,
+a thin adapter wrapping `Money.default_bank` — and asks it to exchange the
+coin's amount into the target currency.
+
+Every conversion writes an immutable `Exchange` record: a `Bankable` host
+(same `has_coins :from, :to` DSL used by every other Bankable model) owning a
+copy of the source value (`from`) and the converted result (`to`), plus
+`rate`, `source` (the provider name), and `at` (timestamp). `Exchange` is a
+write-only audit log — `convert_to` never reads prior `Exchange` rows back
+to resolve a rate, it always asks the provider fresh. This mirrors Midas's
+"immutable postings" ledger philosophy elsewhere: `Exchange` blocks updates
+to its own columns (`ActiveRecord::ReadOnlyRecord`) after creation, though
+destroy is still allowed.
+
+Passing `at:` (a historical timestamp) requires a provider implementing
+`#exchange_at(money, currency_code, at:)`; the default `BankProvider` does
+not, so a non-nil `at:` against the default provider raises `ArgumentError`.
+`Bankable#{name}_in(currency_code)` and `Coin#format(to:)` are both built on
+`convert_to`, so they carry the same audit-write and historical-rate rules.
+
+Regulatory per-jurisdiction rounding remains out of scope.
 
 ---
 
@@ -366,4 +389,4 @@ Each module has one job:
 - **Parser** — input coercion
 - **Allocation** — per-unit pricing
 - **Bidi** — RTL/LTR isolation
-- **Converter** — (future) exchange rates
+- **Converter** — live exchange rates + Exchange audit log
