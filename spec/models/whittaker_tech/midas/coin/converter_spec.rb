@@ -119,6 +119,19 @@ RSpec.describe WhittakerTech::Midas::Coin::Converter do
         expect(WhittakerTech::Midas::Exchange.last.source).to eq('custom-provider')
       end
     end
+
+    context 'with a using: raw Money::Bank::Base instance' do
+      let(:coin) { create(:midas_coin, currency_minor: 1000, currency_code: 'USD') }
+      let(:bank) do
+        Money::Bank::VariableExchange.new.tap { |b| b.add_rate('USD', 'EUR', 0.5) }
+      end
+
+      it 'auto-wraps it in BankProvider' do
+        result = coin.convert_to('EUR', using: bank)
+
+        expect(result.currency_minor).to eq(500)
+      end
+    end
   end
 
   describe '#format' do
