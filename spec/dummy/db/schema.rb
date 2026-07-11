@@ -10,17 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_19_150000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_224004) do
   create_table "midas_coins", force: :cascade do |t|
-    t.string "resource_type", null: false
-    t.bigint "resource_id", null: false
-    t.string "resource_role", null: false
+    t.datetime "created_at", null: false
     t.string "currency_code", limit: 3, null: false
     t.bigint "currency_minor", null: false
-    t.datetime "created_at", null: false
+    t.bigint "resource_id", null: false
+    t.string "resource_role", null: false
+    t.string "resource_type", null: false
     t.datetime "updated_at", null: false
     t.index ["resource_id", "resource_type", "resource_role"], name: "index_midas_coins_on_resource_and_role"
     t.index ["resource_type", "resource_id"], name: "index_midas_coins_on_resource"
+  end
+
+  create_table "midas_exchanges", force: :cascade do |t|
+    t.datetime "at", null: false
+    t.datetime "created_at", null: false
+    t.decimal "rate", precision: 24, scale: 12, null: false
+    t.string "source", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "test_orders", force: :cascade do |t|

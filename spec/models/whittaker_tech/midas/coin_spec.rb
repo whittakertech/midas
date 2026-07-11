@@ -117,8 +117,16 @@ RSpec.describe WhittakerTech::Midas::Coin do
     end
 
     context 'with to: specified' do
-      it 'raises NotImplementedError' do
-        expect { coin.format(to: 'EUR') }.to raise_error(NotImplementedError)
+      around do |example|
+        original_bank = Money.default_bank
+        Money.default_bank = Money::Bank::VariableExchange.new
+        Money.default_bank.add_rate('USD', 'EUR', 0.85)
+        example.run
+        Money.default_bank = original_bank
+      end
+
+      it 'converts then formats in the target currency (see Coin::Converter spec for conversion coverage)' do
+        expect(coin.format(to: 'EUR')).to be_a(String)
       end
     end
   end
@@ -320,75 +328,6 @@ RSpec.describe WhittakerTech::Midas::Coin do
 
     it 'raises when string lacks currency context' do
       expect { described_class.parse('12.34') }.to raise_error(ArgumentError, /Currency code required/)
-    end
-  end
-
-  describe 'deprecated shims' do
-    before  { WhittakerTech::Midas.deprecation_behavior = :raise }
-    after   { WhittakerTech::Midas.reset_configuration! }
-
-    let(:coin) { create(:midas_coin, resource_role: 'price') }
-
-    describe '#resource_label' do
-      it 'raises a DeprecationError' do
-        expect { coin.resource_label }
-          .to raise_error(WhittakerTech::Midas::Deprecation::DeprecationError)
-      end
-
-      it 'returns the same value as resource_role when warned' do
-        WhittakerTech::Midas.deprecation_behavior = :warn
-        allow(Kernel).to receive(:warn)
-        expect(coin.resource_label).to eq(coin.resource_role)
-      end
-
-      it 'does not raise and does not call Kernel.warn with :silence' do
-        WhittakerTech::Midas.deprecation_behavior = :silence
-        allow(Kernel).to receive(:warn)
-        expect { coin.resource_label }.not_to raise_error
-        expect(Kernel).not_to have_received(:warn)
-      end
-    end
-
-    describe '#resource_label=' do
-      it 'raises a DeprecationError' do
-        expect { coin.resource_label = 'cost' }
-          .to raise_error(WhittakerTech::Midas::Deprecation::DeprecationError)
-      end
-
-      it 'sets resource_role when warned' do
-        WhittakerTech::Midas.deprecation_behavior = :warn
-        allow(Kernel).to receive(:warn)
-        coin.resource_label = 'cost'
-        expect(coin.resource_role).to eq('cost')
-      end
-
-      it 'does not raise and does not call Kernel.warn with :silence' do
-        WhittakerTech::Midas.deprecation_behavior = :silence
-        allow(Kernel).to receive(:warn)
-        expect { coin.resource_label = 'cost' }.not_to raise_error
-        expect(Kernel).not_to have_received(:warn)
-      end
-    end
-
-    describe '.for_label' do
-      it 'raises a DeprecationError' do
-        expect { described_class.for_label('price') }
-          .to raise_error(WhittakerTech::Midas::Deprecation::DeprecationError)
-      end
-
-      it 'returns the same relation as .for_role when warned' do
-        WhittakerTech::Midas.deprecation_behavior = :warn
-        allow(Kernel).to receive(:warn)
-        expect(described_class.for_label('price').to_sql)
-          .to eq(described_class.for_role('price').to_sql)
-      end
-
-      it 'does not raise and does not call Kernel.warn with :silence' do
-        WhittakerTech::Midas.deprecation_behavior = :silence
-        allow(Kernel).to receive(:warn)
-        expect { described_class.for_label('price') }.not_to raise_error
-        expect(Kernel).not_to have_received(:warn)
-      end
     end
   end
 

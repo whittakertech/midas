@@ -77,7 +77,7 @@ product.set_price(amount: 2999, currency_code: 'USD')
 product.price              # => Coin object
 product.price_amount       # => Money object (#<Money @cents=2999 @currency="USD">)
 product.price_format       # => "$29.99"
-product.price_in('EUR')    # => "€26.85" (if exchange rates configured)
+product.price_in('EUR')    # => "€26.85"
 ```
 
 ## Usage Guide
@@ -196,7 +196,7 @@ Money.default_formatting_rules = {
 
 ### Exchange Rates
 
-Set up exchange rates for currency conversion:
+Set up exchange rates on `Money.default_bank` as usual:
 ```ruby
 # In your app
 Money.default_bank.add_rate('USD', 'EUR', 0.85)
@@ -210,6 +210,68 @@ For production, integrate with an exchange rate API:
 - [eu_central_bank](https://github.com/RubyMoney/eu_central_bank)
 - [money-open-exchange-rates](https://github.com/spk/money-open-exchange-rates)
 - [google_currency](https://github.com/RubyMoney/google_currency)
+
+#### How conversion works
+
+`Coin` conversion is provider-agnostic. By default it wraps whatever bank is
+set on `Money.default_bank` (via `Coin::Converter::BankProvider`), so any of
+the gems above work unmodified. You can also convert directly:
+
+```ruby
+coin = product.price
+coin.convert_to('EUR')    # => new, persisted Coin in EUR
+coin.exchange_to('EUR')   # => alias for convert_to
+```
+
+Every conversion — whether via `convert_to`, `exchange_to`, `#{name}_in`, or
+`Coin#format(to:)` — writes an immutable `WhittakerTech::Midas::Exchange`
+audit row recording the `from`/`to` coins, the `rate` used, the provider
+`source`, and the timestamp (`at`). This is a write-only audit log, not a
+rate cache: `convert_to` never reads past `Exchange` rows back to resolve a
+rate, it always asks the provider fresh.
+
+```ruby
+result = coin.convert_to('EUR')
+exchange = WhittakerTech::Midas::Exchange.last
+exchange.from   # => Coin copy of the original value (USD)
+exchange.to     # => the converted result (== `result`)
+exchange.rate   # => BigDecimal rate used
+exchange.source # => "money:Money::Bank::VariableExchange"
+exchange.at     # => Time the conversion was made
+```
+
+**`format(to:)` converts on every call.** If you need the same converted
+value multiple times, convert once and reuse the result instead of calling
+`format(to:)` repeatedly — each call performs a live conversion and writes a
+new `Exchange` row:
+
+```ruby
+# Avoid — converts and audits twice
+coin.format(to: 'EUR')
+coin.format(to: 'EUR')
+
+# Prefer — convert once, format many times
+converted = coin.convert_to('EUR')
+converted.amount.format
+```
+
+**Historical rates.** Passing `at:` requires a provider that implements
+`#exchange_at(money, currency_code, at:)` — the default `BankProvider` does
+not, since `Money::Bank::VariableExchange` has no historical capability.
+Passing `at:` against the default provider raises `ArgumentError`. Supply a
+custom provider via `using:` for historical support:
+
+```ruby
+coin.convert_to('EUR', at: 3.months.ago, using: my_historical_provider)
+```
+
+**Custom providers.** Any object responding to `#exchange(money, currency_code)`
+and `#name` can be passed as `using:` to override the default bank-backed
+provider — useful for testing or wiring in a rate API directly:
+
+```ruby
+coin.convert_to('EUR', using: my_provider)
+```
 
 ## Advanced Usage
 
@@ -230,7 +292,7 @@ order.set_shipping(amount: 850, currency_code: 'EUR')
 
 order.subtotal_format     # => "$100.00"
 order.shipping_format     # => "€8.50"
-order.shipping_in('USD')  # => "$10.00" (with exchange rate)
+order.shipping_in('USD')  # => "$10.00"
 ```
 
 ### Working with Coin Objects Directly
@@ -366,10 +428,17 @@ bin/rails server
 
 ### Exchange rates not working
 
-Make sure you've configured exchange rates:
+Make sure you've configured exchange rates on `Money.default_bank` (the
+default provider raises whatever error the underlying bank raises, e.g.
+`Money::Bank::UnknownRate`, if a rate is missing):
 ```ruby
 Money.default_bank.add_rate('USD', 'EUR', 0.85)
 ```
+
+### `ArgumentError` mentioning "historical" from `convert_to`
+
+You passed `at:` without a provider that supports it. Either omit `at:` or
+supply `using:` with a provider implementing `#exchange_at`.
 
 ### Input field not formatting
 

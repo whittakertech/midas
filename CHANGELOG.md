@@ -6,6 +6,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.3.0] - 2026-07-08
+
+### Breaking Changes
+
+- Removed deprecated shims `Coin#resource_label`, `Coin#resource_label=`, and `Coin.for_label` (all
+  previously scheduled for removal in `0.3.0` — see `[0.2.0]` Deprecations). Use `resource_role`
+  directly and `Coin.for_role`.
+
+### Added
+
+- Implemented live currency conversion: `Coin#convert_to(currency_code, at: nil, using: nil)`
+  (aliased `Coin#exchange_to`), provider-agnostic via a new adapter,
+  **Coin::Converter::BankProvider**, which wraps `Money.default_bank` by default.
+- Added **Exchange**, an immutable audit-log model recording every conversion (`from`/`to` Coins via
+  the standard `has_coins :from, :to` Bankable DSL, plus `rate`, `source`, and `at`). Write-only —
+  never read back to resolve future conversions.
+- Implemented `Coin#format(to:)`, performing a live conversion (and Exchange audit write) before
+  formatting.
+- Wired up `Bankable`'s `#{name}_in(currency_code)` sugar (e.g. `product.price_in('EUR')`), built on
+  `convert_to`.
+- Passing a historical `at:` against a provider that doesn't support it (the default `BankProvider`
+  has no historical capability) now raises `ArgumentError` instead of silently ignoring it.
+
+### Notes
+
+- `at:` defaults to `nil` (meaning "now") rather than `Time.current` — a signature detail invisible
+  to every prior caller, since `convert_to`/`format(to:)` previously always raised
+  `NotImplementedError` unconditionally. No existing caller could have depended on the old behavior.
+- Regulatory per-jurisdiction rounding and reading `Exchange` history back as a rate cache remain
+  out of scope.
+
+---
+
 ## [0.2.0] - 2026-02-19
 
 ### Breaking Changes
