@@ -15,6 +15,13 @@ permissions:
 
 jobs:
   pipeline:
+    # Gitea's own Actions runner also executes this file (self-hosted
+    # act_runner, independent of the GitHub mirror). Gitea has no fallback
+    # for cross-instance reusable-workflow references, so it always tries
+    # to resolve whittakertech/.github against itself and fails ("repository
+    # not found") since no such org exists on this Gitea instance. Only run
+    # on real GitHub Actions; let Gitea skip this cleanly.
+    if: github.server_url == 'https://github.com'
     uses: whittakertech/.github/.github/workflows/master-ci.yml@main
     with:
       docs_enabled: false
