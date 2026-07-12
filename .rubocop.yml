@@ -54,6 +54,15 @@ Naming/PredicatePrefix:
 Rails/InverseOf:
   Enabled: false  # Polymorphic associations don't need inverse_of
 
+Rails/Exit:
+  Exclude:
+    - 'scripts/**/*'       # Standalone build scripts, not Rails runtime code
+    - 'spec/rails_helper.rb'  # Standard Rails-generated production-mode guard
+
+Rails/Output:
+  Exclude:
+    - 'scripts/**/*'  # Standalone CLI script, not a Rails runtime path
+
 RSpec/ExampleLength:
   Max: 10
   CountAsOne:
