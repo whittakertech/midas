@@ -22,6 +22,7 @@ This design keeps your pricing, billing, and financial reporting consistent acro
 - Automatic minor-unit conversion for all input types (int, float, Money)
 - Multi-currency support with configurable exchange rates
 - Headless currency input UI for form builders
+- **Additive double-entry bookkeeping** via `Ledger` (accounts + balanced, immutable postings) — see [Ledger](#ledger--double-entry-bookkeeping) below
 - Test suite with >90% coverage
 - Zero schema duplication&mdash;no proliferation of `_cents` columns
 
@@ -272,6 +273,73 @@ provider — useful for testing or wiring in a rate API directly:
 ```ruby
 coin.convert_to('EUR', using: my_provider)
 ```
+
+## Ledger — Double-Entry Bookkeeping
+
+*Since 0.4.0.* `Ledger` is **additive** to Coin/Bankable, not a replacement — most monetary
+attributes should keep using `has_coin`/`has_coins`. Reach for `Ledger` when you need a full,
+audited double-entry trail (billing, subscriptions, anything where "why is this balance what it
+is" needs a real answer).
+
+### Accounts
+
+An `Ledger::Account` is either a **system account** (no owner — e.g. a per-currency suspense or
+revenue account, disambiguated by `slug`) or an **owned account** (a polymorphic `owner`, e.g. a
+Customer):
+
+```ruby
+revenue  = WhittakerTech::Midas::Ledger::Account.create!(kind: :revenue, slug: 'revenue', currency_code: 'USD')
+customer = WhittakerTech::Midas::Ledger::Account.create!(kind: :asset, owner: current_customer, currency_code: 'USD')
+
+# Per-currency suspense account, for posting out-of-order events against
+suspense = WhittakerTech::Midas::Ledger::Account.suspense_for('USD')
+```
+
+`kind` is one of `asset`, `liability`, `equity`, `revenue`, `expense`, `suspense`.
+
+### Recording a balanced entry
+
+`Ledger::Entry.record!` is the **only** sanctioned way to create an entry — it's the one call
+that guarantees the result balances:
+
+```ruby
+WhittakerTech::Midas::Ledger::Entry.record!(
+  currency_code: 'USD',
+  occurred_at: Time.current,
+  lines: [
+    { account: customer, direction: :debit,  amount: 1000 },
+    { account: revenue,  direction: :credit, amount: 1000 }
+  ]
+)
+```
+
+An entry with mismatched debits/credits, a mixed-currency line, a zero-amount posting, or no
+lines at all raises `ActiveRecord::RecordInvalid` and rolls back entirely — nothing partial is
+ever left behind.
+
+Entries and their postings are **immutable** once the entry finalizes. Attempting to add,
+destroy, or reattach an amount to a posting on an already-finalized entry raises
+`WhittakerTech::Midas::Ledger::UnbalancedEntryError`.
+
+### Balances
+
+```ruby
+customer.balance  # => 1000  (raw debit-normal; only counts postings on finalized entries)
+revenue.balance   # => -1000
+```
+
+### Suspense accounts for out-of-order events
+
+If an external event arrives out of order (e.g. a refund webhook before its charge), post it
+against `Account.suspense_for(currency_code)` — reclassifying later is just recording a second
+balanced entry that debits suspense and credits the now-known correct account; entries are
+immutable, so reclassification is never a mutation of the original.
+
+### What's deferred
+
+Monthly partitioning of the postings table, a DB-level balance-invariant backstop,
+reclassification tooling/aging alerts, and multi-currency entries are intentionally out of scope
+for this release — see `CHANGELOG.md`.
 
 ## Advanced Usage
 
