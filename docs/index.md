@@ -20,6 +20,8 @@ DSL for declaring and accessing its monetary attributes.
 - **RTL support** — Unicode bidirectional isolation for Arabic and Hebrew UIs
 - **Per-unit pricing** — `Allocation` value object for per-unit / bulk pricing
 - **Bank-style currency input** — Stimulus controller with automatic decimal handling
+- **Additive double-entry bookkeeping** — `Ledger` (accounts + balanced, immutable postings) for
+  consumers needing a full audited trail, since 0.4.0
 - **90%+ test coverage**
 
 ---
@@ -58,8 +60,8 @@ invoice.total             # => #<WhittakerTech::Midas::Coin ...>
 ## Documentation sections
 
 - **[Installation](installation/)** — add the gem, run migrations, register the Stimulus controller
-- **[Usage](usage/)** — Bankable DSL, Coin arithmetic, Presenter, Allocation
-- **[Architecture](architecture/)** — design decisions, module breakdown, schema
+- **[Usage](usage/)** — Bankable DSL, Coin arithmetic, Presenter, Allocation, Ledger
+- **[Architecture](architecture/)** — design decisions, module breakdown, schema (including Ledger)
 - **[API Reference](api/)** — full method reference; generated API docs at [`api/WhittakerTech/Midas`](api/WhittakerTech/Midas/)
 - **[Examples](examples/)** — e-commerce products, invoicing, bulk pricing, RTL display
 

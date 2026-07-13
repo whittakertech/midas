@@ -312,3 +312,42 @@ class Product < ApplicationRecord
   end
 end
 ```
+
+---
+
+## Ledger — double-entry bookkeeping (0.4.0+)
+
+*Additive to Coin/Bankable, not a replacement.* Reach for `Ledger` when a monetary attribute
+needs a full, audited double-entry trail rather than a simple stored value.
+
+```ruby
+# Accounts: system (no owner, disambiguated by slug) or owned (polymorphic owner)
+revenue  = WhittakerTech::Midas::Ledger::Account.create!(kind: :revenue, slug: 'revenue', currency_code: 'USD')
+customer = WhittakerTech::Midas::Ledger::Account.create!(kind: :asset, owner: current_customer, currency_code: 'USD')
+
+# Entry.record! is the ONLY sanctioned way to build a balanced entry
+WhittakerTech::Midas::Ledger::Entry.record!(
+  currency_code: 'USD',
+  occurred_at: Time.current,
+  lines: [
+    { account: customer, direction: :debit,  amount: 1000 },
+    { account: revenue,  direction: :credit, amount: 1000 }
+  ]
+)
+
+customer.balance  # => 1000 (raw debit-normal, finalized entries only)
+revenue.balance   # => -1000
+```
+
+An unbalanced, mixed-currency, zero-amount, or empty-lines call to `record!` raises
+`ActiveRecord::RecordInvalid` and rolls back entirely. Entries and Postings are immutable once
+finalized — any further add, destroy, or `set_amount` call against a finalized entry's postings
+raises `WhittakerTech::Midas::Ledger::UnbalancedEntryError`.
+
+For out-of-order external events (a refund webhook arriving before its charge), post against
+`Ledger::Account.suspense_for(currency_code)` and reclassify later with a second balanced entry —
+never by mutating the original.
+
+See [Architecture](architecture/#ledger--additive-double-entry-bookkeeping-040-phase-1) for the
+full design (why `record!` is the only write path, why amounts are denormalized onto Posting,
+what's deferred to later phases).

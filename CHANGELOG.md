@@ -6,6 +6,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.4.0] - 2026-07-13
+
+### Added
+
+- Added **Midas::Ledger** — additive double-entry bookkeeping alongside the existing `Coin`/
+  `Bankable` system (not a replacement; simple stored values keep using `has_coin`/`has_coins`
+  as before):
+  - **Ledger::Account** — a chart-of-accounts entry. Either a system account (no owner — e.g. a
+    per-currency suspense or revenue account, disambiguated by `slug`) or an owned account
+    (polymorphic `owner`, e.g. a Customer), scoped uniquely per `(owner, kind, currency)` or
+    `(slug, currency)`. `kind` is one of `asset`, `liability`, `equity`, `revenue`, `expense`, or
+    `suspense`. `Account.suspense_for(currency_code)` finds-or-creates the per-currency suspense
+    account, retried once against the concurrent-creation race its partial unique index guards
+    against. `#balance` returns the raw debit-normal balance.
+  - **Ledger::Entry** — a balanced double-entry transaction. `Entry.record!(currency_code:,
+    occurred_at:, lines:, source: nil, memo: nil)` is the only sanctioned way to build one —
+    it constructs the entry, then each posting, then each posting's Coin (sequentially, since
+    Coin requires an already-persisted `resource` — the same constraint `Exchange`/`Converter`
+    already has), then finalizes: reloads postings and validates balance, single currency,
+    positive amounts, and at-least-one line, stamping `finalized_at` only if valid. Entries (and
+    their Postings) are immutable after creation, enforced the same way as `Exchange`.
+  - **Ledger::Posting** — one debit or credit line within an Entry. Reuses `Coin` via `Bankable`
+    (`has_coin :amount`) for presentation/conversion parity with the rest of the engine, while
+    denormalizing `currency_minor` onto the row itself, since that's the field balance/report
+    queries actually read. Postings on an already-finalized Entry reject any further add or
+    remove, raising `Ledger::UnbalancedEntryError`.
+  - Monthly partitioning of `midas_ledger_postings`, a DB-level balance-invariant backstop,
+    reclassification tooling/aging alerts for suspense balances, multi-currency entries, and
+    Subscribify usage-metering ingestion are deliberately out of scope for this release.
+
 ## [0.3.0] - 2026-07-08
 
 ### Breaking Changes

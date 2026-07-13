@@ -88,6 +88,11 @@ WhittakerTech::Midas
 │
 ├── Bankable                     ← concern: has_coin / has_coins DSL
 │
+├── Ledger                       ← additive double-entry bookkeeping (0.4.0+)
+│   ├── Ledger::Account          ← chart-of-accounts entry (system or owned)
+│   ├── Ledger::Entry            ← balanced transaction; .record! is the sole write path
+│   └── Ledger::Posting          ← one debit/credit line (Bankable host for its amount)
+│
 └── FormHelper / JS controller   ← bank-style currency input field
 ```
 
@@ -298,6 +303,95 @@ end
 | `Money`    | Minor units taken directly from `.cents` |
 | `Integer`  | Treated as minor units                 |
 | `Float`/`Numeric` | Treated as major units; scaled by `10 ** decimals_for(iso)` |
+
+---
+
+## Ledger — additive double-entry bookkeeping (0.4.0+, Phase 1)
+
+`Ledger` lives alongside Coin/Bankable, not in place of it. Most monetary attributes should keep
+using `has_coin`/`has_coins`; `Ledger` exists for consumers that need a full, audited double-entry
+trail — accounts, balanced transactions, and immutable postings.
+
+```
+Ledger::Account  ──has_many──▶  Ledger::Posting  ◀──belongs_to──  Ledger::Entry
+                                       │
+                                  has_coin :amount
+                                       │
+                                       ▼
+                                     Coin
+```
+
+### Account
+
+Either a **system account** (no `owner` — a per-currency singleton like suspense or revenue,
+disambiguated by `slug`) or an **owned account** (polymorphic `owner`, e.g. a Customer).
+Uniqueness is scoped to `(owner_type, owner_id, kind, currency_code)` for owned accounts, or
+`(slug, currency_code)` for system accounts — matching a DB-level unique index (partial, `WHERE
+owner_id IS NULL`, for the system-account case).
+
+`kind`: `asset`, `liability`, `equity`, `revenue`, `expense`, `suspense`.
+
+`Account.suspense_for(currency_code)` find-or-creates the per-currency suspense account, with a
+bounded retry against the concurrent-creation race the partial unique index guards against.
+`#balance` returns the raw debit-normal balance (`sum(debits) - sum(credits)`), reading the
+denormalized `currency_minor` column directly (not joining Coin) and counting only postings on
+**finalized** entries.
+
+### Entry — the sole write path is `record!`
+
+`Entry.record!(currency_code:, occurred_at:, lines:, source: nil, memo: nil)` is the only
+sanctioned way to build an Entry. It:
+
+1. Creates the Entry
+2. Creates each Posting, then attaches its Coin via `set_amount` — **sequentially**, because Coin
+   requires an already-persisted `resource` before it can attach (the same constraint
+   `Exchange`/`Converter` already has — see above)
+3. Calls a private `finalize!`, which reloads postings fresh from the DB and validates, in a
+   `:finalize` validation context: balance (debits == credits), single currency, positive
+   amounts, and at-least-one posting
+4. Only if valid, stamps `finalized_at` (via `update_column`, deliberately bypassing the
+   immutability guard — this is the one sanctioned internal state transition)
+
+Any failure rolls the whole transaction back.
+
+**Why not just recheck balance after every Posting write?** That was the original design, and it
+doesn't work: because Coin/Posting/Entry must persist in that sequential order, a naive
+post-write balance check would false-positive on the very first posting of every legitimate
+multi-line entry (a single posting is never balanced by itself). Instead, Entry tracks a
+`finalized_at` state flag. Postings on an already-finalized Entry reject any `create`, `destroy`,
+or `set_amount` call outright — raising `Ledger::UnbalancedEntryError` — rather than relying on
+re-deriving balance state on every write.
+
+### Posting — Coin reuse, denormalized for queries
+
+`Posting` `include`s `Bankable` and does `has_coin :amount`, exactly like `Exchange` does for
+`from`/`to` — giving it `amount`, `amount_format`, `amount_in`, and conversion parity with the
+rest of the engine "for free". But balance/report queries don't read the Coin: `currency_minor`
+is **denormalized** directly onto the posting row, kept in sync by an override of `set_amount`
+(which must `alias` the original method rather than call `super` — `Bankable`'s `has_coin` defines
+`set_amount` directly on the includer class via `define_method`, not through a separate module in
+the ancestor chain, so there's no ancestor for `super` to reach).
+
+The denormalization matters for the deferred Phase 2 (below): if the amount only lived on the
+joined `midas_coins` row, partitioning `midas_ledger_postings` wouldn't speed up any query that
+also needs the amount, since Coin is a separate, unpartitioned table shared with every other
+Bankable consumer.
+
+### Suspense accounts and reclassification
+
+Out-of-order external events (e.g. a refund webhook arriving before its charge) post against
+`Account.suspense_for(currency_code)`. Reclassification, once the missing counterpart arrives, is
+**not a mutation** — Entries are immutable — it's simply a second balanced Entry that debits
+suspense and credits the now-known correct account.
+
+### Deferred (Phase 2 / Phase 3)
+
+- Monthly range partitioning of `midas_ledger_postings` by `occurred_at`, plus a DB-level
+  balance-invariant backstop (a deferred constraint trigger)
+- Reclassification tooling/UI and suspense aging alerts
+- Multi-currency entries (recording both legs of an FX conversion as postings, not just the
+  converted total — Entries are single-currency in Phase 1)
+- Subscribify usage-metering ingestion (aggregated usage line items turned into balanced Entries)
 
 ---
 
