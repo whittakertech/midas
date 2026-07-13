@@ -36,6 +36,12 @@ RSpec.describe WhittakerTech::Midas::Ledger::Account do
       dup = described_class.new(kind: :suspense, slug: 'suspense', currency_code: 'USD')
       expect(dup).not_to be_valid
     end
+
+    it 'allows two system accounts of the same kind with different slugs' do
+      described_class.create!(kind: :revenue, slug: 'platform-revenue', currency_code: 'USD')
+      other = described_class.new(kind: :revenue, slug: 'fees-revenue', currency_code: 'USD')
+      expect(other).to be_valid
+    end
   end
 
   describe '.suspense_for' do
@@ -80,6 +86,14 @@ RSpec.describe WhittakerTech::Midas::Ledger::Account do
 
       expect(asset.balance).to eq(1000)
       expect(revenue.balance).to eq(-1000)
+    end
+
+    it 'ignores postings on an entry that was never finalized' do
+      asset = described_class.create!(owner: customer, kind: :asset, currency_code: 'USD')
+      entry = WhittakerTech::Midas::Ledger::Entry.create!(currency_code: 'USD', occurred_at: Time.current)
+      entry.postings.create!(account: asset, direction: :debit, occurred_at: Time.current)
+
+      expect(asset.balance).to eq(0)
     end
   end
 end

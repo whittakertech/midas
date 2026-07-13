@@ -56,6 +56,8 @@ class WhittakerTech::Midas::Ledger::Posting < WhittakerTech::Midas::ApplicationR
   # @param currency_code [String]
   # @return [WhittakerTech::Midas::Coin]
   def set_amount(amount:, currency_code:)
+    ensure_entry_not_finalized!
+
     coin = attach_amount_coin(amount:, currency_code:)
     update_column(:currency_minor, coin.currency_minor) # rubocop:disable Rails/SkipsModelValidations
     coin

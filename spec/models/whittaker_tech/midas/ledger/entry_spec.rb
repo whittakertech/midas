@@ -163,5 +163,20 @@ RSpec.describe WhittakerTech::Midas::Ledger::Entry do
 
       expect { entry.postings.first.destroy! }.to raise_error(WhittakerTech::Midas::Ledger::UnbalancedEntryError)
     end
+
+    it 'refuses to reattach a different amount to a posting on an already-finalized entry' do
+      entry = described_class.record!(
+        currency_code: 'USD',
+        occurred_at: Time.current,
+        lines: [
+          { account: asset, direction: :debit, amount: 500 },
+          { account: revenue, direction: :credit, amount: 500 }
+        ]
+      )
+
+      expect do
+        entry.postings.first.set_amount(amount: 99_999, currency_code: 'USD')
+      end.to raise_error(WhittakerTech::Midas::Ledger::UnbalancedEntryError)
+    end
   end
 end

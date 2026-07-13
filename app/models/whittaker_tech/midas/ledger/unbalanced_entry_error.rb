@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-# Raised when a Posting write (add, update, or destroy) would leave its
-# parent Entry's debits and credits out of balance. This is the
-# defense-in-depth backstop for any write path that bypasses
-# `Ledger::Entry.record!` — see `Ledger::Posting`'s `after_save`/
-# `after_destroy` guard.
+# Raised when a Posting write (create, destroy, or reattaching its amount
+# via #set_amount) is attempted against an already-finalized Entry. This is
+# the defense-in-depth backstop for any write path that bypasses
+# `Ledger::Entry.record!` — see `Ledger::Posting`'s `before_create`/
+# `before_destroy` guard (and the `set_amount` override).
 #
 # @since 0.4.0
 class WhittakerTech::Midas::Ledger::UnbalancedEntryError < StandardError; end

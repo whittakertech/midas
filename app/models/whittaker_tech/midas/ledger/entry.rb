@@ -101,8 +101,12 @@ class WhittakerTech::Midas::Ledger::Entry < WhittakerTech::Midas::ApplicationRec
     update_column(:finalized_at, Time.current) # rubocop:disable Rails/SkipsModelValidations
   end
 
+  # Only checks non-empty, not "at least one debit and one credit" — the
+  # balance and positive-amount checks together already rule out a
+  # one-sided entry (a lone debit or lone credit can never balance against
+  # nothing), so this doesn't need to duplicate that logic.
   def postings_present
-    errors.add(:base, 'an entry must have at least one debit and one credit posting') if postings.empty?
+    errors.add(:base, 'an entry must have at least one posting') if postings.empty?
   end
 
   def postings_balance

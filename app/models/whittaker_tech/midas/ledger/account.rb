@@ -39,7 +39,11 @@ class WhittakerTech::Midas::Ledger::Account < WhittakerTech::Midas::ApplicationR
 
   validates :currency_code, presence: true, length: { is: 3 }
   validates :slug, presence: true, if: -> { owner_type.nil? }
-  validates :kind, uniqueness: { scope: :currency_code },
+  # System accounts are disambiguated by slug, not kind — e.g. a
+  # 'platform-revenue' and a 'fees-revenue' system account can coexist in
+  # the same currency, both kind: :revenue. Matches the DB partial unique
+  # index on (slug, currency_code) WHERE owner_id IS NULL.
+  validates :slug, uniqueness: { scope: :currency_code },
                    if: -> { owner_type.nil? }
   validates :kind, uniqueness: { scope: %i[owner_type owner_id currency_code] },
                    if: -> { owner_type.present? }
@@ -71,7 +75,10 @@ class WhittakerTech::Midas::Ledger::Account < WhittakerTech::Midas::ApplicationR
 
   # Raw debit-normal balance: sum(debits) - sum(credits), reading the
   # denormalized `currency_minor` column on Posting directly (not joining
-  # Coin) so this stays cheap even before Phase 2 partitioning.
+  # Coin) so this stays cheap even before Phase 2 partitioning. Only counts
+  # postings on finalized entries — Entry.create! (bypassing `record!`) is
+  # a live, if unsanctioned, path to an unfinalized entry with postings
+  # attached, and those must never contribute to a real balance.
   #
   # This is intentionally kind-agnostic. Presenting a liability/equity/
   # revenue account's balance as conventionally credit-positive is a
@@ -79,7 +86,9 @@ class WhittakerTech::Midas::Ledger::Account < WhittakerTech::Midas::ApplicationR
   #
   # @return [Integer]
   def balance
-    postings.debit.sum(:currency_minor) - postings.credit.sum(:currency_minor)
+    entry_class = WhittakerTech::Midas::Ledger::Entry
+    finalized = postings.joins(:entry).merge(entry_class.where.not(finalized_at: nil))
+    finalized.debit.sum(:currency_minor) - finalized.credit.sum(:currency_minor)
   end
 
   private
