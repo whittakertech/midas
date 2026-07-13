@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Midas (`whittaker_tech-midas`) is a **Rails Engine** for multi-currency monetary value management. It replaces scattered `*_cents` and `*_currency` columns with a single polymorphic `Coin` model backed by a centralized `midas_coins` table. Built on top of the `money` gem (~6.19). Requires Ruby >= 3.4.0 and Rails >= 7.1.5.2.
+Midas (`whittaker_tech-midas`) is a **Rails Engine** for multi-currency monetary value management. It replaces scattered `*_cents` and `*_currency` columns with a single polymorphic `Coin` model backed by a centralized `midas_coins` table. Built on top of the `money` gem (~6.19). Requires Ruby >= 3.2.0 and Rails >= 7.1.5.2.
 
 As of 0.4.0, Midas also provides **Ledger** — additive double-entry bookkeeping (accounts + balanced postings) alongside Coin/Bankable, for consumers that need a full audit trail rather than a simple stored value. See the Ledger section below.
 
