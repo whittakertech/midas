@@ -1,0 +1,36 @@
+name: Sync README badges
+
+on:
+  push:
+    branches: ["master"]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+
+      - name: Fetch and run badge sync script
+        run: |
+          curl -sSL https://raw.githubusercontent.com/whittakertech/.github/main/scripts/sync_readme_badges.rb -o /tmp/sync_readme_badges.rb
+          ruby /tmp/sync_readme_badges.rb
+
+      - name: Commit if README changed
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "No badge drift detected."
+            exit 0
+          fi
+          git config user.name "gitea-actions"
+          git config user.email "actions@gitea.whittakertech.com"
+          git add README.md
+          git commit -m "chore: sync README badges to gemspec [skip ci]"
+          git push origin HEAD:master
