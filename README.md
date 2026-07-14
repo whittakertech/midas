@@ -28,7 +28,7 @@ This design keeps your pricing, billing, and financial reporting consistent acro
 
 ## Requirements
 
-- Ruby 3.4+
+- Ruby 3.2+
 - Rails 7.1+
 - money gem ~> 6.19.0
 

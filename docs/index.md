@@ -30,7 +30,7 @@ DSL for declaring and accessing its monetary attributes.
 
 | Requirement | Version |
 |-------------|---------|
-| Ruby        | >= 3.4  |
+| Ruby        | >= 3.2  |
 | Rails       | >= 7.1  |
 | money gem   | ~> 6.19 |
 

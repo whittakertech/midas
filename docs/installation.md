@@ -132,7 +132,7 @@ bin/rails runner "puts WhittakerTech::Midas::Coin.count"
 
 | Requirement  | Minimum  |
 |--------------|----------|
-| Ruby         | 3.4.0    |
+| Ruby         | 3.2.0    |
 | Rails        | 7.1.5.2  |
 | money gem    | ~> 6.19  |
 | PostgreSQL   | 14+ (recommended); SQLite 3 supported for development |
