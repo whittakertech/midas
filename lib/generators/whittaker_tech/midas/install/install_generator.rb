@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WhittakerTech::Midas::Generators::InstallGenerator < Rails::Generators::Base
+class WhittakerTech::Midas::InstallGenerator < Rails::Generators::Base
   desc 'Installs Midas and copies migrations.'
 
   def copy_migrations

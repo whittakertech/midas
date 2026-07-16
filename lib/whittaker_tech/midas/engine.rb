@@ -108,6 +108,15 @@ class WhittakerTech::Midas::Engine < Rails::Engine
   config.eager_load_paths += Dir["#{config.root}/app/models"]
 
   initializer 'midas.helpers' do
+    # Explicit require rather than relying on Zeitwerk autoload resolution
+    # here: ActiveSupport.on_load(:action_view) fires immediately (not
+    # deferred) whenever ActionView::Base is already loaded by the time this
+    # initializer runs, which on Rails 8 hosts happens before this engine's
+    # own autoload paths are guaranteed ready -- raising a NameError on boot
+    # for WhittakerTech::Midas::FormHelper. Requiring the file directly
+    # sidesteps the race entirely.
+    require_relative '../../../app/helpers/whittaker_tech/midas/form_helper'
+
     ActiveSupport.on_load(:action_view) do
       include WhittakerTech::Midas::FormHelper
     end
