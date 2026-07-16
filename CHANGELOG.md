@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.4.1] - 2026-07-15
+
+### Fixed
+
+- `Midas::Engine`'s `midas.helpers` initializer registered
+  `ActiveSupport.on_load(:action_view) { include WhittakerTech::Midas::FormHelper }`,
+  relying on Zeitwerk to resolve the constant. On a Rails 8 host,
+  `ActionView::Base` is typically already loaded by the time this
+  initializer runs, so `on_load` fires immediately -- before this engine's
+  own autoload paths are guaranteed ready -- raising
+  `NameError: uninitialized constant WhittakerTech::Midas::FormHelper` on
+  boot. Fixed by requiring the helper file directly instead of relying on
+  autoload timing. Discovered while mounting Midas into Subscribify (T0).
+
 ## [0.4.0] - 2026-07-13
 
 ### Added
