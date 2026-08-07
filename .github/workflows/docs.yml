@@ -1,4 +1,4 @@
-name: 🚀 Deploy Midas Docs (MkDocs Material)
+name: Docs
 
 on:
   push:
@@ -14,7 +14,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  # Gitea-only internal preview (YARD + MkDocs -> Gitea's own gh-pages).
+  # Documentation publishing of record moved to Codex (the `codex_publish`
+  # job below), which owns midas.whittakertech.com via GitHub Pages.
+  deploy-gitea-preview:
+    if: github.server_url != 'https://github.com'
     runs-on: ubuntu-latest
 
     steps:
@@ -67,3 +71,46 @@ jobs:
 
       - name: 🚀 Deploy to GitHub Pages
         run: mkdocs gh-deploy --force --clean --message "Deploy Midas Docs [skip ci]"
+
+  # Real publish target: Codex ingests docs/ (hand-written pages +
+  # this freshly-regenerated YARD output, overlaid into docs/api/) and
+  # deploys straight to this repo's own gh-pages -- same domain
+  # (midas.whittakertech.com), different tooling underneath.
+  build-docs-artifact:
+    if: github.server_url == 'https://github.com'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: false
+
+      - name: Install Ruby Dependencies
+        run: bundle install
+
+      - name: Generate YARD API Docs
+        run: bundle exec yardoc --yardopts .yardopts
+
+      - name: Normalize YARD Markdown Lists
+        run: ruby scripts/normalize_yard_markdown.rb docs/api
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs/api
+
+  codex_publish:
+    needs: build-docs-artifact
+    if: github.server_url == 'https://github.com'
+    uses: whittakertech/codex/.github/workflows/publish_docs.yml@main
+    with:
+      engine_owner: whittakertech
+      engine_repo: midas
+      engine_ref: ${{ github.sha }}
+      docs_artifact_name: docs
+      site_url: https://midas.whittakertech.com
+    secrets:
+      CODEX_GITHUB_TOKEN: ${{ secrets.CODEX_GITHUB_TOKEN }}
