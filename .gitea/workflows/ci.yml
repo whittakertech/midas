@@ -1,0 +1,34 @@
+name: CI (Gitea)
+
+# Real test/lint signal for PRs against this repo. Lives here, not
+# .github/workflows/, because Gitea reads .gitea/workflows/ exclusively
+# when it exists and never falls back to .github/workflows/ (confirmed:
+# go-gitea/gitea#31456) -- which is exactly what lets .github/workflows/
+# ci.yml's cross-repo `uses:` (whittakertech/.github) exist at all without
+# Gitea attempting, and failing, to resolve it and silently blocking every
+# run for this repo (confirmed root cause of a real dispatch outage,
+# 2026-08).
+
+on:
+  push:
+    branches: [ "master", "tea" ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Run RSpec
+        run: bundle exec rspec
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
