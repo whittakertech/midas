@@ -1,0 +1,21 @@
+name: Publish (squash tea -> master)
+
+# Gitea-side operation by nature (operates on this repo's own tea/master
+# branches) -- lives in .gitea/workflows/ alongside ci.yml/mirror.yml, not
+# .github/workflows/, for the same reason documented there: Gitea reads
+# .gitea/workflows/ exclusively once it exists, never falling back to
+# .github/workflows/ (go-gitea/gitea#31456).
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "publish" to confirm you want to squash-merge tea into master'
+        required: true
+
+jobs:
+  publish:
+    uses: WhittakerTech-org/.github/.github/workflows/publish.yml@main
+    with:
+      confirm: ${{ github.event.inputs.confirm }}
+    secrets: inherit

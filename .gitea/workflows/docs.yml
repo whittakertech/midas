@@ -1,0 +1,83 @@
+name: Docs (Gitea preview)
+
+# Gitea-only internal preview (YARD + MkDocs -> Gitea's own gh-pages).
+# Documentation publishing of record is Codex (see .github/workflows/docs.yml's
+# codex_publish job), which owns midas.whittakertech.com via GitHub Pages.
+#
+# Lives in .gitea/workflows/, not .github/workflows/, deliberately: Gitea
+# reads .gitea/workflows/ exclusively when it exists (confirmed --
+# go-gitea/gitea#31456 -- and never processes .github/workflows/ once it
+# does), so this file being here is what lets ci.yml/docs.yml's GitHub-only
+# jobs use cross-repo `uses:` (whittakertech/.github, whittakertech/codex)
+# without Gitea ever attempting -- and failing -- to resolve them at
+# run-creation time. That resolution failure was blocking every Actions
+# run for this repo silently (no error, just zero dispatched runs) until
+# this split.
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy-gitea-preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧩 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 💎 Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: false
+
+      - name: 🧱 Cache gem Dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('*.gemspec') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: 📦 Install Ruby Dependencies
+        run: |
+          bundle config set --local path vendor/bundle
+          bundle install
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 🧱 Cache pip Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: 📦 Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: 📝 Generate YARD API Docs
+        run: bundle exec yardoc --yardopts .yardopts
+
+      - name: 🧹 Normalize YARD Markdown Lists
+        run: ruby scripts/normalize_yard_markdown.rb docs/api
+
+      - name: 🧪 Build MkDocs Site
+        run: mkdocs build --strict
+
+      - name: 🚀 Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force --clean --message "Deploy Midas Docs [skip ci]"
