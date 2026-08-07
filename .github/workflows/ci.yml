@@ -14,6 +14,35 @@ permissions:
   id-token: write
 
 jobs:
+  # Real verification on Gitea: the shared `pipeline` job below can't run
+  # here at all (Gitea has no fallback for cross-instance reusable-workflow
+  # references -- it always tries to resolve whittakertech/.github against
+  # itself and fails), which left every Gitea-side run of this file showing
+  # as unconditionally "skipped" with no real test/lint signal for any PR.
+  # This job runs the same test/lint steps directly and inline (no
+  # cross-repo `uses:`), so PRs against `tea` get a real CI signal.
+  # Publishing tasks (gem release, docs deploy) stay GitHub-only below --
+  # those need real GitHub context/secrets and are covered once content
+  # actually reaches GitHub via mirror.yml.
+  test_gitea:
+    name: Test (Gitea)
+    if: github.server_url != 'https://github.com'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Run RSpec
+        run: bundle exec rspec
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
   pipeline:
     # Gitea's own Actions runner also executes this file (self-hosted
     # act_runner, independent of the GitHub mirror). Gitea has no fallback
