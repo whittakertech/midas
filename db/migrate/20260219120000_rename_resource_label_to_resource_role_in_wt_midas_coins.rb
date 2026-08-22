@@ -2,7 +2,7 @@
 
 require 'whittaker_tech/midas'
 
-class RenameResourceLabelToResourceRoleInWtMidasCoins < ActiveRecord::Migration[8.0]
+class RenameResourceLabelToResourceRoleInWtMidasCoins < ActiveRecord::Migration[6.1]
   def change
     rename_column WhittakerTech::Midas.table_name('coins'), :resource_label, :resource_role
     rename_index  WhittakerTech::Midas.table_name('coins'),

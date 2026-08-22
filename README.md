@@ -2,7 +2,7 @@
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](MIT-LICENSE)
 ![Ruby 3.2](https://img.shields.io/badge/ruby-3.2+-red.svg)
-![Rails 7.1](https://img.shields.io/badge/rails-7.1+-crimson.svg)
+![Rails 6.1](https://img.shields.io/badge/rails-6.1+-crimson.svg)
 [![Gem Version](https://badge.fury.io/rb/whittaker_tech-midas.svg)](https://badge.fury.io/rb/whittaker_tech-midas)
 [![CI](https://github.com/WhittakerTech/midas/actions/workflows/ci.yml/badge.svg)](https://github.com/WhittakerTech/midas/actions)
 
@@ -29,7 +29,10 @@ This design keeps your pricing, billing, and financial reporting consistent acro
 ## Requirements
 
 - Ruby 3.2+
-- Rails 7.1+
+- Rails 6.1+ (6.1 supported for legacy consumers, exercised in CI on Ruby 3.3;
+  `Ledger` uses the Rails 7.1 `enum` form where available and falls back to the
+  6.1 syntax, where an unknown value raises `ArgumentError` on assignment rather
+  than becoming a validation error)
 - money gem ~> 6.19.0
 
 ## Installation

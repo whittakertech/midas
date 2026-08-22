@@ -2,7 +2,7 @@
 
 require 'whittaker_tech/midas'
 
-class CreateMidasLedgerEntries < ActiveRecord::Migration[8.0]
+class CreateMidasLedgerEntries < ActiveRecord::Migration[6.1]
   def change
     create_table WhittakerTech::Midas.table_name('ledger_entries') do |t|
       t.string :currency_code, null: false, limit: 3

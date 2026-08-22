@@ -29,7 +29,10 @@ module Dummy
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w(assets tasks))
+    # `autoload_lib` arrived in Rails 7.1; the 6.1 matrix lane has no
+    # equivalent. This dummy app ships no lib/ of its own, so skipping it
+    # there costs nothing.
+    config.autoload_lib(ignore: %w(assets tasks)) if config.respond_to?(:autoload_lib)
 
     # Configuration for the application, engines, and railties goes here.
     #

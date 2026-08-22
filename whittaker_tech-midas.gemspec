@@ -32,13 +32,16 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency 'money', '~> 6.19.0'
-  spec.add_dependency 'poly', '~> 1.0'
-  spec.add_dependency 'rails', '>= 7.1.5.2'
+  spec.add_dependency 'poly', '~> 1.3'
+  spec.add_dependency 'rails', '>= 6.1'
 
   spec.add_development_dependency 'factory_bot_rails', '~> 6.4'
   spec.add_development_dependency 'puma', '~> 6.0'
   spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'rspec-rails', '~> 7.0'
+  # `>= 6.1` rather than `~> 7.0` so Bundler can pick the rspec-rails major
+  # that matches the Rails pinned by the RAILS_VERSION matrix cell -- 7.x
+  # requires Rails >= 7.0 and cannot resolve against the 6.1 lane.
+  spec.add_development_dependency 'rspec-rails', '>= 6.1'
   spec.add_development_dependency 'shoulda-matchers', '~> 6.5'
   spec.add_development_dependency 'simplecov', '~> 0.22'
   spec.add_development_dependency 'simplecov-console', '~> 0.9'

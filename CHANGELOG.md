@@ -6,6 +6,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.5.0] - 2026-08-22
+
+### Changed
+
+- **Lowered the supported Rails floor from `>= 7.1.5.2` to `>= 6.1`**, and the
+  Poly dependency from `~> 1.0` to `~> 1.3` (the release that lowered Poly's own
+  ActiveRecord floor). The previous pin was an end-of-life policy choice, not a
+  technical constraint. Lowered so hellodancerrails (Rails 6.1.7.10 / Ruby
+  3.3.11) can adopt `Coin`.
+- `Ledger::Account#kind` and `Ledger::Posting#direction` now declare their enums
+  version-conditionally. Rails 7.1+ keeps today's exact behaviour
+  (`enum :name, values, validate: true`); Rails 6.1, which has neither the
+  positional form nor `validate:`, uses `enum name: values`. **Behavioural
+  difference on 6.1:** assigning an unknown value raises `ArgumentError` at
+  assignment time instead of producing a validation error — stricter, never
+  looser. The value maps are now exposed as `Account::KINDS` and
+  `Posting::DIRECTIONS`.
+- All bundled migrations now declare `ActiveRecord::Migration[6.1]` instead of
+  `[8.0]`, since 6.1 cannot parse a newer compatibility version. For Midas's
+  supported adapters this is immaterial: the only 6.1-vs-7.0 difference that
+  would reach these tables is `datetime` precision, and PostgreSQL's plain
+  `timestamp` is already microsecond-precision while SQLite treats precision as
+  advisory. Existing installations are unaffected — their migrations have
+  already run.
+- CI gains a Rails version axis (`RAILS_VERSION`: 7.1, 7.2, 8.x, plus a 6.1 cell
+  pinned to Ruby 3.3) and splits RuboCop into its own job, since lint is
+  version-independent.
+
+### Fixed
+
+- `spec/dummy` could only boot on Rails 7.1+. It now supports the full declared
+  window: `config.autoload_lib` (7.1+), `config.enable_reloading` (7.1+, vs
+  `cache_classes`), `config.action_dispatch.show_exceptions` (symbol in 7.1+,
+  boolean in 6.1), `config.action_controller.raise_on_missing_callback_actions`
+  (7.1+) and `primary_abstract_class` (7.0+) are all version-guarded.
+  `spec/rails_helper.rb` falls back from rspec-rails's `fixture_paths` to
+  `fixture_path` when the underlying ActiveRecord predates 7.1.
+- `rspec-rails` development dependency relaxed from `~> 7.0` to `>= 6.1`; 7.x
+  cannot resolve against Rails 6.1.
+- `lib/whittaker_tech/midas/version.rb` tripped `Style/OneClassPerFile`, which is
+  mutually exclusive with this repo's `Style/ClassAndModuleChildren: compact`
+  setting. Resolved with a scoped disable and a note. (Surfaced now because
+  `AllCops: NewCops: enable` plus an unpinned `rubocop` means new cops activate
+  on release — pinning the lint toolchain, as Poly does, would make this
+  reproducible.)
+
+### Development
+
+- The 6.1 bundle lane pins `concurrent-ruby < 1.3.5` (1.3.5 dropped the implicit
+  `require 'logger'` that ActiveSupport 6.1 relies on) and `sqlite3 ~> 1.4`
+  (6.1's SQLite3Adapter requires it; sqlite3 2.x needs Rails 7.2+). Both are
+  Gemfile-only; neither is a runtime requirement of the gem.
+
+---
+
 ## [0.4.1] - 2026-07-15
 
 ### Fixed
