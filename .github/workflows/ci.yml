@@ -1,13 +1,30 @@
 name: CI/CD
 
-# GitHub-only by construction, not by `if:` guard -- Gitea never reads this
-# directory once .gitea/workflows/ exists (confirmed: go-gitea/gitea#31456),
-# so it never attempts, and fails, the cross-repo `uses:` resolution below.
-# That silent resolution failure (Gitea tries to resolve whittakertech/.github
-# against itself and fails, at run-creation time -- before any job-level
-# `if:` is even evaluated) was blocking every Actions run for this repo,
-# not just this job, with zero error output. See .gitea/workflows/ci.yml
+# GitHub-only by construction: Gitea never reads this directory once
+# .gitea/workflows/ exists (confirmed: go-gitea/gitea#31456), so it never
+# attempts the cross-repo `uses:` resolution below. See .gitea/workflows/ci.yml
 # for the real Gitea-side test/lint job.
+#
+# CORRECTION (2026-08-22): this comment previously added that a job-level
+# `if:` guard could not help, because resolution happens "at run-creation
+# time -- before any job-level `if:` is even evaluated", and that this had
+# blocked every Actions run for this repo with zero error output.
+#
+# The `if:`-guard half of that is FALSE on this Gitea version, and it caused
+# real downstream cost: it was cited as justification for restructuring seven
+# other repos into .gitea/ before anyone checked the run history.
+#
+# Evidence: WhittakerTech-org/oscar uses exactly that guard pattern in its
+# .github/workflows/ci.yml and its Gitea Actions show five `success` runs and
+# one `skipped` -- the `conclusion: skipped` Oscar's own comment predicts for
+# its guarded `github_ci` job. Guards ARE evaluated before cross-repo `uses:`
+# resolution here.
+#
+# Whatever outage prompted this repo's directory split, the `if:`-guard
+# mechanism was not the cause, or was misattributed. The split still stands on
+# its own merits (explicit platform ownership beats relying on guard
+# semantics) -- it simply is not the only thing that works. Full write-up:
+# projects/galaxy ADR 2026-08-22, and Galaxy RM-209.
 
 on:
   push:
