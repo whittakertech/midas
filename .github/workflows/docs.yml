@@ -42,7 +42,7 @@ jobs:
 
   codex_publish:
     needs: build-docs-artifact
-    uses: whittakertech/codex/.github/workflows/publish_docs.yml@main
+    uses: whittakertech/codex/.github/workflows/publish_docs.yml@master
     with:
       engine_owner: whittakertech
       engine_repo: midas
