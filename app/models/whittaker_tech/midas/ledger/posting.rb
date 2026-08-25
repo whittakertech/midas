@@ -31,7 +31,22 @@ class WhittakerTech::Midas::Ledger::Posting < WhittakerTech::Midas::ApplicationR
   # overriding so it can still be called.
   alias attach_amount_coin set_amount
 
-  enum :direction, { debit: 'debit', credit: 'credit' }, validate: true
+  DIRECTIONS = { debit: 'debit', credit: 'credit' }.freeze
+
+  # Rails 7.1 introduced both the positional `enum :name, values` form and the
+  # `validate: true` option (unknown values become validation errors rather
+  # than raising ArgumentError on assignment). Rails 6.1 has neither, so the
+  # declaration is version-conditional. On 6.1 an unknown value still raises
+  # ArgumentError at assignment time -- stricter than 7.1+, never looser --
+  # and AR 6.1 offers no way to defer that to validation.
+  if ActiveRecord::VERSION::STRING >= '7.1'
+    enum :direction, DIRECTIONS, validate: true
+  else
+    # rubocop:disable Rails/EnumSyntax -- the positional form this cop wants
+    # is exactly what Rails 6.1 lacks; that is why this branch exists.
+    enum direction: DIRECTIONS
+    # rubocop:enable Rails/EnumSyntax
+  end
 
   validates :occurred_at, presence: true
   # account/entry are both present at creation time (before any amount is

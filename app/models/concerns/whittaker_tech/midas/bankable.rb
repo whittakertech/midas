@@ -129,8 +129,8 @@ module WhittakerTech::Midas::Bankable
     def define_methods(name, label, assoc_name)
       define_method(name) { public_send(assoc_name) }
 
-      define_method("#{name}_amount")   { public_send(name)&.amount }
-      define_method("#{name}_format")   { public_send(name)&.amount&.format }
+      define_method("#{name}_amount") { public_send(name)&.amount }
+      define_method("#{name}_format") { public_send(name)&.amount&.format }
       define_method("#{name}_in") { |to| public_send(name)&.exchange_to(to)&.format }
 
       # Sets the coin value with the specified amount and currency.
