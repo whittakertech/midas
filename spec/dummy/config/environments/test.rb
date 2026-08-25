@@ -9,7 +9,13 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # While tests run files are not watched, reloading is not necessary.
-  config.enable_reloading = false
+  # `enable_reloading` replaced `cache_classes` in Rails 7.1; the 6.1 matrix
+  # lane still needs the old name.
+  if config.respond_to?(:enable_reloading=)
+    config.enable_reloading = false
+  else
+    config.cache_classes = true
+  end
 
   # Eager loading loads your entire application. When running a single test locally,
   # this is usually not necessary, and can slow down your test suite. However, it's
@@ -29,7 +35,10 @@ Rails.application.configure do
   config.cache_store = :null_store
 
   # Render exception templates for rescuable exceptions and raise for other exceptions.
-  config.action_dispatch.show_exceptions = :rescuable
+  # Rails 7.1 changed this from a boolean to a symbol; 6.1 only understands
+  # the boolean, where `false` is the equivalent of `:rescuable` here.
+  config.action_dispatch.show_exceptions =
+    Rails::VERSION::STRING >= '7.1' ? :rescuable : false
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -57,5 +66,12 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
 
   # Raise error when a before_action's only/except options reference missing actions
-  config.action_controller.raise_on_missing_callback_actions = true
+  # (Rails 7.1+; the option does not exist on the 6.1 lane). Guarded on the
+  # Rails version rather than `respond_to?`: `config.action_controller` is an
+  # OrderedOptions that accepts any setter via method_missing, so the failure
+  # would otherwise surface later, when the railtie applies the recorded
+  # option to ActionController::Base.
+  if Rails::VERSION::STRING >= '7.1'
+    config.action_controller.raise_on_missing_callback_actions = true
+  end
 end

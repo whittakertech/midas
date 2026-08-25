@@ -2,7 +2,7 @@
 
 require 'whittaker_tech/midas'
 
-class CreateMidasCoins < ActiveRecord::Migration[8.0]
+class CreateMidasCoins < ActiveRecord::Migration[6.1]
   def change
     create_table WhittakerTech::Midas.table_name('coins') do |t|
       t.references :resource, polymorphic: true, null: false, index: true

@@ -2,7 +2,7 @@
 
 require 'whittaker_tech/midas'
 
-class CreateMidasLedgerAccounts < ActiveRecord::Migration[8.0]
+class CreateMidasLedgerAccounts < ActiveRecord::Migration[6.1]
   def change
     create_table WhittakerTech::Midas.table_name('ledger_accounts') do |t|
       t.references :owner, polymorphic: true, null: true, index: true

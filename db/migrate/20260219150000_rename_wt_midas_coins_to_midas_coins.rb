@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RenameWtMidasCoinsToMidasCoins < ActiveRecord::Migration[8.0]
+class RenameWtMidasCoinsToMidasCoins < ActiveRecord::Migration[6.1]
   def change
     rename_table :wt_midas_coins, :midas_coins
     rename_index :midas_coins,

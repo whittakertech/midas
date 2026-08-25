@@ -10,3 +10,4 @@ docs/api/*
 !docs/api/.keep
 .yardoc/
 site/
+Gemfile.lock
