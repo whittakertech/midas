@@ -26,14 +26,29 @@ class WhittakerTech::Midas::Ledger::Account < WhittakerTech::Midas::ApplicationR
            dependent: :restrict_with_error,
            inverse_of: :account
 
-  enum :kind, {
+  KINDS = {
     asset: 'asset',
     liability: 'liability',
     equity: 'equity',
     revenue: 'revenue',
     expense: 'expense',
     suspense: 'suspense'
-  }, validate: true
+  }.freeze
+
+  # Rails 7.1 introduced both the positional `enum :name, values` form and the
+  # `validate: true` option (unknown values become validation errors rather
+  # than raising ArgumentError on assignment). Rails 6.1 has neither, so the
+  # declaration is version-conditional. On 6.1 an unknown value still raises
+  # ArgumentError at assignment time -- stricter than 7.1+, never looser --
+  # and AR 6.1 offers no way to defer that to validation.
+  if ActiveRecord::VERSION::STRING >= '7.1'
+    enum :kind, KINDS, validate: true
+  else
+    # rubocop:disable Rails/EnumSyntax -- the positional form this cop wants
+    # is exactly what Rails 6.1 lacks; that is why this branch exists.
+    enum kind: KINDS
+    # rubocop:enable Rails/EnumSyntax
+  end
 
   before_validation :normalize_currency_code
 

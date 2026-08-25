@@ -44,10 +44,17 @@ Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_paths = [
-    Rails.root.join('spec/fixtures')
-  ]
+  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures.
+  # rspec-rails only exposes the plural `fixture_paths` when the underlying
+  # ActiveRecord supports it (Rails 7.1+); the 6.1 lane still has the singular
+  # `fixture_path`, which takes a String rather than an Array.
+  if config.respond_to?(:fixture_paths=)
+    config.fixture_paths = [
+      Rails.root.join('spec/fixtures')
+    ]
+  else
+    config.fixture_path = Rails.root.join('spec/fixtures').to_s
+  end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

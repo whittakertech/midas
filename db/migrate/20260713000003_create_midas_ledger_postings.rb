@@ -2,7 +2,7 @@
 
 require 'whittaker_tech/midas'
 
-class CreateMidasLedgerPostings < ActiveRecord::Migration[8.0]
+class CreateMidasLedgerPostings < ActiveRecord::Migration[6.1]
   def change
     create_table WhittakerTech::Midas.table_name('ledger_postings') do |t|
       t.references(

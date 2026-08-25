@@ -1,0 +1,59 @@
+name: CI (Gitea)
+
+# Real test/lint signal for PRs against this repo. Lives here, not
+# .github/workflows/, because Gitea reads .gitea/workflows/ exclusively
+# when it exists and never falls back to .github/workflows/ (confirmed:
+# go-gitea/gitea#31456) -- which is exactly what lets .github/workflows/
+# ci.yml's cross-repo `uses:` (whittakertech/.github) exist at all without
+# Gitea attempting, and failing, to resolve it and silently blocking every
+# run for this repo (confirmed root cause of a real dispatch outage,
+# 2026-08).
+
+on:
+  push:
+    branches: [ "master", "tea" ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['3.4']
+        rails: ['7.1', '7.2', '8.x']
+        include:
+          # Rails 6.1 exists for hellodancerrails (Rails 6.1.7.10 / Ruby
+          # 3.3.11), which adopts Midas for Coin. 6.1 predates Ruby 3.4
+          # entirely, so it runs on the Ruby that consumer actually uses.
+          - { ruby: '3.3', rails: '6.1' }
+    env:
+      RAILS_VERSION: ${{ matrix.rails }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - name: Run RSpec
+        run: bundle exec rspec
+
+  # Lint is version-independent (.rubocop.yml pins TargetRubyVersion), so it
+  # runs once rather than once per matrix cell.
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop

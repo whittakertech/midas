@@ -1,69 +1,53 @@
-name: 🚀 Deploy Midas Docs (MkDocs Material)
+name: Docs (Codex publish)
+
+# Real publish target: Codex ingests docs/ (hand-written pages +
+# a freshly-regenerated YARD artifact, overlaid into docs/api/) and
+# deploys straight to this repo's own gh-pages -- midas.whittakertech.com.
+#
+# GitHub-only by construction, not by `if:` guard: this file lives in
+# .github/workflows/ specifically because Gitea never reads that directory
+# once .gitea/workflows/ exists (see .gitea/workflows/docs.yml's comment)
+# -- so Gitea never attempts, and fails, the cross-repo `uses:` resolution
+# below.
 
 on:
   push:
-    branches:
-      - master
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    branches: [main, master]
 
 jobs:
-  build-deploy:
+  build-docs-artifact:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 🧩 Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 💎 Setup Ruby
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
           bundler-cache: false
 
-      - name: 🧱 Cache gem Dependencies
-        uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('*.gemspec') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+      - name: Install Ruby Dependencies
+        run: bundle install
 
-      - name: 📦 Install Ruby Dependencies
-        run: |
-          bundle config set --local path vendor/bundle
-          bundle install
-
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: 🧱 Cache pip Dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: 📦 Install Python Dependencies
-        run: pip install -r requirements.txt
-
-      - name: 📝 Generate YARD API Docs
+      - name: Generate YARD API Docs
         run: bundle exec yardoc --yardopts .yardopts
 
-      - name: 🧹 Normalize YARD Markdown Lists
+      - name: Normalize YARD Markdown Lists
         run: ruby scripts/normalize_yard_markdown.rb docs/api
 
-      - name: 🧪 Build MkDocs Site
-        run: mkdocs build --strict
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs/api
 
-      - name: 🚀 Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force --clean --message "Deploy Midas Docs [skip ci]"
+  codex_publish:
+    needs: build-docs-artifact
+    uses: whittakertech/codex/.github/workflows/publish_docs.yml@master
+    with:
+      engine_owner: whittakertech
+      engine_repo: midas
+      engine_ref: ${{ github.sha }}
+      docs_artifact_name: docs
+      site_url: https://midas.whittakertech.com
+    secrets:
+      CODEX_GITHUB_TOKEN: ${{ secrets.CODEX_GITHUB_TOKEN }}

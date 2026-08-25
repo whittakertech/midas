@@ -2,7 +2,7 @@
 
 require 'whittaker_tech/midas'
 
-class CreateWhittakerTechSchema < ActiveRecord::Migration[8.0]
+class CreateWhittakerTechSchema < ActiveRecord::Migration[6.1]
   SCHEMA_NAME = (WhittakerTech::Midas.table_namespace || 'midas').freeze
   raise 'Invalid schema name' unless SCHEMA_NAME =~ /\A[a-z_][a-z0-9_]*\z/
 
