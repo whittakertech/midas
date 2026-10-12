@@ -37,13 +37,15 @@ supported, at what level, and whether any end-of-support dates apply.
 
 ## Reporting a Vulnerability
 
-**Status: reporting channel pending (REQUIRING LEE'S DECISION).**
-GitHub private vulnerability reporting is not currently enabled for this
-repository, and no dedicated security contact has been established. Until one
-is published here, please do not disclose vulnerabilities in public issues or
-pull requests. Contact the maintainers through the
-[WhittakerTech organization](https://github.com/whittakertech) by a non-public
-route, without including exploit details in any public channel.
+Please report suspected security vulnerabilities **privately**, using GitHub's
+private vulnerability reporting for this repository:
+
+**[Report a vulnerability](https://github.com/whittakertech/midas/security/advisories/new)**
+(or open the repository's **Security** tab and choose **Report a vulnerability**).
+
+Do not disclose vulnerabilities in public issues, pull requests or discussions.
+Please include the affected version, a description of the problem, and steps to
+reproduce it.
 
 ## Disclosure and Remediation
 
