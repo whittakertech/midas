@@ -45,3 +45,12 @@ jobs:
     with:
       docs_enabled: false
     secrets: inherit
+
+  # Create the GitHub Release for a version tag, from CHANGELOG.md. Runs only after
+  # `pipeline` succeeds (so a failed RubyGems push creates no Release). Opt-in
+  # reusable workflow in whittakertech/.github; it needs `contents: write`, which the
+  # top-level permissions above grant. Added after v0.5.0 shipped without a Release.
+  github_release:
+    needs: pipeline
+    if: startsWith(github.ref, 'refs/tags/v')
+    uses: whittakertech/.github/.github/workflows/github-release.yml@main
