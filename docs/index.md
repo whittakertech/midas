@@ -62,7 +62,7 @@ invoice.total             # => #<WhittakerTech::Midas::Coin ...>
 - **[Installation](installation/)** — add the gem, run migrations, register the Stimulus controller
 - **[Usage](usage/)** — Bankable DSL, Coin arithmetic, Presenter, Allocation, Ledger
 - **[Architecture](architecture/)** — design decisions, module breakdown, schema (including Ledger)
-- **[API Reference](api/)** — full method reference; generated API docs at [`api/WhittakerTech/Midas`](api/WhittakerTech/Midas/)
+- **[API Reference](api/whittakertech/midas/)** — full class and method reference, generated from the YARD docs
 - **[Examples](examples/)** — e-commerce products, invoicing, bulk pricing, RTL display
 
 ---

@@ -348,6 +348,6 @@ For out-of-order external events (a refund webhook arriving before its charge), 
 `Ledger::Account.suspense_for(currency_code)` and reclassify later with a second balanced entry —
 never by mutating the original.
 
-See [Architecture](architecture/#ledger--additive-double-entry-bookkeeping-040-phase-1) for the
+See [Architecture](../architecture/#ledger--additive-double-entry-bookkeeping-040-phase-1) for the
 full design (why `record!` is the only write path, why amounts are denormalized onto Posting,
 what's deferred to later phases).
