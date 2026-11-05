@@ -24,16 +24,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
-          bundler-cache: false
-
-      - name: Install Ruby Dependencies
-        run: bundle install
+          bundler-cache: true
 
       - name: Generate YARD API Docs
-        run: bundle exec yardoc --yardopts .yardopts
-
-      - name: Normalize YARD Markdown Lists
-        run: ruby scripts/normalize_yard_markdown.rb docs/api
+        run: bundle exec rake docs:api
 
       - uses: actions/upload-artifact@v4
         with:
